@@ -1,0 +1,63 @@
+def dfs(v, parent, children, leaf_nodes):
+    num_children = 0
+    for u in children[v]:
+        if u == parent:
+            continue
+        dfs(u, v, children, leaf_nodes)
+        num_children += 1
+    if num_children == 1:
+        leaf_nodes.append(v)
+    elif num_children >= 3:
+        non_leaf_nodes.append(v)
+
+def cut_edges(non_leaf_nodes, children):
+    cnt = 0
+    for v in non_leaf_nodes:
+        edges = []
+        for u in children[v]:
+            if len(edges) < 2 and u != parent[v]:
+                edges.append(u)
+            else:
+                cut_list.append((u, v))
+                cnt += 1
+    return cnt
+
+# read the number of test cases
+t = int(input())
+
+for _ in range(t):
+    # read the input values
+    n = int(input())
+    parent = [-1] * (n+1)
+    children = [[] for _ in range(n+1)]
+    leaf_nodes = []
+    non_leaf_nodes = []
+    
+    for i in range(n-1):
+        u, v = map(int, input().split())
+        parent[v] = u
+        children[u].append(v)
+        children[v].append(u)
+
+    # find leaf and non-leaf nodes
+    dfs(1, -1, children, leaf_nodes)
+
+    # check if there are any non-leaf nodes
+    if len(non_leaf_nodes) == 0:
+        print("-1")
+        continue
+
+    # cut the edges and generate the output
+    cut_list = []
+    cnt = cut_edges(non_leaf_nodes, children)
+    for v in leaf_nodes:
+        u = v
+        while parent[u] != -1:
+            cut_list.append((u, parent[u]))
+            u = parent[u]
+            cnt += 1
+    print(cnt)
+    if cnt > 0:
+        for (a, b) in cut_list:
+            print(a, b, end=" ")
+        print()
