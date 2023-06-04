@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+int d[6]={0};
+int sq(int a)
+{
+return a*a;
+}
+void check(string s)
+{
+int a,b,c;
+a=sq(d[0]-d[2])+sq(d[1]-d[3]);
+b=sq(d[0]-d[4])+sq(d[1]-d[5]);
+c=sq(d[4]-d[2])+sq(d[5]-d[3]);
+if ((a&&b&&c) ==0)return;
+if(a+b==c||b+c==a||a+c==b)cout<<s, exit(0);
+}
+int main() {
+for(int i=0;i<6;++i)cin>>d[i];
+check("RIGHT");
+for(int i=0;i<6;++i)
+{
+d[i]--;
+check("ALMOST");
+d[i]+=2;
+check("ALMOST");
+d[i]--;
+}
+cout<<"NEITHER";
+return 0;
+}
