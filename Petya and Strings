@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+#include <cmath>
+#include <string>
+#include <cctype>
+using namespace std;
+int main()
+{
+    string y,x;
+    cin>>x;
+    cin>>y;
+   // int counter=0;
+    for(int i=0;i<x.length();i++){
+        if(tolower(x[i])>tolower(y[i])){
+        cout<<1;
+        return 0;
+        }
+        else if(tolower(x[i])<tolower(y[i])){
+        cout<<-1;
+        return 0; 
+        }
+        
+    }
+    cout<<0;
+ 
+    return 0;
+}
