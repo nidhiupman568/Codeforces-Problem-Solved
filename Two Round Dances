@@ -1,0 +1,439 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp> 
+#include <functional>
+using namespace __gnu_pbds;  
+using namespace std;
+
+typedef tree<long long, null_type, less<long long>, rb_tree_tag, 
+             tree_order_statistics_node_update> 
+    new_data_set; 
+//defines
+typedef long long ll;
+typedef long double ld;
+#define TIME clock() * 1.0 // CLOCKS_PER_SEC
+#define prev _prev
+#define y0 _y0
+#define kill _kill
+#define MAX 10000
+#define pie 3.1415926535898
+// Computes the parity of the number n (64-Bit) i.e. parity is 0 if the number of set-bits is even otherwise odd.
+#define COMPUTE_PARITY(number) __builtin_parity(number)
+
+// Computes the number of leading zeroes in the binary representation of n (64-Bit). The value will be 64 - (number of bits required to represent n).
+#define COMPUTE_LEADING_ZEROES(number) __builtin_clzll(number)
+
+// Computes the number of trailing zeroes in the binary representation of n (64-Bit). The value will always be zero if n is odd.
+#define COMPUTE_TRAILING_ZEROES(number) __builtin_ctzll(number)
+//permanent constants
+const ld pi = acos(-1.0);
+const int day[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int digarr[10] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
+const int dx[4] = {0, 1, 0, -1};
+const int dy[4] = {1, 0, -1, 0};
+const int dxo[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+
+const int dyo[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+const int alf = 26;
+const int dig = 10;
+const int two = 2;
+const int th = 3;
+const ll prost = 239;
+const ll btc = 30;
+const ld eps = 1e-10;
+const ll INF = (ll)(1e18 + 239);
+const int BIG = (int)(1e9 + 239);
+const long long MOD = (long long)(1e9 + 7); //(int)(1e9 + 7); //998244353;
+const ll MOD2 = (ll)MOD * (ll)MOD;
+ 
+//random
+mt19937 rnd(239); //(chrono::high_resolution_clock::now().time_since_epoch().count());
+ 
+//constants
+const int M = (int)(2e5 + 239);
+const int N = (int)(2e3 + 239);
+const int L = 20;
+const int T = (1 << 20);
+const int B = 500;
+const int X = 1e4 + 239;
+
+//for finding trailing zeros in factorial of a number like zero in 5!(120) is 1
+ll findTrailingZeros(ll n) 
+{ 
+    ll count = 0; 
+  
+    for (ll i = 5; n / i >= 1; i *= 5) 
+        count += n / i; 
+  
+    return count; 
+} 
+
+ll power(ll aa, ll nn) 
+{ 
+    ll res = 1;      // Initialize result 
+    aa = aa % MOD;  // Update 'a' if 'a' >= p 
+  
+    while (nn > 0) 
+    { 
+        // If n is odd, multiply 'a' with result 
+        if (nn & 1) 
+            res=(res*aa) % MOD; 
+  
+        // n must be even now 
+        nn = nn>>1; // n = n/2 
+        aa= (aa*aa)%MOD; 
+    } 
+    return res; 
+} 
+ ll gcd(ll a, ll b) 
+{ 
+    if(a < b) 
+        return gcd(b, a); 
+    else if(a%b == 0) 
+        return b; 
+    else return gcd(b, a%b);   
+} 
+
+ll fact(ll n)
+{
+    if (n <= 1)
+        return 1;
+    return (n * fact(n - 1));
+}
+ 
+ll nPr(ll n, ll r)
+{
+    return fact(n) / fact(n - r);
+}
+ll nCr(ll n, ll r)
+{
+    return fact(n) / (fact(r) * fact(n - r));
+}
+ll  nCrModp(ll n, ll r, ll  p)
+{
+    long long C[r+1];
+    memset(C, 0, sizeof(C));
+ 
+    C[0] = 1;
+    for (long long i = 1; i <= n; i++)
+    {
+        for (long long j = min(i, r); j > 0; j--)
+            C[j] = (C[j] + C[j-1])%p;
+    }
+    return C[r];
+}
+  
+/*// If n is prime, then always returns true, If n is 
+// composite than returns false with high probability 
+// Higher value of k increases probability of correct 
+// result. 
+int isPrime2(long long n, long long  k) 
+{ 
+   // Corner cases 
+   if (n <= 1 || n == 4)  return 0; 
+   if (n <= 3) return 1; 
+  
+   // Try k times 
+   while (k>0) 
+   { 
+       // Pick a random number in [2..n-2]         
+       // Above corner cases make sure that n > 4 
+       long long  a = 2 + rand()%(n-4);   
+  
+       // Checking if a and n are co-prime 
+       if (gcd(n, a) != 1) 
+          return 0; 
+   
+       // Fermat's little theorem 
+       if (power(a, n-1, n) != 1) 
+          return 0; 
+  
+       k--; 
+    } 
+  
+    return 1;
+    
+for(long long i=2;i<=sqrt(n);i++)
+    {
+        if(n%i==0)return 0;
+    }return 1;
+} */
+
+ll isPrime1(ll n) 
+{ 
+
+	if (n <= 1) 
+		return 0; 
+	if (n==2 || n==3) 
+		return 1; 
+	if (n % 2 == 0 || n % 3 == 0) 
+		return 0; 
+		
+	for (ll i = 5; i * i<=n; i+=6) 
+		if (n % i == 0 || n % (i + 2) == 0) 
+			return 0; 
+
+	return 1; 
+} 
+// An interval has start time and end time 
+struct Interval { 
+	long start, end; 
+}; 
+
+/*// Compares two intervals according to staring times. 
+bool compareInterval(Interval a, Interval b) {
+    if (a.end == b.end) return a.start < b.start;
+    return a.end < b.end;
+}*/
+
+
+// Compares numbers taken in pair (Final Sorting)
+bool compareInterval(Interval a, Interval b) 
+{
+    if(a.start!=b.start)
+    return (a.start > b.start);
+    else if(a.start==b.start) return a.end<b.end;
+    
+   // else return a.end<b.end;
+    
+    
+} 
+ /*
+ int n,matches=1;cin>>n;vector<Interval> v(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i].start >> v[i].end;
+        v[i].end+=v[i].start;
+    }
+    sort(v.begin(),v.end(),compareInterval);
+    long prev = v[0].end;
+    for (int i = 1; i < n; i++) {
+        if (v[i].start > prev) {
+            prev = v[i].end;
+            matches++ ;
+        }
+    }
+*/
+//countsquares between range or having odd number of divisors
+ll countSquares(ll a,ll b) 
+{ 
+    return (floor(sqrt(b)) - ceil(sqrt(a)) + 1); 
+} 
+ll OR(ll v[], ll n) 
+{ 
+    ll ans =v[0]; 
+    for (ll i = 1; i < n; i++)  
+         {ans=(ans|v[i])-v[i];
+             
+             if(ans<0){
+                 ans=0;break;
+             }
+         }     
+  
+    return ans; 
+} 
+//return powers of 2 (2^0+2^1+2^2+...... and this function returns 0+1+2+.....)
+ll block(ll  x) 
+{ 
+    vector<ll> v; 
+      ll sum=0,count=0;
+    // Converting the decimal number 
+    // into its binary equivalent. 
+    
+    while (x > 0)  
+    { 
+        v.push_back(x % 2); 
+       //sum+=x%2;
+       if(x%2==1)count++;
+        x = x / 2;
+        
+    } 
+  
+    /*// Displaying the output when 
+    // the bit is '1' in binary 
+    // equivalent of number. 
+    for (long long i = 0; i < v.size(); i++)  
+    { 
+        if (v[i] == 1)  
+        { 
+            sum+=i;
+           // if (i != v.size() - 1) 
+              //  cout << ", "; 
+        } 
+    } */
+    //cout << endl; 
+    return count;
+} 
+//long int l=10000;
+// return greatest possible number we can make placing all of them together
+//  [3,9,22,0] -> 93220
+bool cmp(long long a,long long b)
+{
+    return to_string(a)+to_string(b)>to_string(b)+to_string(a);
+}
+//LEFT SHIFT AND RIGHT SHIFT IN CASE OF STRING
+string leftrotate(string s, ll d) 
+{ 
+    reverse(s.begin(), s.begin()+d); 
+    reverse(s.begin()+d, s.end()); 
+    reverse(s.begin(), s.end()); 
+    return s;
+} 
+string rightrotate(string s, ll d) 
+{ 
+    return leftrotate(s, s.length()-d); 
+}
+//BACKSPACE STRING
+string newString(string S) 
+{ 
+    deque<char> q; 
+  ll h=0;
+    for (int i = S.size()-1; i >=0; i--) { 
+  
+        if (S[i] != '#' && h==0) 
+            q.push_back(S[i]); 
+        else if(S[i]=='#')h++;
+        else if(S[i]!='#' && h!=0)h--;
+    } 
+ 
+    string ans = ""; 
+  
+    while (!q.empty()) { 
+        ans += q.front(); 
+        q.pop_front(); 
+    } 
+  reverse(ans.begin(),ans.end());
+    return ans; 
+} 
+//Maximum Subarray Sum
+ll maxSubArraySum(vector<ll>&a, ll size) 
+{ 
+    ll max_so_far = INT_MIN, max_ending_here = 0; 
+  
+    for (long long i = 0; i < size; i++) 
+    { 
+        max_ending_here=max(max_ending_here+a[i],a[i]);
+        max_so_far=max(max_so_far,max_ending_here);
+    } 
+    return max_so_far; 
+}
+ld eps1 = 1.0E-14;
+//LONGEST COMMON SUBSEQUENCE LENGTH(NOT CONTIGUOUS)
+ll longestCommonSubsequence(string text1, string text2) {
+        ll a=text1.size(),b=text2.size();
+        ll lcs[a+1][b+1];
+        for(ll i=0;i<=a;i++)
+        {
+            for(ll j=0;j<=b;j++)
+            {
+                if(i==0 or j==0)lcs[i][j]=0;
+                else if(text1[i-1]==text2[j-1])
+                {
+                    lcs[i][j]=1+lcs[i-1][j-1];
+                }
+                else
+                {
+                   lcs[i][j]=max(lcs[i-1][j],lcs[i][j-1]);
+                }
+            }
+        }
+        return lcs[a][b];
+    }
+    ll ispal(string a)
+    {
+        
+        string b=a;
+        reverse(b.begin(),b.end());
+        return (b==a)?1:0;
+    }
+ll a,b,c,m,n,k;
+
+ll t=1;
+
+bool isPower(ll x, ll y) 
+{ 
+    // logarithm function to calculate value 
+    ll res1 = log(y) / log(x); 
+    ld res2 = log(y) / log(x); // Note : this is double 
+  
+    // compare to the result1 or result2 both are equal 
+    return (res1 == res2); 
+}
+ll calc(ll x,ll y)
+{
+    ll x1=(log2(x))+1LL,y1=(log2(y))+1LL;
+
+    ll xx=x,yy=y;
+
+    x=(x<<y1);
+
+    y=(y<<x1);
+    
+    y+=xx;x+=yy;
+    
+    return abs(y-x);
+}
+ll togglebit(ll n) 
+{ 
+    if (n == 0) 
+        return 1; 
+  
+    // Make a copy of n as we are 
+    // going to change it. 
+    ll i = n; 
+  
+    // Below steps set bits after 
+    // MSB (including MSB) 
+  
+    // Suppose n is 273 (binary 
+    // is 100010001). It does following 
+    // 100010001 | 010001000 = 110011001 
+    n |= n >> 1; 
+  
+    // This makes sure 4 bits 
+    // (From MSB and including MSB) 
+    // are set. It does following 
+    // 110011001 | 001100110 = 111111111 
+    n |= n >> 2; 
+    n |= n >> 4; 
+    n |= n >> 8; 
+    n |= n >> 16; 
+  
+    return i ^ n; 
+} 
+  
+// Returns XNOR of num1 and num2 
+ll XNOR(ll num1, ll num2) 
+{ 
+    // if num2 is greater then 
+    // we swap this number in num1 
+    if (num1 < num2) 
+        swap(num1, num2);  
+    num1 = togglebit(num1); 
+    
+    return num1 ^ num2; 
+} 
+void solve()
+{
+    cin>>n;
+    m=(n/2);
+    c=fact(n-1);
+    cout<<(c/m);
+ if(t>0)cout<<"\n";
+}
+
+int32_t main()
+{
+#ifdef ONPC
+    freopen("input.txt", "r", stdin);
+#endif
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+   
+   //cin>>t;
+    while(t--)
+    {
+        solve();
+    }
+  //cout<<sum;
+        
+    return 0;
+}
