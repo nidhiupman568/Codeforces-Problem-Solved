@@ -1,0 +1,5 @@
+#include<stdio.h>
+main(){
+  int n,x,y;scanf("%d%d%d",&n,&x,&y);n/=2;
+  puts(x-n&&x-n-1||y-n&&y-n-1?"YES":"NO");
+}
