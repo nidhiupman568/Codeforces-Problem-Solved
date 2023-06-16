@@ -1,0 +1,14 @@
+#include<iostream>
+using namespace std;
+long long n,a,m,b,ans,i;
+int main()
+{
+	cin>>n>>a>>m>>b; 
+	for(i=1;i<=n;i++)
+	{
+		if(ans<((i-1)*m)) break;
+		while(ans<=(i-1)*m+b) ans=(((i-1)*m+b)/a)*a+a;
+	}
+	cout<<ans;
+	return 0;
+}
