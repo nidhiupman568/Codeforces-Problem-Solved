@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int P {1000000007};
+
+int main() {
+ int t,n,k,a,j; cin>>t; while(t--) {
+  cin>>n>>k;
+  vector<long long> B(64), C;
+  while(n--) {
+   C=B;
+   cin>>a;
+   C[a]++;
+   for(j=0; j<64; j++) C[j&a]+=B[j];
+   for(auto &c: C) c%=P;
+   swap(B, C);
+  }
+  for (a=j=0; j<64; j++) if (__builtin_popcount(j)==k) a=(a+B[j])%P;
+  cout<<a<<'\n';
+ }
+}
