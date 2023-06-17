@@ -1,0 +1,37 @@
+#include<cstdio>
+#include<cstring>
+#define For(i,__,___) for(int i=__;i<=___;i++)
+#define Rep(i,__,___) for(int i=__;i>=___;i--)
+const int N=500+10;
+int n,m,oo,ans,f[N][26][26];
+struct node{int a,b;}pre[N][26][26],t;
+char s[N][N];
+int cost(int i,int a,int b)
+{
+ int res=0;
+ For(j,1,m)res+=s[i][j]!=((j&1?a:b)+97);
+ return res;
+}
+int main()
+{
+ scanf("%d%d",&n,&m);
+ For(i,1,n)scanf("%s",s[i]+1);
+ memset(f,40,sizeof f);
+ ans=oo=f[0][0][0];
+ For(a,0,25)For(b,0,25)if(a!=b)f[1][a][b]=cost(1,a,b);
+ For(i,2,n)For(a,0,25)For(b,0,25)if(a!=b)
+ {
+  int c=cost(i,a,b);
+  For(x,0,25)if(x!=a)For(y,0,25)if(y!=b&&x!=y&&f[i-1][x][y]!=oo)
+   if(f[i][a][b]>f[i-1][x][y]+c)f[i][a][b]=f[i-1][x][y]+c,pre[i][a][b]=(node){x,y};
+ }
+ For(i,0,25)For(j,0,25)if(ans>f[n][i][j])ans=f[n][i][j],t=(node){i,j};
+ printf("%d\n",ans);
+ Rep(i,n,1)
+ {
+  For(j,1,m)s[i][j]=(j&1?t.a:t.b)+97;
+  t=pre[i][t.a][t.b];
+ }
+ For(i,1,n)puts(s[i]+1);
+}
+	   	 					   	 	 		   						
