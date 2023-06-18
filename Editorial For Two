@@ -1,0 +1,8 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define f1(i,n) for(int i=1;i<=n;++i)
+#define N 300005
+using namespace std;
+ll n,k,l[N],a[N];
+bool f(ll x){priority_queue<int>L,R;ll s=0;f1(i,n){L.push(a[i]);s+=a[i];while(s>x)s-=L.top(),L.pop();l[i]=L.size();}s=0;for(int i=n;i;i--){R.push(a[i]);s+=a[i];while(s>x)s-=R.top(),R.pop();if(l[i-1]+R.size()>=k)return 1;}return 0;}
+main(){int t;cin>>t;while(t--){cin>>n>>k;f1(i,n)cin>>a[i];ll l=0,r=4e14,m;for(;r-l>1;){m =l+r>>1;if(f(m))r=m;else l=m;}cout<<r<<'\n';}}
