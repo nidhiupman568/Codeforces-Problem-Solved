@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+int t,n,cnt,ans[200010],k;
+char s[200010];
+int main() {
+	cin>>t;
+	while(t--) {
+		cin>>n>>s;
+		cnt=k=0;
+		for(int i=0,lst=cnt; i<n; i++,lst=cnt) {
+			if(s[i]==s[0]) cnt++;
+			else cnt--;
+			if(lst+cnt>0) ans[i]=1;
+			else ans[i]=2;
+			k=max(k,ans[i]);
+		}
+		if(cnt!=0) {
+			cout<<"-1"<<endl;
+			continue;
+		}
+		cout<<k<<endl;
+		for(int i=0; i<n; i++) cout<<ans[i]<<" ";
+		cout<<endl;
+	}
+	return 0;
+}
