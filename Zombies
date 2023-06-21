@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=2005;
+int n,lim,V,L,nums;
+int num[maxn<<1];
+long long ext;
+pair<long long,int>f[maxn<<1],g;
+struct seq{
+	int l,r;
+}s[maxn];
+inline int cmp(seq a,seq b){
+	return a.l+a.r<b.l+b.r;
+}
+void check(int mid){
+	g=make_pair(-mid,1);
+	for(int i=1;i<=nums;i++)
+		f[i]=g;
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=nums;j++){
+			int len=min(num[j]+L,s[i].r)-max(num[j],s[i].l);
+			if(len>0)
+				f[j]=max(make_pair(f[j].first+len,f[j].second),make_pair(g.first+len-mid,g.second+1));
+		}
+		for(int j=1;j<=nums;j++)
+			g=max(g,f[j]);
+	}
+}
+int main(){
+	scanf("%d%d%d%d",&n,&lim,&V,&L),ext=1ll*n*(V-L);
+	for(int i=1;i<=n;i++)
+		scanf("%d%d",&s[i].l,&s[i].r),ext-=s[i].r-s[i].l,num[++nums]=min(s[i].l,V-L),num[++nums]=max(s[i].r-L,0);
+	sort(s+1,s+1+n,cmp),sort(num+1,num+1+nums),nums=unique(num+1,num+1+nums)-num-1;
+	int L=0,R=1e9;
+	while(L+1<R){
+		int mid=(L+R)>>1;
+		check(mid);
+		if(g.second>=lim)
+			L=mid;
+		else R=mid;
+	}
+	check(L);
+	printf("%lld\n",ext+(g.first+1ll*L*lim));
+	return 0;
+}
+	 							 	  			  	   			   		
