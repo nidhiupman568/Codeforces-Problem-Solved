@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod=998244353;
+int n,a[10000003],x,y,m,dp[6],k;
+long long ans=0;
+int main(){
+	cin>>n>>a[1]>>x>>y>>m>>k;
+	for(int i=1;i<=n;i++){
+		if(i>1)a[i]=(1ll*a[i-1]*x+y)%m;
+		dp[0]=(dp[0]+a[i])%mod;
+		for(int i=k;i;i--)dp[i]=(dp[i]+dp[i-1])%mod;
+		ans=ans^1ll*dp[k]*i;
+	}
+	cout<<ans;
+}
