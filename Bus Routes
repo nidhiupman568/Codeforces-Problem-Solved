@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=5e5+4;
+int n,m,dep[N],cnt,dfn[N],siz[N],rt;
+vector<int>tr[N];int st[20][N];
+int a[N],b[N],c[N],iv[N],p,q;
+bool leaf[N];int vec[N],ok[N];
+void dfs(int x,int p){
+	st[0][dfn[x]=++cnt]=dfn[p],iv[cnt]=x,siz[x]=1;
+	for(auto&y:tr[x])if(y!=p)
+		dep[y]=dep[x]+1,dfs(y,x),siz[x]+=siz[y];
+}
+int lca(int u,int v){
+	u=dfn[u],v=dfn[v];if(u>v)swap(u,v);int d=__lg(v-u);
+	return iv[min(st[d][u+1],st[d][v-(1<<d)+1])];
+}
+bool inr(int x){return dfn[p]<=dfn[x]&&dfn[x]<dfn[p]+siz[p];}
+void sol(){
+	cin>>n>>m;
+	for(int i=1;i<=n;i++)tr[i].clear();
+	for(int i=1;i<n;i++){
+		int u,v;cin>>u>>v;
+		tr[u].emplace_back(v),tr[v].emplace_back(u);
+	}
+	for(int i=0;i<m;i++){cin>>a[i]>>b[i];if(a[i]==b[i])i--,m--;}
+	if(n<3)return void(cout<<(m?"YES":"NO\n1 2")<<'\n');
+	for(int i=1;i<=n;i++){
+		if(tr[i].size()>1)rt=i,leaf[i]=0;
+		else leaf[i]=1,vec[i]=i;
+	}
+	cnt=0,dfs(rt,0);
+	for(int t=1;t<=__lg(n);t++)
+		for(int i=1,j=1<<t;j<=n;i++,j++)
+			st[t][i]=min(st[t-1][i],st[t-1][i+(1<<t-1)]);
+	for(int i=0;i<m;i++){
+		c[i]=lca(a[i],b[i]);
+		if(leaf[a[i]]&&dep[vec[a[i]]]>dep[c[i]])vec[a[i]]=c[i];
+		if(leaf[b[i]]&&dep[vec[b[i]]]>dep[c[i]])vec[b[i]]=c[i];
+	}
+	p=0;for(int i=1;i<=n;i++)if(leaf[i]&&dep[vec[i]]>dep[p])p=vec[i],q=i;
+	for(int i=1;i<=n;i++)if(inr(i))leaf[i]=0;else ok[i]=0;
+	for(int i=0;i<m;i++){
+		if(leaf[a[i]]&&inr(b[i]))ok[a[i]]++;
+		if(leaf[b[i]]&&inr(a[i]))ok[b[i]]++;
+	}
+	for(int i=1;i<=n;i++)if(leaf[i]&&!ok[i])return void(cout<<"NO\n"<<q<<' '<<i<<'\n');
+	cout<<"YES\n";
+}
+int main(){
+	ios::sync_with_stdio(false),cin.tie(0),cout.tie(0);
+	dep[0]=-1;int tc;cin>>tc;while(tc--)sol();
+}
+	  			 		    			 			   	 	 		
