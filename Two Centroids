@@ -1,0 +1,9 @@
+#include<bits/stdc++.h>
+using namespace std;const int N=5e5+5;vector<int>e[N];int T,n,st[N],ed[N],ti,fa[19][N],bi[N],de[N];
+void dfs(int u){st[u]=++ti;de[u]=de[fa[0][u]]+1;for(int k=1;k<19;k++)fa[k][u]=fa[k-1][fa[k-1][u]];
+for(int v:e[u])dfs(v);ed[u]=ti;return;}void add(int u){for(int i=st[u];i<N;i+=(i&(-i)))bi[i]++;}int gt(int u){int r=0;
+for(int i=ed[u];i;i-=(i&(-i)))r+=bi[i];for(int i=st[u]-1;i;i-=(i&(-i)))r-=bi[i];return r;}int in(int u,int v){return st[u]<=st[v]&&st[v]<=ed[u];}
+int jp(int u,int d){for(int k=0;k<19;k++)if(d>>k&1)u=fa[k][u];return u;}void slv(){cin>>n;ti=0;for(int i=1;i<=n;bi[i++]=0)e[i].clear();
+for(int i=2;i<=n;i++){cin>>fa[0][i];e[fa[0][i]].push_back(i);}dfs(1);add(1);int c=1,mx=0;for(int u=2,v,s;u<=n;u++){add(u);
+if(in(c,u)){v=jp(u,de[u]-de[c]-1),s=gt(v);if(s>=(u+1)/2)c=v,mx=u/2;else mx=max(mx,s);}else{s=gt(c);if(s<=u/2)c=fa[0][c],mx=u/2;
+else mx=max(mx,u-s);}cout<<u-2*mx<<" \n"[u==n];}}int main(){ios::sync_with_stdio(0);cin.tie(0);for(cin>>T;T;T--)slv();return 0;}
