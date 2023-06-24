@@ -1,0 +1,18 @@
+#include<bits/stdc++.h>
+const int N=2e5+5;
+int n,mx;
+std::vector<std::pair<int,int>> e[N];
+void dfs(int x,int fa,int d,int fr=n){
+	mx=std::max(mx,d);
+	for(auto [y,z]:e[x])if(y!=fa)dfs(y,x,d+(z<fr),z);
+}
+void solve(){
+	scanf("%d",&n),mx=0;
+	for(int i=1,x,y;i<n;++i)scanf("%d%d",&x,&y),e[x].emplace_back(y,i),e[y].emplace_back(x,i);
+	dfs(1,0,0),printf("%d\n",mx);
+	for(int i=1;i<=n;++i)e[i].clear();
+}
+int main(){
+	int T;for(scanf("%d",&T);T--;)solve();
+	return 0;
+}
