@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+pair<int,int> c[200005];
+int tot[200005];
+int main(){
+	int t,n;
+	cin>>t;
+	while(t--){
+		scanf("%d",&n);
+		long long ans=0;
+		for(int i=1;i<=n;++i) scanf("%d",&c[i].first);
+		for(int i=1;i<=n;++i) scanf("%d",&c[i].second);
+		sort(c+1,c+n+1);
+		for(int i=1;i*i<=2*n;++i){
+			memset(tot,0,sizeof(tot));
+			for(int j=1;j<=n;++j){
+				int x=c[j].first,y=c[j].second,t=i*x-y;
+				if(t>=1&&t<=n) ans+=tot[t];
+				if(x==i) tot[y]++;
+			}
+		}
+		printf("%lld\n",ans);
+	}
+}
