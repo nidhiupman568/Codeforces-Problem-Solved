@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#define ll long long
+const ll N=1e6+10;
+ll n,d[N],top,s[N],dp[N];
+char a[N];
+void mian(){
+	scanf("%lld",&n);
+	for(ll i=0;i<=n;i++)a[i]=getchar(),d[i]=dp[i]=0;
+	a[n+1]='#';
+	ll t=0,ans=top=0;
+	for(ll i=1;i<=n;i++){
+		if(d[t]+t>i)d[i]=std::min(d[t]+t-i,d[2*t-i]);
+		while(a[i+d[i]+1]==a[i-d[i]])d[i]++,t=i;
+		s[++top]=i-1;
+		while(top){
+			if(d[s[top]]+s[top]<i)top--;
+			else{
+				dp[i]=dp[2*s[top]-i]+1;
+				break;
+			}
+		}
+		ans+=dp[i];
+	}
+	printf("%lld\n",ans);
+}
+ 
+int main(){
+	int T=1;
+	scanf("%d",&T);
+	while(T--)mian();
+	return 0;
+}
