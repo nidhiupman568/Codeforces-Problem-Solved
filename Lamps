@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+int T,n,x,y;
+int main(){
+	scanf("%d",&T);
+	while(T--){
+		scanf("%d",&n);
+		priority_queue<int>q[n+1];
+		for(int i=1;i<=n;i++){
+			scanf("%d%d",&x,&y);
+			q[x].push(y);
+		}
+		long long res=0;
+		for(int i=1;i<=n;i++){
+			int j=0;
+			while(q[i].size()&&j<i){
+				res+=q[i].top();
+				q[i].pop();
+				j++;
+			}
+		}
+		cout<<res<<endl;
+	}
+	return 0;
+}
