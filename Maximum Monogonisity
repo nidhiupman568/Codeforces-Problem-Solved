@@ -1,0 +1,40 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<queue>
+#include<cassert>
+using namespace std;
+int N,K,A[3000],B[3000];
+long long dp[3001][3001],ep[3001][2];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	int T;cin>>T;
+	for(;T--;)
+	{
+		cin>>N>>K;
+		for(int i=0;i<N;i++)cin>>A[i];
+		for(int i=0;i<N;i++)cin>>B[i];
+		for(int i=0;i<=N;i++)for(int j=0;j<=N-K;j++)
+		{
+			dp[i][j]=-1e18;
+		}
+		for(int j=0;j<=N-K;j++)
+		{
+			ep[j][0]=-1e18;
+			ep[j][1]=-1e18;
+		}
+		dp[0][0]=0;
+		for(int i=0;i<N;i++)for(int j=0;j<=N-K;j++)
+		{
+			if(j<N-K)dp[i+1][j+1]=max(dp[i+1][j+1],dp[i][j]);
+			dp[i+1][j]=max(dp[i+1][j],dp[i][j]+2LL*abs(A[i]-B[i]));
+			dp[i+1][j]=max(dp[i+1][j],ep[j][0]+A[i]+B[i]);
+			dp[i+1][j]=max(dp[i+1][j],ep[j][1]-(A[i]+B[i]));
+			ep[j][0]=max(ep[j][0],dp[i][j]-(A[i]+B[i]));
+			ep[j][1]=max(ep[j][1],dp[i][j]+A[i]+B[i]);
+		}
+		cout<<dp[N][N-K]<<"\n";
+	}
+}
