@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long n,f[100010],a[100010],b[100010],ans[100010],mod=998244353;
+vector<pair<int,int> > v[100010];
+void dfs(int x){
+	f[x]=1;
+	for(int i=0;i<v[x].size();i++){
+		int y=v[x][i].first,z=v[x][i].second;
+		if(!f[y]) dfs(y);
+		ans[x]+=a[y]*b[x];
+		if(z) ans[x]+=a[y];
+		else ans[x]+=b[x];
+		ans[x]+=ans[y];
+		a[x]+=a[y];
+		b[x]+=b[y];
+		if(z) b[x]++;
+		else a[x]++;
+		ans[x]%=mod;
+		a[x]%=mod;
+		b[x]%=mod;
+	}
+}
+int main(){
+	int x,y,z;
+	cin>>n;
+	for(int i=1;i<=n;i++){
+		cin>>x;
+		for(int j=1;j<=x;j++) cin>>y>>z,v[i].push_back(make_pair(y,z));	
+	}
+	dfs(1);
+	cout<<ans[1]%mod<<endl;
+	return 0;
+}
