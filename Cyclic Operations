@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=5e5+100;
+int p[N];
+int vis[N],col[N];
+int main()
+{
+	int _;scanf("%d",&_);
+	while(_--)
+	{
+		int n,k;scanf("%d%d",&n,&k);
+		for(int i=1;i<=n;i++)scanf("%d",&p[i]),vis[i]=col[i]=0;
+		if(k==1)
+		{
+			int tag=1;
+			for(int i=1;i<=n;i++)tag&=(p[i]==i);
+			puts(tag?"YES":"NO");
+			continue;
+		}
+		int tag=1;
+		for(int i=1;i<=n;i++)if(!vis[i])
+		{
+			int j=i;
+			while(!vis[j])vis[j]=i,j=p[j];
+			int len=0;
+			while(vis[j]==i)vis[j]=-1,len++,j=p[j];
+			if(len!=0&&len!=k)tag=0;
+		}
+		puts(tag?"YES":"NO");
+	}
+	return 0;
+}
