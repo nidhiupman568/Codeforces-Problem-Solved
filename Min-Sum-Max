@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define N 305
+#define ll long long
+const int INF=1e9;
+int T,n,ans,a[N],o1[N],o2[N],z1[N][N][2],z2[N][N][2],dp[N][N][N][2];ll b[N],ds[N];
+void W(int &x,int y) {x=max(x,y);}
+void slv1()
+{
+	for(int i=1;i<=n;++i) for(int j=i;j<=n;++j)
+		for(int k=0;k<=ds[0]+1;++k) dp[i][j][k][0]=dp[i][j][k][1]=-INF;
+	for(int i=n,t;i;--i)
+	{
+		t=0;fill(o1,o1+n+2,0);fill(o2,o2+n+2,0);
+		for(int j=i;j<=n;++j)
+		{
+			if(i==j) dp[i][j][a[i]][0]=dp[i][j][a[i]][1]=1;
+			else for(int k=i;k<=j;++k)
+			{
+				if(a[k]>=a[i])
+				{
+					if(o1[k-1]) W(dp[i][j][a[k]][0],dp[k][j][a[i]][1]+dp[i][o1[k-1]][a[k]][0]);
+					if(o2[k+1]) W(dp[i][j][a[k]][0],dp[i][k][a[k]][0]+dp[o2[k+1]][j][a[k]][0]);
+				}
+				if(a[k]<=a[i])
+				{
+					if(o1[k-1]) W(dp[i][j][a[k]][1],dp[k][j][a[i]][0]+dp[i][o1[k-1]][a[k]][1]);
+					if(o2[k+1]) W(dp[i][j][a[k]][1],dp[i][k][a[k]][1]+dp[o2[k+1]][j][a[k]][1]);
+				}
+			}o1[j]=o1[j-1];if(a[i]==a[j]) {o1[j]=j;for(int k=j;k>t;--k) o2[k]=j;t=j;}
+			for(int k=1;k<=ds[0];++k) W(dp[i][j][k][0],dp[i][j][k-1][0]);
+			for(int k=ds[0];k;--k) W(dp[i][j][k][1],dp[i][j][k+1][1]);
+		}
+	}
+}
+void slv()
+{
+	scanf("%d",&n);++n;ds[0]=0;ds[++ds[0]]=0;ans=-INF;
+	for(int i=2;i<=n;++i) scanf("%lld",&b[i]),b[i]+=b[i-1],ds[++ds[0]]=b[i];
+	sort(ds+1,ds+ds[0]+1);ds[0]=unique(ds+1,ds+ds[0]+1)-ds-1;
+	for(int i=1;i<=n;++i) a[i]=lower_bound(ds+1,ds+ds[0]+1,b[i])-ds;
+	reverse(a+1,a+n+1);slv1();
+	for(int i=1;i<=n;++i) for(int j=1;j<=ds[0];++j)
+		z1[n-i+1][j][0]=dp[i][n][j][0],z1[n-i+1][j][1]=dp[i][n][j][1];
+	reverse(a+1,a+n+1);slv1();
+	for(int i=1;i<=n;++i) for(int j=1;j<=ds[0];++j)
+		z2[i][j][0]=dp[i][n][j][0],z2[i][j][1]=dp[i][n][j][1];
+	for(int i=1;i<=n;++i) for(int j=i+1;j<=n;++j)
+		if(a[i]<=a[j]) W(ans,z1[i][a[j]][0]+z2[j][a[i]][1]);
+		else W(ans,z1[i][a[j]][1]+z2[j][a[i]][0]);printf("%d\n",ans-1);
+}
+int main() {scanf("%d",&T);while(T--) slv();return 0;}
