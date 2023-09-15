@@ -1,0 +1,41 @@
+#include <iostream>
+#include<queue>
+using namespace std;
+
+int t, n, a[200005], c[200005], v[200005];
+long long s[200005];
+priority_queue<pair<long long, int>> q;
+
+void solve()
+{
+	cin >> n;
+	for (int i = 1; i <= n; i++){
+		cin >> a[i];
+		v[i] = s[i] = 0;
+	}
+	for (int i = 1; i <= n; i++){
+		cin >> c[i];
+		s[a[i]] += c[i];
+	}
+	for (int i = 1; i <= n; i++){
+		q.push({ -s[i],i });
+	}
+	while (q.size()){
+		int u = q.top().second;
+		q.pop();
+		if (v[u]) continue;
+		v[u] = 1;
+		cout << u << " ";
+		s[a[u]] -= c[u];
+		q.push({ -s[a[u]],a[u] });
+	}
+	cout << endl;
+}
+
+int main()
+{
+	cin >> t;
+	while (t--){
+		solve();
+	}
+}
