@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int mod=998244353;
+struct node{
+    ll x,y,pn;
+}num[64];
+int n,m;
+node dfs(ll x){
+    int flag=0;
+    if(x==0)return {0,0,1};
+    if(x==1)return {m,m,n};x++;
+    if(1ll<<__builtin_ctzll(x)==x)flag=1;
+    if(flag&&num[__builtin_ctzll(x)].pn)
+    return num[__builtin_ctzll(x)];
+    x--;
+    ll mid=x-((1ll<<63-__builtin_clzll(x))-1),s=63-__builtin_clzll(x);
+    ll l=min(mid,1ll<<s-1),r=mid-l;
+    l+=(x-mid)/2;r+=(x-mid)/2;
+    auto ls=dfs(l),rs=dfs(r);
+    node now;
+    now.pn=ls.pn*rs.pn%mod*n%mod;
+    now.y=(ls.y*rs.pn+rs.y*ls.pn+ls.pn*rs.pn)%mod*m%mod;
+    ls.pn=ls.pn*n%mod;rs.pn=rs.pn*n%mod;
+    now.x=(ls.x*rs.pn+rs.x*ls.pn+ls.y*rs.y%mod*m+now.y)%mod;
+    x++;
+    if(flag)num[__builtin_ctzll(x)]=now;
+    return now;
+}
+int main(){
+    int t;scanf("%d",&t);
+    while(t--){
+        ll k,ans=0,mid=0;
+        scanf("%lld%d",&k,&n);
+        for(m=1;m<=n;m++){
+            memset(num,0,sizeof(num));
+            ll op=dfs(k).x;
+            //printf("%lld\n",op);
+            ans+=m*(op-mid+mod);
+            mid=op;
+        }
+        printf("%lld\n",ans%mod);
+    }
+}
+
