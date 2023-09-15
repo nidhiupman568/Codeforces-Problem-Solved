@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int M=514,N=1919810;
+typedef long long ll;
+typedef pair<ll,ll> PII;
+ 
+ll n,m,k;
+ 
+void __(){
+    cin>>n>>m>>k;
+    if(n>m){
+        puts("First");
+    }else if(n<m){
+        puts("Second");
+    }else{
+        if(k%2) puts("First");
+        else puts("Second");
+    }
+}
+ 
+ 
+int main()
+{
+	int _;
+	cin>>_;
+	while(_--){
+	    __();
+	}
+} 
