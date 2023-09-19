@@ -1,0 +1,31 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+// Aliases
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+using str = string;
+// Constants
+constexpr int INF = int(1e9);
+constexpr ll INF64 = ll(1e18);
+constexpr ld EPS = 1e-9;
+constexpr ll MOD = 1e9+7;
+//constexpr ld PI = ld(M_PI);
+// Macros
+#define all(x) x.begin(),x.end()
+#define fast_io() ios::sync_with_stdio(0)
+#define floop(a,b) for(auto i = a; i <= b; i++)
+#define bloop(b,a) for(auto i = b; i >= a; i--)
+#define sz(x) (long long)x.size()
+#define pb emplace_back
+#define endl "\n"
+
+int main() {
+fast_io();
+int n,a,b,c,ans=0;
+cin>>n;
+floop(0,n-1){cin>>a>>b>>c;if(a+b+c>=2){ans++;}}
+cout<<ans<<endl;
+return 0;
+}
