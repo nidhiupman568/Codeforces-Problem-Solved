@@ -1,0 +1,8 @@
+# Read the weight of the watermelon
+w = int(input())
+
+# Check if it's possible to divide the watermelon as per the conditions
+if w % 2 == 0 and w > 2:
+    print("YES")
+else:
+    print("NO")
