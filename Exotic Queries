@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+5;
+int n,q,cnt,L[N],R[N],ans[N];
+int a[N],C[N],mx[N*4];
+vector<int> vec[N],qs[2][N];
+void add(int x,int y) {
+	while(x<=n+1) C[x]+=y,x+=x&-x;
+}
+int sum(int x) {
+	int cnt=0;
+	while(x) cnt+=C[x],x-=x&-x;
+	return cnt;
+}
+void cg(int p,int l,int r,int x) {
+	if(l==r) {
+		mx[p]=a[x];
+		return ;
+	}
+	int mid=l+r>>1;
+	if(x<=mid) cg(p<<1,l,mid,x);
+	else cg(p<<1|1,mid+1,r,x);
+	mx[p]=max(mx[p<<1],mx[p<<1|1]);
+}
+int Gmx(int p,int l,int r,int x,int y) {
+	if(x<=l&&r<=y) return mx[p];
+	int mid=l+r>>1,L=0,R=0;
+	if(x<=mid) L=Gmx(p<<1,l,mid,x,y);
+	if(y>mid) R=Gmx(p<<1|1,mid+1,r,x,y);
+	return max(L,R);
+}
+int main() {
+	scanf("%d%d",&n,&q);
+	for(int i=1;i<=n;vec[a[i]].push_back(i),i++) scanf("%d",&a[i]);
+	for(int i=1;i<=q;i++) {
+		scanf("%d%d",&L[i],&R[i]);
+		qs[0][R[i]].push_back(i);
+		qs[1][L[i]-1].push_back(i);
+	}
+	for(int i=1;i<=n;i++) {
+		cnt+=vec[i].size();
+		for(int j=1;j<vec[i].size();j++) add(Gmx(1,1,n,vec[i][j-1],vec[i][j])+1,1);
+		for(int j=0;j<vec[i].size();j++) cg(1,1,n,vec[i][j]);
+		for(int j=0;j<qs[0][i].size();j++) ans[qs[0][i][j]]-=sum(L[qs[0][i][j]])-cnt; 
+		for(int j=0;j<qs[1][i].size();j++) ans[qs[1][i][j]]+=sum(L[qs[1][i][j]])-cnt; 
+	}
+	for(int i=1;i<=q;++i) printf("%d\n",ans[i]);
+}
