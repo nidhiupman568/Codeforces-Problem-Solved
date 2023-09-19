@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define N 200005
+#define ll long long
+#define mid ((l+r)/2)
+#define pb push_back
+int T,n,m,c,a[N];ll mx,ans,dp[N];bool vs[N];vector<int> e[N];
+struct Node {int x;ll w;}b[N];
+bool cmp(Node x,Node y) {return x.x<y.x;}
+void dfs(int u)
+{
+    if(vs[u]) return;vs[u]=1;dp[u]=0;
+    for(auto v:e[u]) dfs(v),dp[u]=max(dp[u],dp[v]+(a[v]-a[u]+c)%c);
+}
+void slv()
+{
+    scanf("%d %d %d",&n,&m,&c);mx=0;ans=1e18;fill(vs+1,vs+n+1,0);
+    for(int i=1;i<=n;++i) scanf("%d",&a[i]),e[i].clear();
+    for(int i=1,u,v;i<=m;++i) scanf("%d %d",&u,&v),e[u].pb(v);
+    for(int i=1;i<=n;++i) dfs(i);
+    for(int i=1;i<=n;++i) b[i]=(Node) {a[i],dp[i]+a[i]},mx=max(mx,b[i].w);
+    sort(b+1,b+n+1,cmp);
+    for(int i=1;i<=n;++i) ans=min(ans,mx-b[i].x),mx=max(mx,b[i].w+c);
+    printf("%lld\n",ans);
+}
+int main()
+{
+    scanf("%d",&T);
+    while(T--) slv();return 0;
+}
