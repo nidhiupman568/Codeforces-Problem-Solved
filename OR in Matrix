@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define endl '\n'
+#define pi pair<int,int>
+#define pl pair<long long,long long>
+#define adj(name) vector<vector<int>>name
+#define adjs(name,size) vector<vector<int>>name(size)
+#define adjpass(name) vector<vector<int>>&name
+#define med(name,u,v) name[u].push_back(v)
+#define rest(name,val) memset(name,val,sizeof name)
+#define all(x) x.begin(),x.end()
+#define killua ios_base::sync_with_stdio(false), cin.tie(NULL), cout.tie(0)
+//changes in dir:
+int fx[]={0, 0,1,-1,0, 0};
+int fy[]={1,-1,0, 0,0, 0};
+int fz[]={0, 0,0, 0,1,-1};
+int dx[]={0 , 0 ,1  ,-1 ,-1 ,1  ,-1 , 1};
+int dy[]={1 ,-1 ,0  , 0 , 1 ,1  ,-1 ,-1};
+/*******************الْمَالُ وَالْبَنُونَ زِينَةُ الْحَيَاةِ الدُّنْيَا ۖ وَالْبَاقِيَاتُ الصَّالِحَاتُ خَيْرٌ عِندَ رَبِّكَ ثَوَابًا وَخَيْرٌ أَمَلًا *******************/
+/******************إِلا أَنْ يَشَاءَ اللَّهُ وَاذْكُرْ رَبَّكَ إِذَا نَسِيتَ وَقُلْ عَسَى أَنْ يَهْدِيَنِي رَبِّي لأَقْرَبَ مِنْ هَذَا رَشَدًا *****************/
+/*
+ * سبحان الله
+ * الحمد لله
+ * لا اله الا الله
+ * الله اكبر
+ * سبحان الله وبحمده
+ * سبحان الله العظيم
+ * استغفر الله العظيم واتوب اليه
+ * لا حول ولا قوه الا بالله
+ * لا اله الا انت سبحانك اني كنت من الظالمين
+ * اللهم صلي وسلم وزد وبارك علي سيدنا محمد ولا أله وصحبه اجمعين
+*/
+void gon(){
+    int n,m; cin>>n>>m;
+    int arr[n][m];
+    int tt[n][m];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++)
+            cin>>arr[i][j],tt[i][j]=1;
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(!arr[i][j]){
+                for(int x=0;x<n;x++){
+                    tt[x][j]=0;
+                }
+                for(int x=0;x<m;x++){
+                    tt[i][x]=0;
+                }
+            }
+        }
+    }
+    int kk[n][m];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            int k=0;
+            for(int x=0;x<n;x++){
+                k|=tt[x][j];
+            }
+            for(int x=0;x<m;x++){
+                k|=tt[i][x];
+            }
+            kk[i][j]=k;
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(kk[i][j]!=arr[i][j]){
+                cout<<"NO";
+                return;
+            }
+        }
+    }
+    cout<<"YES"<<endl;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++)
+            cout<<tt[i][j]<<" ";
+        cout<<endl;
+    }
+}
+int32_t main(){
+    #ifndef ONLINE_JUDGE
+        freopen("Input.txt","r",stdin);
+        freopen("Output.txt","w",stdout);
+    #endif
+    killua;
+    int t=1; //cin>>t;
+    while(t--){
+        gon();
+    }
+}
