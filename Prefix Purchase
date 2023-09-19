@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll _=5e5+5;
+ll N,n,k,t,a[_],i;
+void P(){
+	cin>>n;
+	for(i=1;i<=n;i++)cin>>a[i];
+	cin>>k;t=1e18;
+	for(i=n;i;i--)a[i-1]=min(a[i-1],a[i]),a[i]-=a[i-1];
+	for(i=1;i<=n;i++){
+		if(a[i])t=min(t,k/a[i]);
+		cout<<t<<' ';
+		k-=t*a[i];
+	}
+	cout<<'\n';
+}
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	cin>>N;while(N--)P();
+}
