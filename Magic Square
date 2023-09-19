@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=505,p=998244353;
+int t,n,a[N][N],b[N][N],dx[N*N],dy[N*N],vis[N][N],e[N];
+int fac[N],flag,ans;
+int ex[N],ey[N];
+int add(int x,int y) {return x+y<n?x+y:x+y-n;}
+int dec(int x,int y) {return x-y<0?x-y+n:x-y;}
+int main() {
+	fac[0]=1;
+	for(int i=1;i<N;i++) fac[i]=1ll*fac[i-1]*i%p;
+	scanf("%d",&t);
+	while(t) {flag=1;ans=1;
+		scanf("%d",&n);
+		for(int i=0;i<n;i++) ex[i]=ey[i]=0;
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++) {
+				scanf("%d",&a[i][j]);
+				dx[a[i][j]]=i;
+				dy[a[i][j]]=j;
+			}
+		for(int i=0;i<n;i++)
+			for(int j=0;j<n;j++) {
+				scanf("%d",&b[i][j]);int k=b[i][j];
+				dx[k]=dec(i,dx[k]);
+				dy[k]=dec(j,dy[k]);
+				if(dx[k]&&dy[k]) {
+					if(vis[dx[k]][dy[k]]==t) flag=0;
+					vis[dx[k]][dy[k]]=t;
+				}
+			}
+		if(!flag) puts("0");
+		else {
+			while(1) {
+				int tx=0,ty=0;
+				for(int i=0;i<n;i++)
+					if(!ex[i]&&dy[a[i][0]]) {
+						int j=1;
+						for(;j<n;j++) 
+							if(dy[a[i][j]]!=dy[a[i][0]]) break;
+						if(j==n) {
+							tx++,ex[i]=1;
+							for(j=0;j<n;j++) e[add(dy[a[i][0]],j)]=a[i][j];
+							for(j=0;j<n;j++) a[i][j]=e[j];
+						}
+					}
+				for(int i=0;i<n;i++)
+					if(!ey[i]&&dx[a[0][i]]) {
+						int j=1;
+						for(;j<n;j++) 
+							if(dx[a[j][i]]!=dx[a[0][i]]) break;
+						if(j==n) {
+							ty++,ey[i]=1;
+							for(j=0;j<n;j++) e[add(dx[a[0][i]],j)]=a[j][i];
+							for(j=0;j<n;j++) a[j][i]=e[j];
+						}
+					}
+				if(tx||ty) ans=1ll*ans*fac[tx]%p*fac[ty]%p;
+				else break;
+			}
+			for(int i=0;i<n;i++)
+				for(int j=0;j<n;j++)
+					if(a[i][j]!=b[i][j]) flag=0;
+			if(!flag) puts("0");
+			else printf("%d\n",ans);
+		}
+		t--;
+	}
+}
