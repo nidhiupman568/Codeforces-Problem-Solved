@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 10005
+int i,j,k,n,m,t,f[N],res,a[N],l[N],g[N],vis[N];
+int main(){
+	cin>>t;
+	while(t--){
+		cin>>n;
+		for(m=1;m<=n;m*=2){} m--;
+		for(i=0;i<=m;i++){f[i]=g[i]=1e9;l[i]=0;}
+		f[0]=g[0]=0;
+		for(i=1;i<=n;i++)cin>>a[i];
+		for(i=1;i<=n;i++){
+			vector<pair<int,int> >v;
+			int it=0;
+			for(j=i;j>=1;j--){
+				vis[a[j]]=1;
+				while(vis[it])it++;
+				if(it&&l[it]<j){l[it]=j; v.push_back({it,j});}
+			}
+			for(j=0;j<=m;j++){
+				if(f[j]<=n)for(auto [w,l]:v)if(l>f[j])g[w^j]=min(g[w^j],i);
+			}
+			memcpy(f,g,m*4+50); memset(vis,0,m*4+50);
+		}
+		for(i=m;i>=0;i--)if(f[i]<=n){cout<<i<<'\n';break;}
+	}
+}
