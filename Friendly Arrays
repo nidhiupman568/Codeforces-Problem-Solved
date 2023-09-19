@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+ 
+signed main(){
+	int T;cin>>T;
+	while(T--){
+		int n,m,jlu=0,hit=0;
+		cin>>n>>m;
+		for(int i=1;i<=n;++i){
+			int x;cin>>x;jlu^=x;
+		}
+		for(int i=1;i<=m;++i){
+			int x;cin>>x;hit|=x;
+		}
+		if(n&1) printf("%d %d\n",jlu,jlu|hit);
+		else printf("%d %d\n",jlu&~hit,jlu);
+	}
+}
