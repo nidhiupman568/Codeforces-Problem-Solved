@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool checkRow(const string &row) {
+    for (const char &c : row) {
+        if (c != 'R') {
+            return false;
+        }
+    }
+    return true;
+}
+
+void solve() {
+    vector<string> grid(8);
+
+    for (string &row : grid) {
+        cin >> row;
+    }
+
+    for (auto &row : grid) {
+        if (checkRow(row)) {
+            cout << "R\n";
+            return;
+        }
+    }
+
+    cout << "B\n";
+}
+
+int main() {
+    // freopen("input.txt", "r", stdin);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    while (t-- > 0) {
+        solve();
+    }
+}
