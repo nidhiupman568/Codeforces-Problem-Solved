@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main() {
+    int x;
+    scanf("%d", &x);
+
+    int b = (x + 4) / 5;
+    printf("%d\n", b);
+
+    return 0;
+}
