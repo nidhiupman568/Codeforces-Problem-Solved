@@ -1,0 +1,15 @@
+#include<stdio.h>
+int main(){
+
+int a,b,c,p;
+scanf("%d%d%d",&a,&b,&c);
+while(1){
+    if(a*2<=b && a*4<=c){
+        p=(a+2*a+4*a);
+        break;
+    }
+    a=a-1;
+}
+printf("%d",p);
+
+}
