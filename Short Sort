@@ -1,0 +1,80 @@
+// #pragma GCC optimize(2)
+// #pragma GCC optimize(3,"Ofrrst","inline")
+/*
+   **    **         ******             **            **
+  //**  **         **////**           /**           /**
+   //****         **    //            /**           /**
+    //**         /**                  /**           /**
+     /**         /**                  /**           /**
+     /**         //**    **       **  /**       **  /**
+     /**          //******       //*****       //***** 
+     //            //////         /////         /////  
+*/    
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define endl "\n"
+#define ull unsigned long long
+#define ms(x,y) memset(x,y,sizeof x);
+#define debug(x) cout << #x << " = " << x << endl;
+#define ios ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+#define fre freopen("input.txt", "r", stdin);freopen("output.txt", "w", stdout);
+const int mod=998244353;
+const int inf=0x3f3f3f3f3f3f3f3f;
+const int N = 3e5+10;
+const double esp=1e-6;
+const ull MOD1 = 1610612741;
+const ull MOD2 = 805306457;
+const ull BASE1 = 1331;
+const ull BASE2 = 131;
+#define pre(i,a,b) for(int i=a;i<=b;i++)
+#define rep(i,a,b) for(int i=a;i>=b;i--)
+char *p1,*p2,buf[100000];//快读和同步流二者只能选一个
+#define nc() (p1==p2 && (p2=(p1=buf)+fread(buf,1,100000,stdin),p1==p2)?EOF:*p1++)
+int read()
+{
+    int x = 0,f = 1;char ch = nc();
+    while(ch<48||ch>57)  {if(ch=='-')f=-1;ch=nc();}
+    while(ch>=48&&ch<=57)  x=x*10+ch-48,ch=nc();
+    return x*f;
+}
+void write(int x)
+{
+    if(x<0) putchar('-'),x=-x;
+    if(x>9) write(x/10);
+    putchar(x%10+'0');
+    return;
+}
+int n;
+string s;
+void solve()
+{
+    cin >> s;
+    if(s == "acb" || s == "bac" || s == "acb" || s == "cba" || s == "abc")
+        cout << "YES" << endl;
+    else cout << "NO" << endl;
+}
+// #define LOCAL
+signed main()
+{
+    ios
+    //fre
+    #ifdef LOCAL
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    auto start = std::chrono::high_resolution_clock::now();
+    #endif
+    
+    int t=1;
+    cin >> t;
+    while(t--)
+		solve();
+
+    #ifdef LOCAL
+    auto end = std::chrono::high_resolution_clock::now();
+    cout << "Execution time: "
+         << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+         << " ms" << '\n';
+    #endif
+    return 0;
+}
