@@ -1,0 +1,43 @@
+def main():
+    t=int(input())
+    for _ in range(t):
+        n,m = map(int, input().split())
+        conditions = [(0, 0, 0)] * m
+        for i in range(m):
+            ai, bi, di = map(int,input().split())
+            conditions[i] = ai - 1, bi - 1, di
+        g = [{} for _ in range(n)]
+        ok = True
+        for ai, bi, di in conditions:
+            d = g[bi].get(ai, None)
+            if d is not None and d != di:  
+                ok = False
+            g[bi][ai] = di
+            g[ai][bi] = -di
+        if not ok:
+            print('NO')
+            continue
+        coords = [None] * n
+        for i in range(n):
+            if coords[i] is not None:
+                continue
+            coords[i] = 0
+            q = [i]
+            while q:
+                cur = q.pop()
+                for v in g[cur]:
+                    if coords[v] is not None and coords[v] != coords[cur] + g[cur][v]:
+                        ok = False
+                        break
+                    if coords[v] is not None:
+                        continue
+                    coords[v] = coords[cur] + g[cur][v]
+                    q.append(v)
+            if not ok:
+                break
+        if ok:
+            print("YES")
+        else:
+            print("NO")
+if __name__ == '__main__':
+    main()
