@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+int gcd(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+bool isPrime(int a) {
+    if (a <= 1) {
+        return false;
+    }
+    int sqrtA = sqrt(a);
+    for (int i = 2; i <= sqrtA; i++) {
+        if (a % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while(t--){
+        int a, b;
+        cin >> a >> b;
+        int check = true;
+        if (a == b && (a%2==1)) {
+            if (isPrime(a)) {
+                cout << -1 << endl;
+                check = false;
+            } else {
+                for(int x = 3; x < a/2; x++) {
+                    if(gcd(x, a-x) != 1) {
+                        cout << x << " " << (a-x) << endl;
+                        check = false;
+                        break;
+                    }
+                } 
+            }
+        }
+        if(check == false) {
+            continue;
+        }
+        int l = 1, r = 1;
+        int start;
+        if (a % 2 == 0) {
+            start = a/2;
+        } else {
+            start = a/2+1;
+        }
+        for(l = start; l <= b/2; l++) {
+            if (l > 1){
+                cout << l << " " << (l) << endl;
+                check = false;
+                break;
+            }
+        }
+        if (check==true) {
+            cout << -1 << endl;
+        }
+        // for (l = 2; l < b-1; l++) {
+        //     if (check == false) {
+        //         break;
+        //     }
+        //     for (r = b-l; r > a; r--) {
+        //         int temp = gcd(l, r);
+        //         if(temp != 1 && a <= l+r && b >= l+r){
+        //             check = false;
+        //             cout << l << " " << r << endl;
+        //             break;
+        //         } 
+        //     }
+        // }
+        // if (check == true) {
+        //     cout << -1 << endl;
+        // }
+    }
+}
