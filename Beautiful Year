@@ -1,0 +1,15 @@
+y = int(input())
+yy = y + 1
+count = []
+value = 0
+while value == 0:
+    for num in str(yy):
+        if num not in count:
+            count.append(num)
+            if len(count) == len(str(yy)):
+                print(yy)
+                value = 1
+        elif num in count:
+            yy = yy + 1
+            count = []
+            break
