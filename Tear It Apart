@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+int func(deque<int> v){
+    int maxe=0;
+    for (auto it=v.begin();it!=v.begin()+v.size()-1;it++){
+        int f=*(it+1)-*(it)-1;
+        maxe=max(maxe,f);
+    }
+    if (maxe==0) return 0;
+    return floor(log2(maxe))+1;
+}
+int main() {
+    ll t;
+    cin >> t;
+    for (ll i=0;i<t;i++){
+        string str;
+        unordered_map<char,deque<int>> umap;
+        cin >> str;
+        for (int i=0;i<str.size();i++) umap[str[i]].push_back(i);
+        int min_tot=INT_MAX;
+        for (auto i:umap){
+            (i.second).push_front(-1);
+            (i.second).push_back(str.size());
+            int longest=func(i.second);
+            min_tot=min(longest,min_tot);
+        }
+        cout<<min_tot<<endl;
+    }
+}
