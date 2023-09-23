@@ -1,0 +1,51 @@
+#include <iostream>
+#include <algorithm>
+#include <math.h>
+// #include <vector>
+// #include <stack>
+// #include <queue>
+// #include <map>
+// #include <set>
+// #include <deque>
+#define ll long long
+#define pp pop_back
+#define sz(s) (int)s.size()
+#define N 200005
+#define ff first
+#define ss second
+#define pb push_back
+#define yes "YES\n"
+#define no "NO\n"
+using namespace std;
+
+ll T, n, k, a[N];
+
+int main()
+{
+	ios::sync_with_stdio(false); cin.tie(0);
+	cin >> T;
+	while (T--){
+		cin >> n >> k;
+		for(int i = 1; i <= n; i++){
+			cin >> a[i];
+		}
+		sort(a+1,a+n+1);
+		ll s = 0, cnt = 0;
+		for(int i = 1; i <= n; i++){
+			if(s+a[i] > k){
+				break;
+			}
+			cnt++;
+			s += a[i];
+		}
+		ll ans = cnt, x = 0, x1 = 0;
+		while(cnt > 0){
+			x = ((k-(s+(x1*cnt)))/cnt);
+			x1 += x;
+			ans += (x*cnt);
+			s -= a[cnt];
+			cnt--;
+		}
+		cout << ans << '\n';
+	}
+}
