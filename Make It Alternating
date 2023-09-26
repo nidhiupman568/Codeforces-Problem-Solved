@@ -1,0 +1,936 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define vi vector<int>
+#define vll vector<long long>
+#define vec vector
+#define ms multiset
+#define msi multiset<int>
+#define st string
+#define lb lower_bound
+#define up upper_bound
+#define endl "\n"
+#define debug(a) cout << "Case #" << a << ": "
+#define ll long long
+#define ull unsigned long long
+#define ld long double
+#define pb(x) push_back(x)
+#define pf(x) pop_front(x)
+#define f(i, a, b) for (ll i = a; i < b; i++)
+#define ff(i, a, b) for (i = a; i < b; i++)
+#define all(v) v.begin(), v.end()
+#define FAST                      \
+    ios_base::sync_with_stdio(0); \
+    cin.tie(0);                   \
+    cout.tie(0)
+#define rel                               \
+    string s;                             \
+    getline(cin, s);                      \
+    for (size_t i = 0; i < s.size(); i++) \
+    {                                     \
+        getline(cin, s);                  \
+    }
+inline ll addM(ll a, ll b, ll m)
+{
+    return ((a % m) + (b % m)) % m;
+}
+inline ll subM(ll a, ll b, ll m) { return ((a % m) - (b % m) + m) % m; }
+inline ll mulM(ll a, ll b, ll m) { return ((a % m) * (b % m)) % m; }
+inline ll powM(ll a, ll b, ll m)
+{
+    ll ans = 1;
+    a %= m;
+    while (b)
+    {
+        if (b & 1)
+            ans = (a * ans) % m;
+        a = (a * a) % m;
+        b >>= 1;
+    }
+    return ans;
+}
+inline ll divM(ll a, ll b, ll m) { return mulM(a, powM(b, m - 2, m), m); }
+inline void yes(bool ok, bool capital = true)
+{
+    if (capital)
+    {
+        if (ok)
+            cout << "YES\n";
+        else
+            cout << "NO\n";
+    }
+    else
+    {
+        if (ok)
+            cout << "Yes\n";
+        else
+            cout << "No\n";
+    }
+}
+
+const ll md = (ll)(1e9 + 7);
+
+// const ll M = (int)(1e7);
+// vec<ll> numbers(M, 0);
+// set<ll> primes;
+// void seive()
+// {
+//     for (int i = 2; i * i <= M; i++)
+//     {
+//         for (int j = (i * i); j <= M; j += i)
+//         {
+//             if (numbers[j] == 0)
+//                 numbers[j] = 1;
+//         }
+//     }
+//     f(i, 2, M)
+//     {
+//         if (numbers[i] == 0)
+//             primes.insert(i);
+//     }
+// }
+
+long long C(long long n, long long r, ll mod) // nCr
+{
+    long long res = 1LL;
+    for (int i = 0; i < r; i++)
+    {
+        res *= (n - i);
+        res /= (i + 1);
+        res = res % mod;
+    }
+    return res;
+}
+
+ll mypow(ll x, ll y)
+{
+    ll res = 1ll;
+
+    // Check till the number becomes zero
+    while (y > 0)
+    {
+
+        // If y is odd, multiply x with result
+        if (y % 2 == 1)
+            res = (res * x);
+
+        // y = y/2
+        y = y >> 1;
+
+        // Change x to x^2
+        x = (x * x);
+    }
+    return res;
+}
+
+unsigned ll Logn(unsigned ll n,
+                 unsigned ll r)
+{
+    return (n > r - 1) ? 1 +
+                             Logn(n / r, r)
+                       : 0;
+}
+
+bool is_vowel(char x)
+{
+    if (x == 'a' or x == 'e' or x == 'i' or x == 'o' or x == 'u')
+        return true;
+    return false;
+}
+vec<int> binary(ll val)
+{
+    vec<int> ans;
+    while (val > 0)
+    {
+        if (val % 2LL)
+            ans.pb(1);
+        else
+            ans.pb(0);
+        val /= 2LL;
+    }
+    return ans;
+}
+
+ll binary_count(ll val)
+{
+    ll c = 0ll;
+    while (val > 0)
+    {
+        if (val % 2LL)
+            c++;
+        val /= 2LL;
+    }
+    return c;
+}
+
+void countSubtree(ll node, ll par, vec<ll> &cnt, vec<vec<ll>> &adj)
+{
+    for (auto x : adj[node])
+    {
+        if (x != par)
+        {
+            countSubtree(x, node, cnt, adj);
+            cnt[node] += cnt[x];
+        }
+    }
+    return;
+}
+// to call countSubtree do the following
+// Take a vector of size n+1 named cnt initialized with 1
+// then call call countSubtree(1,0,cnt,adj)
+// 1 is the root node
+// bool findif()
+ll mx = INT_MIN;
+void printSubArrays(vector<ll> arr, ll start, ll end, ll sum, ll k)
+{
+    // Stop if we have reached the end of the array
+    if (end == arr.size())
+        return;
+    // Increment the end point and start from 0
+    else if (start > end)
+        printSubArrays(arr, 0, end + 1, sum, k);
+    // Print the subarray and increment the starting point
+    else
+    {
+        ll s = 0LL;
+        for (ll i = start; i < end; i++)
+            s += arr[i];
+        s += arr[end];
+        mx = max(mx, sum - s + (end - start + 1) * k);
+        printSubArrays(arr, start + 1, end, sum, k);
+    }
+    return;
+}
+ll ceilval(ll x, ll y)
+{
+    return (x / y) + ((x % y) != 0);
+}
+bool sortbysecdesc(const pair<int, int> &a,
+                   const pair<int, int> &b)
+{
+    return a.second < b.second and a.first > b.first;
+}
+/*vec<vec<int>> ans;
+void permute(vec<int> a, int l, int r)
+{
+    // Base case
+    if (l == r)
+    {
+        ans.pb(a);
+    }
+    else
+    {
+        // Permutations made
+        for (int i = l; i <= r; i++)
+        {
+
+            // Swapping done
+            swap(a[l], a[i]);
+
+            // Recursion called
+            permute(a, l + 1, r);
+
+            // backtrack
+            swap(a[l], a[i]);
+        }
+    }
+}*/
+bool issub(string b, string a)
+{
+    int i = 0, j = 0;
+    for (; i < a.size(); i++)
+    {
+        if (j == b.size())
+            break;
+        if (a[i] == b[j])
+            j++;
+    }
+    if (j == b.size())
+        return true;
+    return false;
+}
+double Square(double n, double i, double j)
+{
+    double mid = (i + j) / 2;
+    double mul = mid * mid;
+
+    // If mid itself is the square root,
+    // return mid
+    if ((mul == n) || (abs(mul - n) < 0.00001))
+        return mid;
+
+    // If mul is less than n, recur second half
+    else if (mul < n)
+        return Square(n, mid, j);
+
+    // Else recur first half
+    else
+        return Square(n, i, mid);
+}
+
+// Function to find the square root of n
+double findSqrt(double n)
+{
+    // cout << " n is " << n << endl;
+    double i = 1;
+
+    // While the square root is not found
+    bool found = false;
+    while (!found)
+    {
+
+        // If n is a perfect square
+        if (i * i == n)
+        {
+            return i;
+            found = true;
+        }
+        else if (i * i > n)
+        {
+
+            // Square root will lie in the
+            // interval i-1 and i
+            double res = Square(n, i - 1, i);
+            // cout << fixed << setprecision(5) << res;
+            return res;
+            found = true;
+        }
+        i++;
+    }
+}
+/*
+ll findmin(string s1, string s2, ll i, vec<ll> &dp)
+{
+    if (i >= s1.size())
+        return 0;
+    ll opt1 = INT_MAX, opt2 = INT_MAX;
+    if (dp[i] != -1)
+        return dp[i];
+    ll diff;
+    if (s1[i] < s2[i])
+        diff = s2[i] - s1[i];
+    else
+        diff = ('z' - s1[i]) + (s2[i] - 'a' + 1);
+    opt1 = diff + findmin(s1, s2, i + 1, dp);
+    if (s2[i] < s1[i])
+        diff = s1[i] - s2[i];
+    else
+        diff = ('z' - s2[i]) + (s1[i] - 'a' + 1);
+    opt2 = -diff + findmin(s1, s2, i + 1, dp);
+    if (abs(opt1) <= abs(opt2))
+        return dp[i] = opt1;
+    else
+        return dp[i] = opt2;
+}
+pair<ll, ll> fls(string s)
+{
+    ll n = s.size(), i;
+    ll sum = 0ll;
+    unordered_map<ll, ll> prevsum;
+    ll mxlen = 0;
+    ll currlen;
+    pair<ll, ll> p = {-1, -1};
+    f(i, 0, n)
+    {
+        if (s[i] == '0')
+            sum++;
+        else
+            sum--;
+        if (sum > 0)
+        {
+            // cout << "BYE" << endl;
+            p = {0, i};
+            mxlen = i + 1;
+        }
+        else if (sum <= 0)
+        {
+            if (prevsum.find(sum - 1) != prevsum.end())
+            {
+                // cout << "HELLO" << endl;
+                currlen = i - prevsum[sum - 1];
+                if (currlen >= mxlen)
+                {
+                    p = {prevsum[sum - 1] + 1, i};
+                    mxlen = currlen;
+                }
+            }
+        }
+        if (prevsum.find(sum) == prevsum.end())
+            prevsum[sum] = i;
+    }
+    return p;
+}
+*/
+void factorize(long long n, vector<pair<ll, ll>> &vp)
+{
+    ll count = 0LL;
+
+    // count the number of times 2 divides
+    while (!(n % 2LL))
+    {
+        n >>= 1LL; // equivalent to n=n/2;
+        count++;
+    }
+
+    // if 2 divides it
+    if (count)
+        vp.pb(make_pair(2LL, count));
+
+    // check for all the possible numbers that can
+    // divide it
+    for (long long i = 3LL; i <= sqrt(n); i += 2LL)
+    {
+        count = 0LL;
+        while (n % i == 0LL)
+        {
+            count++;
+            n = n / i;
+        }
+        if (count)
+            vp.pb(make_pair(i, count));
+    }
+
+    // if n at the end is a prime number.
+    if (n > 2)
+        vp.pb(make_pair(n, 1LL));
+}
+
+int largestPower(int n, int p)
+{
+    // Initialize result
+    int x = 0;
+
+    // Calculate x = n/p + n/(p^2) + n/(p^3) + ....
+    while (n)
+    {
+        n /= p;
+        x += n;
+    }
+    return x;
+}
+
+ll power(long long x, unsigned ll y, ll p)
+{
+    ll res = 1ll; // Initialize result
+
+    x = x % p; // Update x if it is more than or
+               // equal to p
+
+    if (x == 0)
+        return 0; // In case x is divisible by p;
+
+    while (y > 0)
+    {
+        // If y is odd, multiply x with result
+        if (y & 1)
+            res = (res * x) % p;
+
+        // y must be even now
+        y = y >> 1; // y = y/2
+        x = (x * x) % p;
+    }
+    return res;
+}
+
+void dfs(ll node, vec<vec<ll>> &adj, vec<ll> &vis, vec<ll> &arr)
+{
+    vis[node] = 1;
+    arr.pb(node);
+    f(i, 0, adj[node].size())
+    {
+        ll child = adj[node][i];
+        if (!vis[child])
+            dfs(child, adj, vis, arr);
+    }
+}
+
+bool checkcycleutil(int node, map<int, bool> &vis, map<int, bool> &inStack, map<int, vec<int>> &adj)
+{
+    // Check if node exists in the
+    // recursive stack.
+    // cout << node << endl;
+    if (inStack[node])
+        return true;
+
+    // Check if node is already visited.
+    if (vis[node])
+        return false;
+
+    // Marking node as visited.
+    vis[node] = true;
+
+    // Marking node to be present in
+    // recursive stack.
+    inStack[node] = true;
+
+    // Iterate for all adjacent of
+    // 'node'.
+    vector<int> vs = adj[node];
+    /*cout << node << " ";
+    for (auto i : vs)
+        cout << i << " ";
+    cout << endl;*/
+    for (auto i : vs)
+    {
+        // Recurse for 'v'.
+        if (checkcycleutil(i, vis, inStack, adj))
+            return true;
+    }
+
+    // Mark 'node' to be removed
+    // from the recursive stack.
+    inStack[node] = false;
+
+    // Return false if no cycle exists.
+    return false;
+}
+bool checkcycle(map<int, vec<int>> &adj, ll n, map<int, int> &mp)
+{
+    map<int, bool> vis;
+    map<int, bool> inStack;
+    for (auto i : mp)
+    {
+        vis[i.first] = false;
+        inStack[i.first] = false;
+    }
+    for (auto i : mp)
+    {
+        // cout << i.first << endl;
+        if (checkcycleutil(i.first, vis, inStack, adj))
+            return true;
+    }
+    return false;
+}
+string to_binary(ll x)
+{
+    st s = "";
+    while (x > 0)
+    {
+        if (x % 2)
+            s.pb('1');
+        else
+            s.pb('0');
+        x /= 2;
+    }
+    // reverse(all(s));
+    return s;
+}
+
+ll floorSqrt(ll x)
+{
+    // Base cases
+    if (x == 0 || x == 1)
+        return x;
+
+    // Do Binary Search for floor(sqrt(x))
+    ll start = 1, end = x / 2, ans;
+    while (start <= end)
+    {
+        int mid = (start + end) / 2;
+
+        // If x is a perfect square
+        ll sqr = mid * mid;
+        if (sqr == x)
+            return mid;
+
+        // Since we need floor, we update answer when
+        // mid*mid is smaller than x, and move closer to
+        // sqrt(x)
+
+        /*
+           if(mid*mid<=x)
+                   {
+                           start = mid+1;
+                           ans = mid;
+                   }
+            Here basically if we multiply mid with itself so
+           there will be integer overflow which will throw
+           tle for larger input so to overcome this
+           situation we can use long or we can just divide
+            the number by mid which is same as checking
+           mid*mid < x
+
+           */
+        if (sqr <= x)
+        {
+            start = mid + 1;
+            ans = mid;
+        }
+        else // If mid*mid is greater than x
+            end = mid - 1;
+    }
+    return ans;
+}
+/////////////////////////
+vector<int> tree[200001];
+int depth[200001];
+int ans[200001];
+
+void eval_depth(int src, int par)
+{
+    int src_depth = 0;
+    for (int child : tree[src])
+    {
+        if (child != par)
+        {
+            eval_depth(child, src);
+            src_depth = max(src_depth, 1 + depth[child]);
+        }
+    }
+    depth[src] = src_depth;
+}
+
+void solve(int src, int par, int par_ans)
+{
+    vector<int> prefixMax, suffixMax;
+    // get depth of child nodes.
+    for (int child : tree[src])
+    {
+        if (child != par)
+        {
+            prefixMax.push_back(depth[child]);
+            suffixMax.push_back(depth[child]);
+        }
+    }
+    // build prefix and suffix
+    for (int i = 1; i < prefixMax.size(); i++)
+        prefixMax[i] = max(prefixMax[i], prefixMax[i - 1]);
+    for (int i = (int)suffixMax.size() - 2; i >= 0; i--)
+        suffixMax[i] = max(suffixMax[i], suffixMax[i + 1]);
+
+    // eval ans for every child c_no
+    int c_no = 0;
+    for (int child : tree[src])
+    {
+        if (child != par)
+        {
+            int op1 = (c_no == 0) ? INT_MIN : prefixMax[c_no - 1];
+            int op2 = (c_no == (int)suffixMax.size() - 1) ? INT_MIN : suffixMax[c_no + 1];
+            int partial_ans = 1 + max(par_ans, max(op1, op2));
+
+            solve(child, src, partial_ans);
+            c_no++;
+        }
+    }
+
+    // eval ans for src
+    ans[src] = 1 + max(par_ans, (prefixMax.empty() ? -1 : prefixMax.back()));
+}
+//////////////////////////
+
+void printLongestIncSubArr(vector<int> arr, int n)
+{
+    // 'max' to store the length of longest
+    // increasing subarray
+    // 'len' to store the lengths of longest
+    // increasing subarray at different
+    // instants of time
+    int max = 1, len = 1, maxIndex = 0;
+
+    // traverse the array from the 2nd element
+    for (int i = 1; i < n; i++)
+    {
+        // if current element if greater than previous
+        // element, then this element helps in building
+        // up the previous increasing subarray encountered
+        // so far
+        if (arr[i] >= arr[i - 1])
+            len++;
+        else
+        {
+            // check if 'max' length is less than the length
+            // of the current increasing subarray. If true,
+            // then update 'max'
+            if (max < len)
+            {
+                max = len;
+
+                // index assign the starting index of
+                // longest increasing contiguous subarray.
+                maxIndex = i - max;
+            }
+
+            // reset 'len' to 1 as from this element
+            // again the length of the new increasing
+            // subarray is being calculated
+            len = 1;
+        }
+    }
+
+    // comparing the length of the last
+    // increasing subarray with 'max'
+    if (max < len)
+    {
+        max = len;
+        maxIndex = n - max;
+    }
+
+    // Print the elements of longest increasing
+    // contiguous subarray.
+    cout << maxIndex + 1 << " " << max + maxIndex;
+}
+ll mySum = 0ll;
+ll findmax(ll i, ll j, vec<vec<ll>> &v, vec<vec<ll>> &vis)
+{
+    if (v[i][j] != 0)
+    {
+        cout << i << " " << j << endl;
+        vis[i][j] = 1;
+        if (i + 1 < v.size() and v[i + 1][j] != 0 and !vis[i + 1][j])
+        {
+            return v[i][j] + findmax(i + 1, j, v, vis);
+        }
+        if (j + 1 < v[0].size() and v[i][j + 1] != 0 and !vis[i][j + 1])
+            return v[i][j] + findmax(i, j + 1, v, vis);
+        if (i - 1 >= 0 and v[i - 1][j] != 0 and !vis[i - 1][j])
+        {
+            return v[i][j] + findmax(i - 1, j, v, vis);
+        }
+        if (j - 1 >= 0 and v[i][j - 1] != 0 and !vis[i][j - 1])
+        {
+            return v[i][j] + findmax(i, j - 1, v, vis);
+        }
+        return v[i][j];
+    }
+}
+bool pall(string &s)
+{
+    string tem = s;
+    reverse(all(tem));
+    return tem == s;
+}
+void mydfs(ll node, vec<vec<ll>> &adj, vec<ll> &vis)
+{
+    vis[node] = 1;
+    f(i, 0, adj[node].size())
+    {
+        if (!vis[adj[node][i]])
+        {
+            mydfs(adj[node][i], adj, vis);
+        }
+    }
+}
+vec<ll> pallindromes;
+bool ispall(ll i)
+{
+    string s = to_string(i);
+    string s1 = s;
+    reverse(all(s1));
+    return s1 == s;
+}
+void myPre()
+{
+    f(i, 0, (ll)(1ll << 15))
+    {
+        if (ispall(i))
+            pallindromes.pb(i);
+    }
+}
+ll fun(ll node, vec<vec<ll>> &adj, vec<ll> &vis, vec<ll> &dp)
+{
+    vis[node] = 1;
+    ll sum = 0ll;
+    f(i, 0, adj[node].size())
+    {
+        if (!vis[adj[node][i]])
+            sum += fun(adj[node][i], adj, vis, dp);
+    }
+    if (sum == 0ll)
+        sum = 1ll;
+    return dp[node] = sum;
+}
+/*************************************************************************************/
+ll largestPower(ll n, ll p)
+{
+    // Initialize result
+    ll x = 0ll;
+
+    // Calculate x = n/p + n/(p^2) + n/(p^3) + ....
+    while (n)
+    {
+        n /= p;
+        x += n;
+    }
+    return x;
+}
+
+// Utility function to do modular exponentiation.
+// It returns (x^y) % p
+ll power(ll x, ll y, ll p)
+{
+    ll res = 1ll; // Initialize result
+    x = x % p;    // Update x if it is more than or
+    // equal to p
+    while (y > 0ll)
+    {
+        // If y is odd, multiply x with result
+        if (y & 1ll)
+            res = (res * x) % p;
+
+        // y must be even now
+        y = y >> 1ll; // y = y/2
+        x = (x * x) % p;
+    }
+    return res;
+}
+
+// Returns n! % p
+ll modFact(ll n, ll p)
+{
+    if (n >= p)
+        return 0ll;
+
+    ll res = 1ll;
+
+    // Use Sieve of Eratosthenes to find all primes
+    // smaller than n
+    bool isPrime[n + 1ll];
+    memset(isPrime, 1ll, sizeof(isPrime));
+    for (ll i = 2ll; i * i <= n; i++)
+    {
+        if (isPrime[i])
+        {
+            for (ll j = 2ll * i; j <= n; j += i)
+                isPrime[j] = 0ll;
+        }
+    }
+
+    // Consider all primes found by Sieve
+    for (ll i = 2ll; i <= n; i++)
+    {
+        if (isPrime[i])
+        {
+            // Find the largest power of prime 'i' that divides n
+            ll k = largestPower(n, i);
+
+            // Multiply result with (i^k) % p
+            res = (res * power(i, k, p)) % p;
+        }
+    }
+    return res;
+}
+void solve()
+{
+
+    // cout << endl;
+    string s;
+    cin >> s;
+    ll n = s.size();
+    vec<ll> start_with_one, start_with_zero;
+    ll first_one = -1;
+    ll first_zero = -1;
+    f(i, 0, n)
+    {
+        if (s[i] == '1')
+        {
+            first_one = i;
+            break;
+        }
+    }
+    f(i, 0, n)
+    {
+        if (s[i] == '0')
+        {
+            first_zero = i;
+            break;
+        }
+    }
+    ll count = 1ll;
+    if (first_one != -1)
+    {
+        f(i, first_one + 1, s.size())
+        {
+            if (s[i] == s[i - 1])
+                count++;
+            else
+            {
+                start_with_one.pb(count);
+                count = 1ll;
+            }
+        }
+    }
+    start_with_one.pb(count);
+    count = 1ll;
+    if (first_zero != -1)
+    {
+        f(i, first_zero + 1, s.size())
+        {
+            if (s[i] == s[i - 1])
+                count++;
+            else
+            {
+                start_with_zero.pb(count);
+                count = 1ll;
+            }
+        }
+    }
+    start_with_zero.pb(count);
+    // for (auto i : start_with_one)
+    //     cout << i << " ";
+    // cout << endl;
+    // for (auto i : start_with_zero)
+    //     cout << i << " ";
+    // cout << endl;
+    ll mn = INT_MAX;
+    ll ways = 1ll;
+    ll opt1 = 0ll;
+    ll opt2 = 0ll;
+    if (first_zero == 0)
+    {
+
+        f(i, 0, start_with_zero.size())
+        {
+            opt2 += (start_with_zero[i] - 1);
+            if (start_with_zero[i] != 1)
+            {
+                ways = mulM(start_with_zero[i], ways, 998244353ll);
+            }
+        }
+
+        ll a = modFact(opt2, 998244353ll);
+        ways = mulM(ways, a, 998244353ll);
+        mn = opt2;
+    }
+    else if (first_one == 0)
+    {
+
+        f(i, 0, start_with_one.size())
+        {
+            opt1 += (start_with_one[i] - 1);
+            if (start_with_one[i] != 1)
+            {
+                ways = mulM(ways, start_with_one[i], 998244353ll);
+            }
+        }
+
+        ll a = modFact(opt1, 998244353ll);
+        ways = mulM(ways, a, 998244353ll);
+        mn = opt1;
+    }
+
+    if (ways == 0)
+        ways = 1ll;
+    cout << mn << " " << ways << endl;
+}
+
+int main()
+{
+#ifndef ONLINE_JUDGE
+    freopen("ip.txt", "r", stdin);
+    freopen("op.txt", "w", stdout);
+#endif
+    FAST;
+    int t = 1;
+    cin >> t;
+    //                   pre();
+    //                                     pre();
+    //          seive();
+    // ll a = 0;
+    //  myPre();
+    while (t--)
+    {
+        // a++;
+        // debug(a);
+        solve();
+    }
+    return 0;
+}
