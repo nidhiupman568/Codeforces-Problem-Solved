@@ -1,0 +1,781 @@
+#include <iostream>
+#include <bits/stdc++.h>
+// #include <sys/resource.h>
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+// using namespace chrono;
+// using namespace __gnu_pbds;
+
+// Speed
+#define Code ios_base::sync_with_stdio(false);
+#define By cin.tie(NULL);
+#define Asquare cout.tie(NULL);
+
+// def
+// #define enableDebug 1
+
+// Debug
+#ifdef enableDebug
+#define debug(x)       \
+    cerr << #x << " "; \
+    cerr << x << " ";  \
+    cerr << endl;
+#else
+#define debug(x) ;
+#endif
+
+// Aliases
+using ll = long long;
+using lld = long double;
+using ull = unsigned long long;
+
+// Constants
+const lld pi = 3.141592653589793238;
+const ll INF = LONG_LONG_MAX;
+const ll mod = 1e9 + 7;
+const ll MOD = 1e9 + 7;
+
+// TypeDEf
+typedef pair<ll, ll> pll;
+typedef vector<ll> vll;
+typedef vector<pll> vpll;
+typedef vector<string> vs;
+typedef unordered_map<ll, ll> umll;
+typedef map<ll, ll> mll;
+
+// Macros
+#define ff first
+#define ss second
+#define pb push_back
+#define mp make_pair
+#define fl(i, n) for (int i = 0; i < n; i++)
+#define rl(i, m, n) for (int i = n; i >= m; i--)
+#define py cout << "YES\n";
+#define pm          \
+    cout << "-1\n"; \
+    s
+#define pn cout << "NO\n";
+#define vr(v) v.begin(), v.end()
+#define rv(v) v.end(), v.begin()
+
+// Operator overloads
+template <typename T1, typename T2> // cin >> pair<T1, T2>
+istream &operator>>(istream &istream, pair<T1, T2> &p)
+{
+    return (istream >> p.first >> p.second);
+}
+
+template <typename T> // cin >> vector<T>
+istream &operator>>(istream &istream, vector<T> &v)
+{
+    for (auto &it : v)
+        cin >> it;
+    return istream;
+}
+
+template <typename T1, typename T2> // cout << pair<T1, T2>
+ostream &operator<<(ostream &ostream, const pair<T1, T2> &p)
+{
+    return (ostream << p.first << " " << p.second);
+}
+
+template <typename T> // cout << vector<T>
+ostream &operator<<(ostream &ostream, const vector<T> &c)
+{
+    for (auto &it : c)
+        cout << it << " ";
+    return ostream;
+}
+
+// Utility functions
+template <typename T>
+void print(T &&t) { cout << t << "\n"; }
+void printarr(ll arr[], ll n)
+{
+    fl(i, n) cout << arr[i] << " ";
+    cout << "\n";
+}
+
+template <typename T>
+void printvec(vector<T> v)
+{
+    ll n = v.size();
+    fl(i, n) cout << v[i] << " ";
+    cout << "\n";
+}
+
+template <typename T>
+ll sumvec(vector<T> v)
+{
+    ll n = v.size();
+    ll s = 0;
+    fl(i, n) s += v[i];
+    return s;
+}
+
+// Mathematical functions
+
+ll gcd(ll num1, ll num2)
+{
+    while (num2 != 0)
+    {
+        int rem = num1 % num2;
+        num1 = num2;
+        num2 = rem;
+    }
+
+    return num1;
+} //__gcd
+
+ll lcm(ll a, ll b) { return (a / gcd(a, b)) * b; }
+
+ll moduloMultiplication(ll a, ll b, ll mod)
+{
+    ll res = 0;
+    a %= mod;
+    while (b)
+    {
+        if (b & 1)
+            res = (res + a) % mod;
+        b >>= 1;
+    }
+    return res;
+}
+
+ll powermod(ll x, ll y, ll p)
+{
+    ll res = 1;
+    x = x % p;
+    if (x == 0)
+        return 0;
+    while (y > 0)
+    {
+        if (y & 1)
+            res = (res * x) % p;
+        y = y >> 1;
+        x = (x * x) % p;
+    }
+    return res;
+}
+
+// Sorting
+bool sorta(const pair<int, int> &a, const pair<int, int> &b) { return (a.second < b.second); }
+bool sortd(const pair<int, int> &a, const pair<int, int> &b) { return (a.second > b.second); }
+
+// Bits
+string decToBinary(int n)
+{
+    string s = "";
+    int i = 0;
+    while (n > 0)
+    {
+        s = to_string(n % 2) + s;
+        n = n / 2;
+        i++;
+    }
+    return s;
+}
+
+ll binaryToDecimal(string n)
+{
+    string num = n;
+    ll dec_value = 0;
+    int base = 1;
+    int len = num.length();
+    for (int i = len - 1; i >= 0; i--)
+    {
+        if (num[i] == '1')
+            dec_value += base;
+        base = base * 2;
+    }
+    return dec_value;
+}
+
+// Check
+bool isPrime(ll n)
+{
+    if (n <= 1)
+        return false;
+    if (n <= 3)
+        return true;
+    if (n % 2 == 0 || n % 3 == 0)
+        return false;
+    for (int i = 5; i * i <= n; i = i + 6)
+    {
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+    }
+    return true;
+}
+
+bool isPowerOfTwo(int n)
+{
+    if (n == 0)
+        return false;
+
+    return ((n & (n - 1)) == 0);
+    // return (ceil(log2(n)) == floor(log2(n)));
+}
+
+bool isPerfectSquare(ll x)
+{
+    if (x >= 0)
+    {
+        ll sr = sqrt(x);
+        return (sr * sr == x);
+    }
+    return false;
+}
+
+// Disjoint Set Union Template
+class DSU
+{
+    vector<int> parent, size;
+
+public:
+    DSU(int n)
+    {
+        for (int i = 0; i <= n; i++)
+        {
+            parent.push_back(i);
+            size.push_back(1);
+        }
+    }
+
+    int findParent(int node)
+    {
+        if (parent[node] == node)
+            return node;
+
+        return (parent[node] = findParent(parent[node]));
+    }
+
+    void Union(int u, int v)
+    {
+        int pu = findParent(u);
+        int pv = findParent(v);
+
+        if (pu == pv)
+            return;
+
+        if (size[pu] < size[pv])
+        {
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        }
+
+        else
+        {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
+};
+
+// Segment Tree Template
+class SGTree
+{
+    vector<ll> seg;
+
+public:
+    SGTree(ll n)
+    {
+        ll h = ceil(log2(n));
+        ll size = 2 * (int)pow(2, h);
+        seg.resize(size + 1);
+    }
+
+    void build(ll idx, ll low, ll high, vector<ll> &arr)
+    {
+        // leaf nodes
+        if (low == high)
+        {
+            seg[idx] = arr[low];
+            return;
+        }
+
+        ll mid = (low + high) / 2;
+        build(2 * idx + 1, low, mid, arr);
+        build(2 * idx + 2, mid + 1, high, arr);
+        seg[idx] = min(seg[2 * idx + 1], seg[2 * idx + 2]);
+    }
+
+    ll query(int idx, int low, int high, int l, int r)
+    {
+        // no overlap
+        // [l, r] [low, high] or [low, high] [l, r]
+        if (r < low || high < l)
+            return INT_MAX;
+
+        // complete overlap
+        // [l, low, high, r]
+        if (l <= low && high <= r)
+            return seg[idx];
+
+        // partially overlap
+        // [l, low, r, high] or [low, l, high, r]
+        int mid = (low + high) / 2;
+        int left = query(2 * idx + 1, low, mid, l, r);
+        int right = query(2 * idx + 2, mid + 1, high, l, r);
+        return min(left, right);
+    }
+
+    void update(int idx, int low, int high, int i, int val)
+    {
+        if (low == high)
+        {
+            seg[idx] = val;
+            return;
+        }
+
+        int mid = (low + high) / 2;
+        if (i <= mid)
+            update(2 * idx + 1, low, mid, i, val);
+
+        else
+            update(2 * idx + 2, mid + 1, high, i, val);
+
+        seg[idx] = min(seg[2 * idx + 1], seg[2 * idx + 2]);
+    }
+};
+
+// Fenweek Tree Template
+class FWTree
+{
+    int n;
+    vector<int> fenweek;
+
+public:
+    FWTree(int size)
+    {
+        this->n = size;
+        fenweek.resize(size + 1);
+        fenweek[0] = 0;
+    }
+
+    void update(int idx, int val)
+    {
+        while (idx <= n)
+        {
+            fenweek[idx] += val;
+            idx = idx + (idx & (-idx));
+        }
+    }
+
+    int sum(int idx)
+    {
+        int s = 0;
+        while (idx > 0)
+        {
+            s += fenweek[idx];
+            idx = idx - (idx & (-idx));
+        }
+
+        return s;
+    }
+};
+
+// SparseTable Template
+class sparseTable
+{
+    int n;
+    int size;
+    vector<vector<int>> sparse;
+
+public:
+    sparseTable(int n)
+    {
+        this->n = n;
+        this->size = log2(n) + 1;
+
+        sparse.resize(n);
+        for (int i = 0; i < n; i++)
+            sparse[i] = vector<int>(size);
+    }
+
+    void build(vector<int> &arr)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            for (int i = 0; (i + (1 << j) - 1) < n; i++)
+            {
+                if (j == 0)
+                    sparse[i][j] = arr[i];
+
+                else
+                    sparse[i][j] = min(sparse[i][j - 1], sparse[i + (1 << (j - 1))][j - 1]);
+            }
+        }
+    }
+
+    int getMin(int l, int r)
+    {
+        int len = log2(r - l + 1);
+        return min(sparse[l][len], sparse[r - (1 << len) + 1][len]);
+    }
+};
+
+// Trie String Template
+class TrieString
+{
+    struct Trienode
+    {
+        bool endsHere;
+        Trienode *child[26];
+    };
+
+    Trienode *root;
+
+    Trienode *getNode()
+    {
+        Trienode *newnode = new Trienode;
+        newnode->endsHere = false;
+
+        for (int i = 0; i < 26; i++)
+            newnode->child[i] = NULL;
+
+        return newnode;
+    }
+
+public:
+    TrieString()
+    {
+        root = getNode();
+    }
+
+    void insert(string word)
+    {
+        Trienode *curr = root;
+        int index;
+
+        for (int i = 0; i < word.size(); i++)
+        {
+            index = word[i] - 'a';
+            if (curr->child[index] == NULL)
+                curr->child[index] = getNode();
+
+            curr = curr->child[index];
+        }
+
+        curr->endsHere = true;
+    }
+
+    bool search(string word)
+    {
+        Trienode *curr = root;
+        int index;
+
+        for (int i = 0; i < word.size(); i++)
+        {
+            index = word[i] - 'a';
+            if (curr->child[index] == NULL)
+                return false;
+
+            curr = curr->child[index];
+        }
+
+        return curr->endsHere;
+    }
+};
+
+// Trie Xor Template
+class TrieXor
+{
+    struct Trienode
+    {
+        Trienode *child[2];
+    };
+
+    Trienode *root;
+
+    Trienode *getNode()
+    {
+        Trienode *newnode = new Trienode;
+        newnode->child[0] = NULL;
+        newnode->child[1] = NULL;
+
+        return newnode;
+    }
+
+public:
+    TrieXor()
+    {
+        root = getNode();
+    }
+
+    void insert(int num)
+    {
+        Trienode *curr = root;
+        int bit;
+        for (int i = 31; i >= 0; i--)
+        {
+            bit = (num >> i) & 1;
+            if (curr->child[bit] == NULL)
+                curr->child[bit] = getNode();
+
+            curr = curr->child[bit];
+        }
+    }
+
+    int getMax(int num)
+    {
+        int maxNum = 0;
+        Trienode *curr = root;
+        int bit;
+
+        for (int i = 31; i >= 0; i--)
+        {
+            bit = (num >> i) & 1;
+
+            if (curr->child[1 - bit] != NULL)
+            {
+                maxNum |= (1 << i);
+                curr = curr->child[1 - bit];
+            }
+
+            else
+            {
+                curr = curr->child[bit];
+            }
+        }
+
+        return maxNum;
+    }
+};
+
+// Hash Function
+long long computeHash(string &s)
+{
+    // Here we take parime as 31
+    long long p = 1;
+    long long hash = 0;
+
+    for (char ch : s)
+    {
+        hash = (hash + (((ch - 'a' + 1) * p) % MOD)) % MOD;
+        p = (p * 31) % MOD;
+    }
+
+    return hash;
+}
+
+ll power(ll base, ll n, ll MOD)
+{
+    ll ans = 1;
+    while (n)
+    {
+        if (n & 1)
+        {
+            ans = ((ans * base) % MOD);
+            n = n - 1;
+        }
+
+        else
+        {
+            n = n >> 1;
+            base = ((base * base) % MOD);
+        }
+    }
+
+    return ans;
+}
+
+// Prefix Hashing
+class prefixHashing
+{
+
+    vector<long long> prefixHash;
+
+public:
+    prefixHashing(string &s)
+    {
+        int n = s.size();
+        long long p = 1;
+        long long hash = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            hash = (hash + (((s[i] - 'a' + 1) * p) % MOD)) % MOD;
+            prefixHash.push_back(hash);
+            p = (p * 31) % MOD;
+        }
+    }
+
+    long long computeSubstringHash(int l, int r)
+    {
+        long long hash = prefixHash[r];
+        if (l - 1 >= 0)
+            hash = (hash - prefixHash[l - 1] + MOD) % MOD;
+
+        hash = (hash * power(power(31, l, MOD), MOD - 2, MOD)) % MOD;
+        return hash;
+    }
+};
+
+// Rabin Karp for string matching algo
+int rabinKarp(string &s, string &pattern)
+{
+    int n1 = s.size();
+    int n2 = pattern.size();
+    int ans = 0;
+
+    // compute patten hash
+    long long patHash = 0;
+    long long p = 1;
+    for (char ch : pattern)
+    {
+        patHash = (patHash + (((ch - 'a' + 1) * p) % MOD)) % MOD;
+        p = (p * 31) % MOD;
+    }
+
+    // compute hash for first window of s
+    long long hash = 0;
+    long long p1 = 1;
+    long long p2 = 1;
+    for (int i = 0; i < n2; i++)
+    {
+        hash = (hash + (((s[i] - 'a' + 1) * p2) % MOD)) % MOD;
+        p2 = (p2 * 31) % MOD;
+    }
+
+    int left = 0, right = n2;
+    if (hash == patHash)
+        ans++;
+
+    while (right < n1)
+    {
+        hash = (hash + (((s[right] - 'a' + 1) * p2) % MOD)) % MOD;
+        hash = (hash - (((s[left] - 'a' + 1) * p1) % MOD) + MOD) % MOD;
+        p2 = (p2 * 31) % MOD;
+        p1 = (p1 * 31) % MOD;
+        right++;
+        left++;
+
+        patHash = (patHash * 31) % MOD;
+
+        if (patHash == hash)
+            ans++;
+    }
+
+    return ans;
+}
+
+// Longest Prefix as Suffix Construction
+vector<int> LPS(string &s)
+{
+    int n = s.size();
+    int i = 1, len = 0;
+
+    vector<int> lps(n, 0);
+
+    while (i < n)
+    {
+        if (s[i] == s[len])
+        {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+
+        else
+        {
+            if (len != 0)
+                len = lps[len - 1];
+
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+
+    return lps;
+}
+
+// KMP String Pattern matching algo
+vector<int> KMP(string &s, string &pattern)
+{
+    int n1 = s.size();
+    int n2 = pattern.size();
+
+    vector<int> lps = LPS(pattern);
+    vector<int> res;
+    int i = 0, j = 0;
+    while (i < n1)
+    {
+        if (s[i] == pattern[j])
+        {
+            i++;
+            j++;
+        }
+
+        else
+        {
+            if (j == 0)
+                i++;
+            else
+                j = lps[j - 1];
+        }
+
+        if (j == n2)
+        {
+            res.push_back(i - n2);
+            j = lps[j - 1];
+        }
+    }
+
+    return res;
+}
+
+// Z algo(function)
+vector<int> Z_function(string &s)
+{
+    int n = s.size(), l = 0, r = 0;
+    vector<int> z(n, 0);
+    for (int i = 1; i < n; i++)
+    {
+        if (i <= r)
+            z[i] = min(z[i - l], r - i + 1);
+
+        while (i + z[i] < n && s[z[i]] == s[z[i] + i])
+            z[i]++;
+
+        if (i + z[i] - 1 > r)
+        {
+            l = i;
+            r = i + z[i] - 1;
+        }
+    }
+
+    return z;
+}
+
+void solve()
+{
+    ll n;
+    cin >> n;
+
+    if (n <= 4)
+        cout << "Bob\n";
+    else
+        cout << "Alice\n";
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    ll t = 1;
+    cin >> t;
+
+    while (t--)
+    {
+        solve();
+    }
+
+    return 0;
+}
