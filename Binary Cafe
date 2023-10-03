@@ -1,0 +1,672 @@
+#include<bits/stdc++.h>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<math.h>
+#include<map>
+#include <cmath>
+#include<set>
+#define pb push_back
+using namespace std;
+#define ndl cout<<endl;
+#define MODU 1073741824
+#define ll long long
+#define large 10000000000
+#define SIZE 200007   
+#define MOD 1000000007
+#define MODS 998244353
+#define forn(i, n) for(int i = 0; i < int(n); ++i)
+#define ull unsigned long long 
+#define cinn(t) int t;cin>>t;
+#define cinn2(t1,t2) int t1,t2;cin>>t1>>t2;
+#define lld long double
+#define cinnl(t) ll t;cin>>t;
+#define cinn2l(t1,t2) ll t1,t2;cin>>t1>>t2;
+#define fornl(i, n) for(ll i = 0; i < n; ++i)
+bool prime(int a){
+    
+    if(a==1) return false;
+    if(a==2||a==3) return true;
+    int count=0;
+    for(int i=2;i<=sqrt(a);i++){
+        if(a%i==0){
+            count++;
+            break;
+        }
+    }
+    if(count==0) return true;
+    return false;
+}
+
+// ld power(int x, int n)
+// {
+//     long long power = 1;
+//     for(int i = 1; i <= n; i++)
+//     {
+//         power *= x;
+//     }
+//     return power;
+// }
+
+// void add(int &a, int b)
+// {
+//     a += b;
+//     if(a >= MOD)
+//         a -= MOD;
+// }
+ 
+
+// inline __int64 get_sum(const vector<__int64> &sum, int l, int r)
+// {
+// 	return (l == 0) ? sum[r] : (sum[r] - sum[l - 1]);
+// }
+// int BS(vector<int>arr_a ,int l, int  r, int x)
+// {
+    
+//     if (r >= l) {
+//         int mid = l + (r - l) / 2;
+ 
+//         // If the element is present at the middle
+//         // itself
+//         if (arr_a[mid] == x)
+//             return 1;
+ 
+//         // If element is smalder than mid, then
+//         // it can only be present in left_a subarr_aay
+//         if (arr_a[mid] > x)
+//             return BS(arr_a, l, mid - 1, x);
+ 
+//         // Else the element can only be present
+//         // in right_a subarr_aay
+//         return BS(arr_a, mid + 1, r, x);
+//     }
+ 
+//     // We reach here when element is not
+//     // present in arr_aay
+//     return -1;
+// }
+// ld gcd(ld a, ld b)
+// {
+//     // Everything divides 0
+//     if (a == 0)
+//       return b;
+//     if (b == 0)
+//       return a;
+  
+//     // base case
+//     if (a == b)
+//         return a;
+  
+//     // a is greater
+//     if (a > b)
+//         return gcd(a-b, b);
+//     return gcd(a, b-a);
+// }
+
+// int  prime_flag[200007];
+
+// void calculate_prime_flag(){
+//     prime_flag[0] = prime_flag[1] = 1;
+//     for(int i=2;i*i<=20007;i++){
+//         if (prime_flag[i]==0){
+//             for(int j=i*i;j<20007;j+=i){
+//                 prime_flag[j] = 1;
+//             }
+//         }
+//     }
+//     return ;
+// }
+
+
+
+// pair<int,int> adj[1009];
+// int ax,ay,bx,by,cx,cy;
+// int level[9][9];
+// vector<pair<int,int>>movements={{1,1},{-1,-1},{1,0},{0,1},{-1,0},{0,-1},{1,-1},{-1,1}};
+// bool isValid(int x,int y){
+//     if(x>=1&&x<=8&&y>=1&&y<=8) return true;
+//     return false;
+// }
+// bool check(int x1,int y1,int x2,int y2){
+//     if((x1-x2)==(y1-y2)){
+//         return true;
+//     }
+//     return false;
+// }
+// queue<pair<int,int>>que;
+
+// void bfs(int vertex_x,int vertex_y){
+//     if(vis[vertex_x][vertex_y]==1) return;
+//     vis[vertex_x][vertex_y]=1;
+//     que.pop();
+    
+//     for(auto m:movements){
+//         int child_x=m.first+vertex_x;
+//         int child_y=m.second+vertex_y;
+//         if(isValid(child_x,child_y)){
+//             if(vis[child_x][child_y]==1){
+//                 level[child_x][child_y]=min(level[child_x][child_y],level[vertex_x][vertex_y]+1);
+//             }
+//             else
+//                 level[child_x][child_y]=level[vertex_x][vertex_y]+1;
+//             que.push({child_x,child_y});
+//         }
+//     }
+//     if(que.empty()){return;}
+//     else{
+//         auto t=que.front();
+//         bfs(t.first,t.second);
+//     }
+// }
+
+// int dist(int x1,int y1,int x2,int y2){
+//     if(x1==x2||y1==y2){
+//         return abs(x1-x2)+abs(y1-y2);
+//     }
+//     else{
+//         int mini=INT_MAX;
+//         for(auto m:movements){
+//             if(isValid(x1+m.first,y1+m.second)){
+//                 if(dist(x1+m.first,y1+m.second)+1<mini){
+//                     mini=dist(x1+m.first,y1+m.second)+1;
+//                 }
+//             }
+            
+//         }
+//         return mini;
+//     }
+// }
+
+// // int satisfy[100007];
+// // set<int>G[100007];
+// // int vis[100007];
+// bool check(vector<int> a) {
+//     for(int i = 0; i < a.size() - 1; i++) {
+//         if(a[i] != a[i+1]) return false;
+//     }
+//     return true;
+// }
+// ld fact(ld i){
+//     ld asn=1;
+//     for(ld j=1;j<=i;j++){
+//         asn*=j;
+//     }
+//     return asn;
+// }
+// vector<int> moves={3,-3,4,-4};
+// ll n;
+// ll dp[100007];
+// memset(dp,-1,sizeof(dp));
+// ll fact(ll i){
+//     if(dp[i]!=-1) return dp[i];
+//     else{
+//         ll mul=1;
+//         for(ll k=1;k<=i;k++){
+//             mul*=k;
+//         }
+//         dp[i]=mul;
+//         return dp[i]
+//     }
+// }
+
+
+// ll dp[45];
+
+//BINARY EXPONENTIATION
+ll binexp(ll a ,ll b){
+    
+    if(b==0) return 1;
+    ll res=1;
+    while(b>0){
+        if(b&1){
+            res=res*a;
+        }
+        a=a*a;
+        b/=2;
+    }
+    return res;
+}
+
+// ll binpow(ll a ,ll b, ll m){
+//     a%=m;
+//     if(b==0) return 1;
+//     ll res=1;
+//     while(b>0){
+//         if(b&1){
+//             res=res*a%m;
+//         }
+//         a=a*a%m;
+//         b/=2;
+//     }
+//     return res%m;
+// }
+
+//Extended EUCLIDIEN ALGO
+// ll gcd(ll a,ll b,ll *x,ll *y){
+//     if(b==0){
+//         *x=1;
+//         *y=0;
+//         return a ;
+//     }
+//     ll x1,y1;
+//     ll d=gcd(b,a%b,&x1,&y1);
+//     *x=y1;
+//     *y=x1-y1*(a/b);
+    
+//     return d;
+// }
+
+// int dp[SIZE];
+// vector<pair<int,int>> moves={{1,0},{0,1},{-1,0},{0,-1}};
+
+
+
+// bool is_valid(int i,int j){
+//     if(i>=0&&i<n&&j>=0&&j<m) return true;
+//     return false;
+    
+// }
+// int vis[1001][1001];
+
+// ll dfs(int i,int j,int n,int m){
+//     if(vis[i][j]!=0||g[i][j]==0||i<0||i>=n||j<0||j>=m) return 0;
+    
+//     ll ans=g[i][j];
+//     vis[i][j]=1;
+    
+//     ans+=(dfs(i+1,j,n,m)+dfs(i,j+1,n,m)+dfs(i-1,j,n,m)+dfs(i,j-1,n,m));
+        
+    
+//     return ans;
+    
+    
+// }
+
+// ll length(ll a){
+//     if(a==0) return 1;
+//     ll temp =a;
+//     ll len=0;
+//     while(temp>0){
+//         len++;
+//         temp/=10;
+        
+//     }
+//     return len;
+// }
+
+// ll unluckcheck(string a){
+//     char maxi='0',mini='9';
+//     for(int i=0;i<a.size();i++){
+//         if(a[i]>maxi){
+//             maxi=a[i];
+//         }
+//         if(a[i]<mini){
+//             mini=a[i];
+//         }
+//     }
+//     return (int(maxi)-int(mini));
+// }
+// const int maxn=2e3+17;
+
+// ll dp[maxn][maxn];
+
+// // ll dp_func(int i,int j,int a[],int n){
+// //     if(dp[i][j]!=-1) return dp[i][j];
+// //     if(i>=j) return dp[i][j]=0;
+// //     dp[i][j]=min(dp[i][j-1],dp[i+1][j])+a[j]-a[i];
+// //     return dp[i][j];
+// // }
+
+// int dp[107];
+// int dp2[107];
+// vector<int>v;
+// int visit[100005];
+
+// void sieve() {
+// 	ll i, j;
+// 	visit[0]=1;
+// 	visit[1] = 1;
+// 	v.pb(2);
+// 	for (i = 4; i < 100005; i += 2)visit[i] = 1;
+// 	for (i = 3; i < 100005; i += 2) {
+// 		if (!visit[i]) {
+// 			v.pb(i);
+// 			if (i * i < 100005) {
+// 				for (j = i * i; j < 100005; j += i * 2) {
+// 					visit[j] = 1;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+// ll fun(int i,int t,int a[],int n){
+//     if(i==n-1){
+//         if(a[i]<t) return 1;
+//         else return 0;
+//     }
+//     if (t==0) return 0;
+//     if(t>a[i]) return max(fun(i+1,t,a,n),1+fun(i+1,t-a[i],a,n));
+//     return fun(i+1,t,a,n);
+// }
+// int a,b,c,d;
+// ll dp[101][101][11][11];
+// ll temp1,temp2;
+// ll fun(int n1,int n2,int k1,int k2){
+    
+//     if(n1==0&&n2==0) return dp[n1][n2][k1][k2]=1;
+//     ll ans=dp[n1][n2][k1][k2];
+//     if(ans!=-1) return ans;
+    
+//     ans=0;
+//     if(k1>0&&n1>0){
+//         ans+=fun(n1-1,n2,k1-1,temp2); ans%=MOD;
+        
+//     }
+//     if(k2>0&&n2>0) {
+//         ans+=fun(n1,n2-1,temp1,k2-1); ans%=MOD;
+//     }
+    
+//     return dp[n1][n2][k1][k2]=ans;
+    
+// }
+// int n,p;
+// bool check(string str){
+//     int start=0,end=n-1;
+//     while(start<end){
+//         if(str[start]!=str[end]){
+//             return false;
+//         }
+//         end--;
+//         start++;
+//     }
+    
+//     return true;
+    
+// }
+// int r_f=0;
+// vector<pair<int,int>>vertices;
+// // vector<pair<int,int>>queries;
+// bool vis[108];
+// vector<int>g[108];
+// // map<int,int>mapp;
+
+// void dfs(int i){
+//     if(vis[i]==true) return ;
+    
+//     vis[i]=true;
+//     // mapp[i]++;
+//     for(auto &child:g[i]){
+//         dfs(child);
+//     }
+//     return;
+// }
+// bool vis[505][505];
+// char a[505][505];
+// int n,m,k;
+
+// void f(int i,int j){
+//      if(vis[i][j]||i<0||i>=n||j<0||j>=m||a[i][j]!='.') return;
+//      vis[i][j]=true;
+     
+     
+     
+//      f(i+1,j);
+//      f(i-1,j);
+//      f(i,j+1);
+//      f(i,j-1);
+     
+//      if(k>0){
+//          a[i][j]='X';
+//          k--;
+//      }
+     
+     
+//  }
+
+// bool sort_rule(vector<int>a,vector<int>b){
+    
+//     auto it1=a.begin();
+//     auto it2=b.begin();
+//     return *it1>*it2;
+// }
+
+// auto  flb(vector<pair<int, int> > arr,pair<int, int> p)
+// {
+    
+//     auto low = lower_bound(arr.begin(), arr.end(), p);
+ 
+//     return low;
+// }
+//  int n,m;
+//  bool vis[51][51];
+//  string a[51];
+//  vector<pair<int,int>>moves={{-1,0},{1,0},{0,1},{0,-1}};
+//  bool isValid(int ai,int bi){
+//      if(ai>0&&ai<=1000&&bi>0&&bi<=1000){
+//          return true;
+//      }
+//      return false;
+//  }
+// string final;
+// vector<int>G[27];
+// int vis[27];
+//  bool flag=false;
+// //  map<char,int>mapp;
+// vector<int>ans;
+//  void dfs(int i){
+     
+     
+//      vis[i]=1;
+//      for(auto &child:G[i]){
+        
+//             if(vis[child]==1){
+//                 flag=true;
+//                 return;
+//             }
+//             if(!vis[child]){
+//                 dfs(child);
+//             }
+//      }
+//      vis[i]=2;
+//      ans.pb(i);
+   
+     
+//  }
+ 
+ 
+ 
+
+
+// //  ll f[5005][5005];
+//  vector<string>nums;
+//  map<string,int>mapp;
+//  string str;
+// void dp(int i,int count,string temp){
+//     if(count==0){ mapp[temp]++; return;}
+//     if(i==str.size()-1){
+//         temp=temp+str[i];
+//         mapp[temp]++;
+//         return;
+//     }
+//     mapp[temp]++;
+//     mapp[str.substr(i,1)]++;
+//     dp(i+1,count,temp);
+//     temp=temp+str.substr(i,1);
+//     dp(i+1,count-1,temp);
+//     return;
+// }
+// string str;
+// int a[300005],b[300005],c[300005];
+// int n;
+// void update(int x,int delta){
+//     for(;x<=n;x+=(x&(-x))){
+//         a[x]+=delta;
+//     }
+// }
+
+// ll sum(){
+//     ll ans=0;
+//     for(int i=n;i>0;i-=(i&(-i))){
+//         ans+=a[i];
+//     }
+//     return ans;
+// }
+// bool sort_rulz(pair<int,int>a,pair<int,int>b){
+//     if(a.first==b.first){
+//         return a.second>b.second;
+//     }
+//     return a.first<b.first;
+// }
+// const int M=100006;
+// vector<int> ans;
+// vector<int> t[M];
+// int n;
+// int init[M],aim[M];
+// void dfs(int x,int last,int f,int s)
+// {
+//     if(f) init[x]^=1;
+//     if(init[x]!=aim[x])
+//     {
+//         f^=1;
+//         ans.push_back(x);
+//     }
+//     for(int i=0;i<t[x].size();i++)
+//         if(t[x][i]!=last) dfs(t[x][i],x,s,f);
+        
+// }
+// int fx(string str,char ch){
+//     int n=str.size();
+    
+//     int count=0;
+//     for(int i=0;i<n;i++){
+//         if(str[i]!=ch){
+//             count++;
+//         }
+//     }
+//     return count;
+// }
+// int fun(string s,char z){
+//     int n=s.size();
+//     if(n==1){
+//         if(s[0]==z) return 0;
+//         return 1;
+//     }
+//     int x = fx(s.substr(0, (n / 2)), z) + fun(s.substr(n - (n / 2), (n / 2)), z + 1);
+//     int y = fun(s.substr(0, (n / 2)), z + 1) + fx(s.substr(n - (n / 2), (n / 2)), z);
+//  return min(x,y);
+    
+// // }
+// vector<ll> factx(ll n)
+// {
+// 	vector<ll> ans;
+// 	for(ll i=1;i*i<=n;i++)
+// 	{
+// 		if(n%i==0)
+// 		{
+// 			ans.push_back(i);
+// 			ans.push_back(n/i);
+// 		}
+// 	}
+// 	return ans;
+// }
+// int ans=0;
+// // bool g=true;
+// bool fx(int a[],int start,int end){
+//     if(start==end-1){ 
+//         if(a[start]!=start+1){
+//             ans++;
+//         }
+//         return true;}
+//     // if(start+1==end){
+//     //     if(a[start]==start+1&&a[end]==end+1){
+//     //         return true;
+//     //     }
+//     //     if(a[start]==end+1&&a[end]==start+1){
+//     //         return true;
+//     //     }
+//     //     return false;
+//     // }
+//     map<int,int>mapp;
+//     for(int i=start;i<=(start+end)/2;i++){
+//         mapp[a[i]]++;
+//     }
+//     int count=0;
+//     for(int i=start;i<=(start+end)/2;i++){
+//         if(mapp[i+1]!=0) count++;
+//     }
+//     if(count==0||count==(end-start+1)/2){
+//         if(count!=0) ans++;
+//         return (fx(a,start,(start+end)/2)&&fx(a,(start+end)/2+1,end));
+//     }
+//     else{
+//         return false;
+//     }
+// }
+// bool dp[200007];
+// bool fx(int a[],int i,int n,stack<int>st,int flag){
+//     if(i==n-1){
+//         if(flag==-1){
+//             if(st.size()!=a[n-1]){
+//                 return false;
+//             }
+//             else{
+//                 return true;
+//             }
+//         }
+//         else{
+//             if(st.size()+1==flag){
+//                 return true;
+//             }
+//             else{
+//                 return false;
+//             }
+//         }
+//     }
+//     if(flag!=-1){
+//         if(st.size()+1==flag){
+//             // st.clear();
+//             stack<int>tem;
+//             return fx(a,i+1,n,tem,-1);
+//         }
+//         else{
+//             st.push(a[i]);
+//             return fx(a,i+1,n,st,flag);
+//         }
+//     }
+//     if(st.empty()){
+//         stack <int>tem;
+//         tem.push(a[i]);
+//       return fx(a,i+1,n,st,a[i])||fx(a,i+1,n,tem,-1);
+//     }
+//     if(st.size()==a[i]){
+//         stack<int>tem;
+//         st.push(a[i]);
+//         return fx(a,i+1,n,tem,-1)||fx(a,i+1,n,st,-1);
+//     }
+//     st.push(a[i]);
+//     return fx(a,i+1,n,st,flag);
+// }
+void solve()
+{
+    cinn2l(n,k);
+    if(k>35){
+        cout<<n+1<<endl;
+        return;
+    }
+    ll ans=min(n,binexp(2,k)-1)+1;
+    cout<<ans<<endl;
+    
+}
+
+int main() {
+  cinn(t);
+// // memset(vis,false,sizeof(vis));
+// // int t=1;
+  while(t--){
+    //   ans=0;
+       solve();
+  }
+
+    return 0;
+}
