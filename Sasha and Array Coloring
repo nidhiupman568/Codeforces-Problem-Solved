@@ -1,0 +1,689 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <string>
+#include <iterator>
+#include <unordered_map>
+#include <iomanip>
+#include<typeinfo>
+#include<cstdio>
+#include <set>
+#include <queue>
+#include <stack>
+#include<numeric>
+#include<bitset>
+#pragma warning(suppress : 4996)
+#pragma warning(disable : 4996)
+typedef long long ll;
+
+using namespace std;
+/*
+map<int, vector<int>> sum;
+map<int, bool> can;
+vector<int> how_sum(vector<int> v, int target) {
+    if (target == 0) {
+        vector<int> ele;
+        sum[target] = ele;
+        can[target] = true;
+        ele.push_back(0);
+        return ele;
+
+    }
+    else if (can[target]) {
+
+        return sum[target];
+    }
+
+    else if (target < 0) {
+        ////cout << "here" << endl;
+        vector<int> ele;
+        sum[target] = ele;
+        can[target] = false;
+        return ele;
+    }
+    else {
+
+        vector<int> ele;
+        int siz = 0;
+        int item = 0;
+        for (int i = 0; i < v.size(); i++) {
+            int t = 0;
+            t = target - v[i];
+            //cout << t << endl;
+            //cout << how_sum(v, t).size() << " " << target << endl;
+            if (how_sum(v, t).size() + 1 > siz && how_sum(v, t).size() + 1 != 1) {
+                //cout << "here" <<t<< endl;
+                ele = how_sum(v, t);
+                ele.push_back(v[i]);
+                siz = ele.size();
+                //can[target] = true;
+                //cout << siz <<" "<<target<< endl;
+            }
+
+
+        }
+        sum[target] = ele;
+        can[target] = true;
+        return ele;
+    }
+}
+map<string, bool> cc;
+map<string, bool> hand;
+map<string, int> freq;
+int counter = 0;
+bool can_construct(string target, vector<string> words) {
+    if (target == "") {
+        return true;
+    }
+
+    else if (hand[target]) {
+        return cc[target];
+    }
+    else {
+        for (int i = 0; i < words.size(); i++) {
+            string a = words[i];
+            string b = target.substr(0, a.length());
+            if (a == b) {
+                string c = target.substr(a.length(), target.length());
+                if (can_construct(c, words)) {
+
+                    hand[target] = true;
+                    cc[target] = true;
+                    return true;
+                }
+            }
+        }
+    }
+    hand[target] = true;
+    cc[target] = false;
+    return false;
+
+}
+int count_construct(string target, vector<string> words) {
+    if (target == "") {
+        return 1;
+    }
+
+    else if (hand[target]) {
+        return freq[target];
+    }
+    else {
+        bool res = false;
+        int it = 0;
+        for (int i = 0; i < words.size(); i++) {
+            string a = words[i];
+            string b = target.substr(0, a.length());
+            if (a == b) {
+                string c = target.substr(a.length(), target.length());
+                it += count_construct(c, words);
+            }
+        }
+
+        hand[target] = true;
+        freq[target] = it;
+
+        return it;
+
+    }
+
+}
+map<string, vector<vector<string>>>  alls;
+map<string, bool> found;
+vector<vector<string>> all_construct(string target, vector<string> words) {
+    if (target == "") {
+        // cout << "base" << endl;
+        vector<vector<string>> ele;
+        //hand[target] = true;
+        return ele;
+    }
+
+    else if (hand[target]) {
+
+        //cout << "here"<<endl;
+        return alls[target];
+    }
+
+    else {
+        //cout << "end" << endl;
+        vector<vector<string>> store;
+        for (int i = 0; i < words.size(); i++) {
+            string a = words[i];
+            string b = target.substr(0, a.length());
+            if (a == b) {
+                string c = target.substr(a.length(), target.length());
+                vector<vector<string>> temp = all_construct(c, words);
+                if (temp.size() > 0 || c == "") {
+                    if (temp.size() == 0) {
+                        vector<string> t;
+                        t.push_back(a);
+                        store.push_back(t);
+                    }
+                    for (int j = 0; j < temp.size(); j++) {
+                        vector<string> t = temp[j];
+                        t.push_back(a);
+                        store.push_back(t);
+                    }
+
+
+                }
+                hand[target] = true;
+
+
+            }
+        }
+
+        alls[target] = store;
+        return store;
+    }
+
+
+
+}
+
+ll binary_search(ll l, ll r, ll x, vector<ll> vals, ll n) {
+    if (r >= l) {
+
+        ll mid = l + (r - l) / 2;
+        ll val;
+        if (mid % 2 == 0) {
+            val = (mid + 1) * (mid / 2);
+        }
+        else {
+            val = mid + ((mid) * (mid - 1) / 2);
+        }
+        //cout << mid << " " << val << endl;
+        if (val - n + mid == x)
+            return n - mid;
+
+        // If element is smaller than mid, then
+        // it can only be present in left subarray
+        if (val - n + mid > x)
+            return binary_search(l, mid - 1, x, vals, n);
+
+
+        return binary_search(mid + 1, r, x, vals, n);
+    }
+}
+/*
+class DisjSet {
+    ll* rank, * parent, * unions, n;
+    set <int> parents;
+
+public:
+    // Constructor to create and
+    // initialize sets of n items
+    DisjSet(int n)
+    {
+        rank = new ll[n + 1];
+        parent = new ll[n + 1];
+        unions = new ll[n + 1];
+        this->n = n;
+        makeSet();
+    }
+
+    // Creates n single item sets
+    void makeSet()
+    {
+        for (int i = 1; i < n + 1; i++) {
+            parent[i] = i;
+            unions[i] = 0;
+            rank[i] = 1;
+            parents.insert(i);
+        }
+    }
+
+    // Finds set of given item x
+    int find(int x)
+    {
+        // Finds the representative of the set
+        // that x is an element of
+        if (parent[x] != x) {
+
+            // if x is not the parent of itself
+            // Then x is not the representative of
+            // his set,
+            parent[x] = find(parent[x]);
+
+            // so we recursively call Find on its parent
+            // and move i's node directly under the
+            // representative of this set
+        }
+
+        return parent[x];
+    }
+    int get_p(int x) {
+
+        // Finds the representative of the set
+        // that x is an element of
+        if (parent[x] != x) {
+
+            // if x is not the parent of itself
+            // Then x is not the representative of
+            // his set,
+            parent[x] = find(parent[x]);
+
+            // so we recursively call Find on its parent
+            // and move i's node directly under the
+            // representative of this set
+        }
+
+        return parent[x];
+    }
+    // Do union of two sets represented
+    // by x and y.
+    void Union(int x, int y)
+    {
+        // Find current sets of x and y
+        ll xset = find(x);
+        ll yset = find(y);
+
+        // If they are already in same set
+        if (xset == yset) {
+            unions[xset]++;
+            return;
+        }
+
+
+
+        // Put smaller ranked item under
+        // bigger ranked item if ranks are
+        // different
+        if (rank[xset] < rank[yset]) {
+            parents.erase(parent[xset]);
+            parent[xset] = yset;
+            rank[yset] = rank[yset] + rank[xset];
+            unions[yset] += unions[xset] + 1;
+            //cout << yset << " 1" << rank[yset] << endl;
+        }
+        else if (rank[xset] > rank[yset]) {
+            parents.erase(parent[yset]);
+            parent[yset] = xset;
+            rank[xset] = rank[xset] + rank[yset];
+            unions[xset] += unions[yset] + 1;
+
+            //cout << xset << " 2" << rank[xset] << endl;
+        }
+
+// If ranks are same, then increment
+// rank.
+        else {
+        parents.erase(parent[yset]);
+        parent[yset] = xset;
+        rank[xset] = rank[xset] + rank[yset];
+        unions[xset] += unions[yset] + 1;
+        //cout << xset << " 3" << rank[xset] << endl;
+        }
+
+    }
+    int get_parents() {
+        return  parents.size();
+    }
+    bool check() {
+        set<int> ::iterator it = parents.begin();
+        for (it; it != parents.end(); it++) {
+            //	cout << *it << " " << unions[*it] << " " << rank[*it] << endl;
+            if (unions[*it] != rank[*it] * (rank[*it] - 1) / 2) {
+
+                return false;
+            }
+        }
+        return true;
+
+    }
+};
+
+
+void fill(string& res) {
+
+}
+unordered_map <int, int> XOR_freq;
+int findXorSum(vector<int>arr, int n)
+{
+    // variable to store
+    // the final sum
+    int sum = 0;
+
+    // multiplier
+    int mul = 1;
+
+    for (int i = 0; i < 13; i++) {
+
+        // variable to store number of
+        // sub-arrays with odd number of elements
+        // with ith bits starting from the first
+        // element to the end of the array
+        int c_odd = 0;
+
+        // variable to check the status
+        // of the odd-even count while
+        // calculating c_odd
+        bool odd = 0;
+
+        // loop to calculate initial
+        // value of c_odd
+        for (int j = 0; j < n; j++) {
+            if ((arr[j] & (1 << i)) > 0)
+                odd = (!odd);
+            if (odd)
+                c_odd++;
+        }
+
+        // loop to iterate through
+        // all the elements of the
+        // array and update sum
+        for (int j = 0; j < n; j++) {
+            XOR_freq[(mul * c_odd)]++;
+            sum += (mul * c_odd);
+            cout << (mul * c_odd) << endl;
+
+            if ((arr[j] & (1 << i)) > 0)
+                c_odd = (n - j - c_odd);
+        }
+
+        // updating the multiplier
+        mul *= 2;
+    }
+
+    // returning the sum
+    return sum;
+}
+
+
+ll gcd(ll a, ll b) {
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+string bin(ll num) {
+    string res = "";
+    while (num > 0) {
+        if (num % 2 == 0) {
+            res ='0'+ res ;
+
+        }
+        else {
+            res = '1' + res;
+        }
+        num = num / 2;
+
+    }
+    return res;
+}
+vector<ll> primeFactors(ll n)
+{
+
+    vector<ll> factors;
+        // Print the number of 2s that divide n
+    while (n % 2 == 0)
+    {
+        factors.push_back(2);
+        n = n / 2;
+    }
+
+    // n must be odd at this point. So we can skip
+    // one element (Note i = i +2)
+    for (int i = 3; i <= sqrt(n); i = i + 2)
+    {
+        // While i divides n, print i and divide n
+        while (n % i == 0)
+        {
+            factors.push_back(i);
+            n = n / i;
+        }
+    }
+
+    // This condition is to handle the case when n
+    // is a prime number greater than 2
+    if (n > 2)
+        factors.push_back(n);
+    return factors;
+}
+
+int convert(long long n) {
+    int dec = 0, i = 0, rem;
+
+    while (n != 0) {
+        rem = n % 10;
+        n /= 10;
+        dec += rem * pow(2, i);
+        ++i;
+    }
+
+    return dec;
+}
+
+int bst(vector<int> piles, vector<ll> sums, int start, int middle, int end) {
+    if (start == end) {
+        return start+1;
+    }
+    else {
+        cout << "? "<< middle - start+1 <<' ';
+        for (int i = start; i <= middle; i++) {
+            cout << i +1<< ' ';
+        }
+        cout << endl<<flush;
+        ll ans;
+        cin >> ans;
+        if (ans > (sums[middle + 1] - sums[start])) {
+            //cout << start << " " << (middle + start) / 2 << " " << middle << endl;
+            return bst(piles, sums, start, (middle + start) / 2, middle);
+        }
+        else {
+            //cout << middle+1  << " " << (middle + end+1) / 2 << " " << end << endl;
+            return bst(piles, sums, middle + 1, (end + middle+1) / 2, end);
+        }
+    }
+
+
+
+}
+class DisjSet {
+    int* rank, * parent, n;
+
+public:
+
+    // Constructor to create and
+    // initialize sets of n items
+    DisjSet(int n)
+    {
+        rank = new int[n+1];
+        parent = new int[n+1];
+        this->n = n;
+        makeSet();
+    }
+
+    // Creates n single item sets
+    void makeSet()
+    {
+        for (int i = 1; i <= n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    // Finds set of given item x
+    int find(int x)
+    {
+        // Finds the representative of the set
+        // that x is an element of
+        if (parent[x] != x) {
+
+            // if x is not the parent of itself
+            // Then x is not the representative of
+            // his set,
+            parent[x] = find(parent[x]);
+
+            // so we recursively call Find on its parent
+            // and move i's node directly under the
+            // representative of this set
+        }
+
+        return parent[x];
+    }
+
+    // Do union of two sets represented
+    // by x and y.
+    void Union(int x, int y)
+    {
+        // Find current sets of x and y
+        int xset = find(x);
+        int yset = find(y);
+
+        // If they are already in same set
+        if (xset == yset)
+            return;
+
+        // Put smaller ranked item under
+        // bigger ranked item if ranks are
+        // different
+        if (rank[xset] < rank[yset]) {
+            parent[xset] = yset;
+        }
+        else if (rank[xset] > rank[yset]) {
+            parent[yset] = xset;
+        }
+
+        // If ranks are same, then increment
+        // rank.
+        else {
+            parent[yset] = xset;
+            rank[xset] = rank[xset] + 1;
+        }
+    }
+};
+long long gcdExtended(long long a, long long b, long long* x, long long* y);
+
+// Function to find modulo inverse of b. It returns
+// -1 when inverse doesn't
+long long modInverse(long long b, long long m)
+{
+    long long x, y; // used in extended GCD algorithm
+    long long g = gcdExtended(b, m, &x, &y);
+
+    // Return -1 if b and m are not co-prime
+    if (g != 1)
+        return -1;
+
+    // m is added to handle negative x
+    return (x % m + m) % m;
+}
+
+// Function to compute a/b under modulo m
+long long modDivide(long long  a, long long b, long long m)
+{
+    a = a % m;
+    long long inv = modInverse(b, m);
+    if (inv == -1)
+        return -1;
+    else
+        return  (inv * a) % m;
+}
+
+// C function for extended Euclidean Algorithm (used to
+// find modular inverse.
+long long gcdExtended(long long a, long long b, long long* x, long long* y)
+{
+    // Base Case
+    if (a == 0)
+    {
+        *x = 0, * y = 1;
+        return b;
+    }
+
+    long long x1, y1; // To store results of recursive call
+    long long gcd = gcdExtended(b % a, a, &x1, &y1);
+
+    // Update x and y using results of recursive
+    // call
+    *x = y1 - (b / a) * x1;
+    *y = x1;
+
+    return gcd;
+}
+*/
+// Driver Program
+vector<vector<int>> can(100, vector<int>(200000, 0));
+vector<vector<int>> vis(100, vector<int>(200000, 0));
+
+int can_sum(vector<int>nums, int num, int index) {
+    //cout << num << " " << index <<" "<<nums.size()<< endl;
+    if (num == 0) {
+        return 1;
+    }
+    else if (num < 0) {
+        return 0;
+    }
+    else if (index < 0) {
+       // cout << "here" << endl;
+        return 0;
+    }
+    else if(vis[index][num]) {
+
+        //cout << "found\n";
+        return can[index][num];
+    }
+    else if (nums[index] > num) {
+        int res = can_sum(nums, num, --index);
+        vis[index+1][num] = 1;
+        can[index+1][num] = res;
+        return res;
+
+    }
+    else {
+        int ind = index;
+        if (nums[index] == num) {
+            vis[index][num] = 1;
+            can[index][num] = 1;
+            return 1;
+        }
+        else {
+            int res = can_sum(nums, num - nums[index], --ind)|| can_sum(nums, num, --ind)  ;
+            vis[index][num] = 1;
+            can[index][num] = res;
+            return res;
+        }
+        
+       
+    }
+}
+
+string binary(ll num) {
+    //converts the number to binary
+    //and removes leading zeroes
+    return (bitset<20>(num).to_string());
+}
+
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int cases = 1;
+    cin >> cases;
+ 
+    while (cases--) {
+        int n; cin >> n;
+        vector<int> nums(n);
+        map<int, int> freq;
+        int m = 0;
+        for (int i = 0; i < n; i++) {
+            int t; cin >> t;
+            nums[i] = t;
+            freq[t] ++;
+            m = max(m, freq[t]);
+        }
+        int k = n / 2;
+        int all = max(m, k);
+        int cost = 0;
+        sort(nums.begin(), nums.end());
+        int count = 0;
+        while (all > 0) {
+            cost += nums[n - 1 - count] - nums[0 + count];
+            all--;
+            count++;
+        }
+        cout << cost << endl;
+    }
+
+}
