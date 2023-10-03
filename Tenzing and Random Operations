@@ -1,0 +1,11 @@
+#include<bits/stdc++.h>
+const int N=5e3+5,P=1e9+7;
+int n,m,v,w,a[N],f[N][N];
+int inv(int x){int s=1;for(int y=P-2;y;y>>=1,x=1ll*x*x%P)if(y&1)s=1ll*s*x%P;return s;}
+int main(){
+	scanf("%d%d%d",&n,&m,&v),w=1ll*v*inv(n)%P;
+	for(int i=1;i<=n;++i)scanf("%d",a+i);
+	for(int i=f[0][0]=1;i<=n;++i)for(int j=0;j<=i&&j<=m;++j)
+		f[i][j]=((1ll*v*j+a[i])%P*f[i-1][j]+(j?1ll*(m-j+1)*i%P*w%P*f[i-1][j-1]:0))%P;
+	return !printf("%d\n",std::accumulate(f[n],f[n]+n+1,0ll)%P);
+}
