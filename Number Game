@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define int ll
+ll binexp(ll a,ll b, ll m)
+{
+   ll result = 1;
+   while(b){
+   if(b&1){
+          result = (result*a)%m;
+       }
+        a = (a*a)%m;
+        b>>=1;
+    }
+     return result;
+}
+int sub_mod(int a, int b, int m) {a %= m;b %= m;return (a - b + m) % m;}
+int add_mod(int a, int b, int m) {a %= m;b %= m;return (a + b) % m;}
+int mul_mod(int a, int b, int m) {a %= m;b %= m;return (a * b) % m;}
+ll div_mod (ll a, ll b, ll m){ll inv = binexp(b,m-2,m);ll ans = ((a%m)*(inv%m))%m;return ans;}
+ 
+
+ 
+ string numd(int n,string name1,string name2){
+if(n==1)return name2;
+ else if(n==2)return name1;
+ else if(n%2!=0)return name1;
+ else {
+
+    int copy=n;
+int even=0,odd=0;
+while(copy!=1){
+    if(copy%2!=0){break;}
+    if(copy%2==0){copy/=2;even++;}
+}
+//cout<<copy<<endl;
+if(copy==1){return name2;}
+else{
+    if(even>1)return name1;
+    else{
+        for(int i=3;i<=sqrt(copy);i++){
+            if(copy%i==0){odd+=2;if(odd>1){return name1;}
+            }
+        }
+        
+        return name2;
+    }
+}
+
+ }
+ }
+void solve()
+{
+ int n;
+ cin>>n;
+ 
+cout<<numd(n, "Ashishgup" ,"FastestFinger")<<endl;
+
+}
+
+
+signed main()
+{
+   ios_base::sync_with_stdio(0);
+   cin.tie(0);cout.tie(0);
+   int t;
+   cin>>t;
+   while(t--)
+   {
+       solve();
+   }
+ 
+}
