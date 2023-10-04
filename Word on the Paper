@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    
+    // Read the newline character after t
+    cin.get();
+
+    while (t--) {
+        char grid[8][8];
+
+        // Read the input grid
+        for (int i = 0; i < 8; i++) {
+            string row;
+            cin >> row;
+            for (int j = 0; j < 8; j++) {
+                grid[i][j] = row[j];
+            }
+        }
+
+        // Find the word vertically in one column
+        string word;
+        for (int j = 0; j < 8; j++) {
+            for (int i = 0; i < 8; i++) {
+                if (grid[i][j] != '.') {
+                    word += grid[i][j];
+                }
+            }
+        }
+
+        // Output the word
+        cout << word << endl;
+    }
+
+    return 0;
+}
