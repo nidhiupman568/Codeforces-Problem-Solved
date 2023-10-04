@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vector<string> vs;
+typedef pair<int, int> pi;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<ll>> vvl;
+typedef vector<pair<int, int>> vpi;
+typedef vector<pair<ll, ll>> vpl;
+#define pb push_back
+#define pp pop_back
+#define fori(i, a, b) for (int i = a; i < b; i++)
+#define forl(i, a, b) for (ll i = a; i < b; i++)
+#define asc(v) sort(v.begin(), v.end())
+#define dsc(v) sort(v.rbegin(), v.rend())
+#define rev(v) reverse(v.begin(), v.end())
+#define all(x) (x).begin(), (x).end()
+#define print(v)     \
+    for (auto a : v) \
+        cout << a << " ";
+ll __lcm(ll a, ll b)
+{
+    return (a / __gcd(a, b)) * b;
+}
+ll mod = 1e9 + 7;
+ll n, k, z;
+vl vec;
+ll solve(int idx, int back, vvl &dp)
+{
+    ll aage = k - idx - (z - back) * 2;
+    // cout << idx << " ";
+    // cout << aage << " ";
+    // cout << back << endl;
+    ll ans = vec[idx];
+    if (aage == 0 && back == 0)
+        return ans;
+    if (aage <= 0)
+        return ans;
+    ll &t = dp[idx][back];
+    if (t != -1)
+        return t;
+    if (back && idx > 0)
+    {
+        ans = max(ans, vec[idx] + solve(idx - 1, back - 1, dp));
+    }
+    if (aage && idx + 1 < n)
+    {
+        ans = max(ans, vec[idx] + solve(idx + 1, back, dp));
+    }
+    return t = ans;
+}
+void solve()
+{
+    cin >> n >> k >> z;
+    vec.resize(n);
+    for (ll i = 0; i < n; i++)
+    {
+        cin >> vec[i];
+    };
+    vvl dp(n + 1, vl(z + 1, -1));
+    cout << solve(0, z, dp) << endl;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    ll t(1);
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+    return 0;
+}
