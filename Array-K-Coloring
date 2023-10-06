@@ -1,0 +1,134 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+using namespace std;
+namespace AbdAlrhman {
+	vector<bool> sieve_of_eratosthenes(unsigned long long length = 1e11) {
+		vector <bool> is_prime(length + 1, true);
+		is_prime[0] = false;
+		is_prime[1] = false;
+		for (int i = 2; i * i <= length; ++i) {
+			if (is_prime[i]) {
+				for (int j = i * i; j <= length; j += i) {
+					is_prime[j] = false;
+				}
+			}
+		}
+		return is_prime;
+	}
+ 
+	void sieve_of_eratosthenes_print(int length = 100) {
+		vector <bool> is_prime(length + 1, true);
+		for (int i = 2; i <= length; ++i) {
+			if (is_prime[i]) {
+				for (int j = i * i; j <= length; j += i) {
+					is_prime[j] = false;
+				}
+			}
+		}
+	}
+}
+ 
+int func(int n, int x = 2, int ans = 1) {
+	if (x > n) { return ans; }
+	if (x % 2) {
+		ans *= x;
+	}
+	else
+		ans += x;
+	return func(n, x + 1, ans);
+}
+ 
+/*
+1 2 4 5 6 7
+S   M    E
+*/
+ 
+int binary_search(vector<int> v, int i) {
+	int s = 0, e = v.size() - 1;
+	while (s <= e) {
+		int m = (e + s) / 2;
+		if (v[m] == i) return m;
+		else if (v[m] < i) s = m + 1;
+		else e = m - 1;
+	}
+}
+ 
+void save() {
+	fstream fl;
+	fl.open("fil.txt", ios::out);
+	if (fl.is_open()) {
+		string s; cin >> s;
+		fl << s;
+		fl.close();
+	}
+	fl.open("fil.txt", ios::app);
+	if (fl.is_open()) {
+		string s; cin >> s;
+		fl << s;
+		fl.close();
+	}
+	fl.open("fil.txt", ios::in);
+	if (fl.is_open()) {
+		string s;
+		while (getline(fl, s)) {
+			cout << s << '\n';
+		}
+		fl.close();
+	}
+}
+ 
+void insertion_sort(vector <int> v, int n) {
+	for (int i = 1; i < n; ++i) {
+		int key = v[i];
+		int j = i - 1;
+		while (key < v[j]) {
+			v[j + 1] = v[j];
+			--j;
+		}
+		v[j + 1] = key;
+	}
+}
+ 
+ 
+inline void solve() {
+	int n, k; cin >> n >> k;
+	map<int, int> m1, m2;
+	vector <int> v(n);
+	int mx = 0;
+	for (int i = 0; i < n; ++i) {
+		cin >> v[i];
+		++m1[v[i]];
+		mx = max(mx, m1[v[i]]);
+	}
+	if (mx > k) {
+		cout << "NO";
+		return;
+	}
+	cout << "YES\n";
+	mx = 0;
+	vector <int> ans(n);
+	for (int i = 0; i < n; ++i) {
+		++m2[v[i]];
+		ans[i] = m2[v[i]];
+		// << m2[v[i]] << ' ';
+		mx = max(mx, m2[v[i]]);
+	}
+	if (mx == k) {
+		for (auto ve : ans)
+			cout << ve << ' ';
+	}
+	else {
+		map<int, int> m3;
+		for (int i = 0; mx<k ; ++i) {
+			++m3[ans[i]];
+			if (m3[ans[i]] > 1) ans[i] = ++mx;
+		}
+		for (auto ve : ans)
+			cout << ve << ' ';
+	}
+}
+ 
+int main() {
+	int t = 1; //cin >> t;
+	while (t--) solve();
+}
