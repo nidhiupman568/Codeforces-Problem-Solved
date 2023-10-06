@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+signed main() {
+    string s;
+    cin>>s;
+    int count=0,flag=0;
+    for(int i=0;i<s.size()-1;i++){
+        if(s[i]!=s[i+1]){
+            count=0;
+        }
+        else ++count;
+        if(count==6){
+            flag=1;
+            break;
+        }
+    }
+    if(flag==1) cout<<"YES";
+    else cout<<"NO";
+}
