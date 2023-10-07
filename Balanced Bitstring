@@ -1,0 +1,41 @@
+// LUOGU_RID: 128137408
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve() {
+  int n, k;
+  cin >> n >> k;
+  string s;
+  cin >> s;
+  int res[2]{};
+  for (int i = 0; i < k; i++) {
+    int tp = -1;
+    for (int j = i; j < n; j += k) {
+      if (s[j] == '0' && tp == 1 || s[j] == '1' && tp == 0) {
+        cout << "NO\n";
+        return;
+      }
+      if (s[j] != '?') {
+        tp = s[j] - '0';
+      }
+    }
+    if (~tp) {
+      res[tp]++;
+    }
+  }
+  if (res[0] > k / 2 || res[1] > k / 2) {
+    cout << "NO\n";
+  } else {
+    cout << "YES\n";
+  }
+}
+
+int main() {
+  cin.tie(0)->sync_with_stdio(0);
+  int t;
+  cin >> t;
+  while (t--) {
+    solve();
+  }
+  return 0;
+}
