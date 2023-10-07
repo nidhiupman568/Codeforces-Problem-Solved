@@ -1,0 +1,143 @@
+#include <bits/stdc++.h>
+ 
+ 
+ 
+#pragma GCC target("avx2,bmi,bmi2,popcnt,lzcnt")
+#pragma GCC optimize("O2")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC optimize("O2,Ofast,unroll-loops")
+ 
+ 
+using namespace std;
+ 
+int m = 1000000007;
+int m1 = 1000000009;
+ 
+ 
+int p = 257;
+ 
+int mul(int a, int b) {
+    return 1LL * a * b % m;
+}
+ 
+int mul1(int a, int b) {
+    return 1LL * a * b % m1;
+}
+ 
+int modpow(int base, int exp) {
+    int ans = 1;
+    while (exp > 0) {
+        if (exp % 2) ans = mul(base, ans);
+        base = mul(base, base);
+        exp /= 2;
+    }
+    return ans;
+}
+ 
+int modpow1(int base, int exp) {
+    int ans = 1;
+    while (exp > 0) {
+        if (exp % 2) ans = mul1(base, ans);
+        base = mul(base, base);
+        exp /= 2;
+    }
+    return ans;
+}
+ 
+ 
+int has(int x) {
+    return modpow(p, x);
+}
+ 
+int has1(int x) {
+    return modpow1(p, x);
+}
+ 
+int hashi[1000001];
+ 
+int hashi1[1000001];
+ 
+vector<int> path;
+ 
+pair<pair<int, int>, int> hashii[1 << 23];
+ 
+bool busy[1 << 23];
+ 
+int hass(pair<int, int> y) {
+    int x = y.first ^ y.second;
+    return (((x & ((1 << 23) - 1)) + (1 << 23)) & ((1 << 23) - 1));
+}
+ 
+void add(pair<int, int> x) {
+    int index = hass(x);
+    int step = 1;
+    while (busy[index] && hashii[index].first != x) {
+        index += step;
+        index &= (1 << 23) - 1;
+        step++;
+    }
+    if (busy[index]) {
+        hashii[index].second++;
+    } else {
+        hashii[index].first = x;
+        hashii[index].second = 1;
+        busy[index] = true;
+        path.push_back(index);
+    }
+}
+ 
+pair<bool, int> find(pair<int, int> x) {
+    int index = hass(x);
+    int step = 1;
+    while (busy[index] && hashii[index].first != x) {
+        index += step;
+        index &= (1 << 23) - 1;
+        step++;
+    }
+    if (busy[index]) return {true, hashii[index].second};
+    return {false, 0};
+}
+ 
+signed main() {
+    //freopen("input.txt", "r", stdin);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n, m2;
+    cin >> n >> m2;
+    pair<int, int> edjes[m2];
+    int countt[n + 1];
+    int countt1[n + 1];
+    for(int i = 1; i < n + 1; i++) {
+        countt[i] = has(i);
+        countt1[i] = has1(i);
+    }
+    for (int i = 0; i < m2; i++) {
+        int a, b;
+        cin >> a >> b;
+        edjes[i] = {a, b};
+        hashi[a] ^= countt[b];
+        hashi[b] ^= countt[a];
+        hashi1[a] ^= countt1[b];
+        hashi1[b] ^= countt1[a];
+    }
+    for (int i = 1; i <= n; i++) {
+        add({hashi[i], hashi1[i]});
+    }
+    long long suma = 0;
+    for (auto &y : path) {
+        auto x = hashii[y];
+        suma += (1LL * x.second * (x.second - 1)) / 2;
+    }
+    for (auto [a, b] : edjes) {
+        hashi[a] ^= countt[b];
+        hashi[b] ^= countt[a];
+        hashi1[a] ^= countt1[b];
+        hashi1[b] ^= countt1[a];
+        if (hashi[a] == hashi[b] && hashi1[a] == hashi1[b]) suma++;
+        hashi[a] ^= countt[b];
+        hashi[b] ^= countt[a];
+        hashi1[a] ^= countt1[b];
+        hashi1[b] ^= countt1[a];
+    }
+    cout << suma;
+}
