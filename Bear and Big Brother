@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int i,j,k,n,m;
+    cin>>n>>m;
+    j = 0;
+   
+    
+        while(n <= m){
+            n = n*3;
+            m = m*2;
+            j++;
+
+        }
+        cout<<j;
+        return 0;
+    
+}
