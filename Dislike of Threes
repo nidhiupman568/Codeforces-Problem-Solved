@@ -1,0 +1,32 @@
+#include <iostream>
+
+// Function to find the k-th element in the sequence
+int findKthElement(int k) {
+    int count = 0;  // Initialize a count to keep track of the elements in the sequence
+    int num = 1;    // Start with the first positive integer
+
+    while (true) {
+        // Check if num is divisible by 3 or ends with 3
+        if (num % 3 != 0 && num % 10 != 3) {
+            count++;
+            if (count == k) {
+                return num;
+            }
+        }
+        num++;
+    }
+}
+
+int main() {
+    int t;
+    std::cin >> t;  // Input the number of test cases
+
+    for (int i = 0; i < t; i++) {
+        int k;
+        std::cin >> k;
+        int result = findKthElement(k);
+        std::cout << result << std::endl;
+    }
+
+    return 0;
+}
