@@ -1,0 +1,97 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+ll large = 1e16, mod = 1e9 + 7, inf = LLONG_MAX;
+#define pb push_back
+#define F first
+#define S second
+#define all(x) x.begin(), x.end()
+bool cmp(pair<int, int> a, pair<int, int> b)
+{
+    if (a.S == b.S)
+        return (float)a.F / a.S > (float)b.F / b.S;
+    else
+        return a.S < b.S;
+}
+void fast()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+#endif
+}
+void solve()
+{
+    ll n, k;
+    cin >> n >> k;
+    vector<ll> a(n), b(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cin >> b[i];
+    }
+    vector<pair<ll, ll>> vec, bec;
+    for (int i = 0; i < n; i++)
+    {
+        vec.push_back({a[i], b[i]});
+    }
+    sort(all(vec), cmp);
+    if (vec[0].S >= k|| n==1)
+    {
+        cout << k * n << endl;
+    }
+    else
+    {
+        for (int i = 0; i < vec.size(); i++)
+        {
+            if (vec[i].S <= k)
+            {
+                bec.push_back({vec[i].F, vec[i].S});
+            }
+        }
+      ll ans=k;
+      ll p= n-1;
+      for(int i=0;i<bec.size();i++)
+      {
+        if(p>=bec[i].F)
+        {
+            ll s=bec[i].F*bec[i].S;
+            ans=ans+s;
+            p=p-bec[i].F;
+            if(p==0)
+            {
+                break;
+            }
+        }
+        else
+        {
+            ll s=p*bec[i].S;
+            ans=ans+s;
+            cout<<ans<<endl;
+            return;
+        } 
+      }
+      if(p!=0)
+      {
+        ans=ans+p*k;
+      }
+      cout<<ans<<endl;
+    }
+}
+int main()
+{
+    fast();
+    int q;
+    cin >> q;
+    while (q--)
+    {
+        solve();
+    }
+    return 0;
+}
