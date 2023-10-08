@@ -1,0 +1,227 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+#include <queue>
+#include <ctime>
+#include <cassert>
+#include <complex>
+#include <string>
+#include <cstring>
+#include <chrono>
+#include <random>
+#include <bitset>
+#include <fstream>
+#include <array>
+#include <functional>
+#include <stack>
+#include <memory>
+using namespace std;
+#define int long long
+#define ii pair <int, int>
+#define app push_back
+#define all(a) a.begin(), a.end()
+#define bp __builtin_popcountll
+#define ll long long
+#define mp make_pair
+#define x first
+#define y second
+#define Time (double)clock()/CLOCKS_PER_SEC
+#define munq(a) sort(all(a)); a.resize(unique(all(a))-a.begin())
+#define sz(a) ((int)a.size())
+
+#ifdef LOCAL
+#define debug(x) do { cout << #x << ": " << x << endl; } while(0)
+#define debug2(x, y) do { std::cerr << #x << ", " << #y << ": " << x << ", " << y << endl; } while (0)
+#define debug3(x, y, z) do {std::cerr << #x << ", " << #y << ", " << #z << ": " << x << ", " << y << ", " << z << endl; } while(0)
+#else
+#define debug(x)
+#define debug2(x, y) 
+#define debug3(x, y, z) 
+#endif
+
+#define FORI(i,a,b) for (int i = (a); i < (b); ++i)
+#define FOR(i,a) FORI(i,0,a)
+#define ROFI(i,a,b) for (int i = (b)-1; i >= (a); --i)
+#define ROF(i,a) ROFI(i,0,a)
+#define rep(a) FOR(_,a)
+#define each(a,x) for (auto& a: x)
+#define FORN(i, n) FORI(i, 1, n + 1)
+
+using vi = vector<int>;
+template <typename T>
+std::istream& operator >>(std::istream& input, std::pair <T, T> & data)
+{
+    input >> data.x >> data.y;
+    return input;
+}
+template <typename T>
+std::istream& operator >>(std::istream& input, std::vector<T>& data)
+{
+    for (T& x : data)
+        input >> x;
+    return input;
+}
+template <typename T>
+std::ostream& operator <<(std::ostream& output, const pair <T, T> & data)
+{
+    output << "(" << data.x << "," << data.y << ")";
+    return output;
+}
+template <typename T>
+std::ostream& operator <<(std::ostream& output, const std::vector<T>& data)
+{
+    for (const T& x : data)
+        output << x << " ";
+    return output;
+}
+ll div_up(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
+ll div_down(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down 
+ll math_mod(ll a, ll b) { return a - b * div_down(a, b); }
+#define tcT template<class T
+#define tcTU tcT, class U
+tcT> using V = vector<T>; 
+tcT> bool ckmin(T& a, const T& b) {
+    return b < a ? a = b, 1 : 0; 
+} // set a = min(a,b)
+tcT> bool ckmax(T& a, const T& b) {
+    return a < b ? a = b, 1 : 0; 
+}
+tcT> vector <T> presum(vector <T> &a) {
+    vector <T> p(a.size() + 1);
+    FOR (i, a.size()) {
+        p[i + 1] = p[i] + a[i];
+    }   
+    return p;
+}
+tcT> vector <T> sufsum(vector <T> &a) {
+    vector <T> p(a.size() + 1);
+    for (int i = (int)a.size() - 1; i >= 0; --i) {
+        p[i] = p[i + 1] + a[i];
+    }
+    return p;
+}
+ll gcd(ll a, ll b) {
+    while (b) {
+        tie(a, b) = mp(b, a % b);
+    }
+    return a;
+}
+int Bit(int mask, int bit) { return (mask >> bit) & 1; }
+signed main() {
+    #ifdef LOCAL
+    #else
+    #define endl '\n'
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    #endif
+    int n;
+    cin >> n;
+    vector <int> a(n), out(n);
+    vector <vector <int>> g(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i]; a[i]--;
+        g[a[i]].push_back(i);
+        out[a[i]]++;
+    }
+
+    vector <int> ans;
+
+
+    vector <int> onc(n, 1);
+    queue <int> q;
+    for (int i = 0; i < n; ++i) {
+        if (out[i]==0) {
+            q.push(i);
+        }
+    }
+    while (q.size()) {
+        int u = q.front(); q.pop();
+        onc[u] = 0;
+        out[a[u]]--;if(out[a[u]]==0 ){
+            q.push(a[u]);
+        }
+    }
+
+    function <bool(int, int)> dfs = [&] (int u, int p) {
+        int get = 0;
+        for (int v : g[u]) {
+            if (onc[v]==0 && v != p) {
+                get += dfs(v, u);
+            }
+        }
+        if (get) {
+            return false;
+        }
+        else {
+            if (!onc[u]) {
+                ans.push_back(u);
+            }
+            return true;
+        }
+    };
+
+    vector <int> used(n), can(n);
+    for (int i = 0; i < n; ++i) {
+        if (!used[i] && onc[i]) {
+            int u = i;vector <int> cyc;
+            int cut = 0;
+            vector <int> p;
+            while(!used[u]) {
+                used[u] = 1;
+                can[u] = dfs(u,u);
+                if (can[u] == 0) {
+                    cut++;
+                    p.push_back((int)cyc.size());
+                }
+                cyc.push_back(u);
+                u = a[u];
+            }
+            int l = (int)cyc.size();
+            for (int j = 0; j < l; ++j) {
+                cyc.push_back(cyc[j]);
+            }
+
+            if (l%2 && cut == 0) {
+                cout << -1 << endl;
+                exit(0);
+            }
+
+            if (cut) {
+                //cout << "l " << l << endl;
+                for (int j = 0; j < cut; ++j) {
+                    //cout << p[j] << ' ';
+                    p.push_back(p[j]);
+                }
+                //cout<<endl << endl;
+                for (int j = 0; j < cut; ++j) {
+                    for (int k = p[j] + 1; cyc[k] != cyc[p[j + 1]]; ++k) {
+                        if (k%2 != p[j]%2) {
+                            ans.push_back(cyc[k]);
+                        }
+                    }
+                }
+            }
+            else {
+                for (int k = 0; k < l; k += 2) {
+                    ans.push_back(cyc[k]);
+                }
+            }
+        }
+    }
+
+    sort(ans.begin(), ans.end());
+    cout << (int)ans.size()<<endl;
+    for (int i : ans) {
+        //cout << i << endl;
+        cout << a[i] + 1 << ' ';
+    }
+    cout << endl;
+
+
+}
