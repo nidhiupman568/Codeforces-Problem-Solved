@@ -1,0 +1,21 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+	
+int main(){
+	int t,a; cin>>t;
+	while(t--)
+	{
+	cin>>a;
+	vector<int> num(a);
+	for(int i=0;i<a;i++){
+		cin>>num[i];
+	}
+	long long ans=0;
+	for(int i=2;i<a;i++){
+		ans+=max(0,num[i]);
+	}
+	ans+=max(0,num[0]+max(0,a>1 ? num[1] : 0));
+	cout<<ans<<endl;
+	}
+}
