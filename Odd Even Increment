@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int t;
+    cin>>t;
+    for (int tc=0; tc<t; tc++) {
+        int n;
+        cin>>n;
+        bool possible=true, p1, p2;
+        for (int i=0; i<n; i++) {
+            int a;
+            cin>>a;
+            if (i==0) p1=a%2;
+            else if (i==1) p2=a%2;
+            else {
+                if (i%2==0 && a%2!=p1) possible=false;
+                if (i%2==1 && a%2!=p2) possible=false;
+            }
+        }
+        if (possible) cout<<"YES\n";
+        else cout<<"NO\n";
+    }
+}
+					       	 	    			 	     	
