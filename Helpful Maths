@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+  string s;
+  cin>>s;
+  vector<char>arr1;
+  vector<char>arr2;
+  
+  int n=s.size();
+  if(n==1){
+      cout<<s[0];
+  }
+  else {
+  for(int i=0;i<n;i=i+2){
+      arr1.push_back(s[i]);
+  }
+  for(int i=1;i<n;i=i+2){
+      arr2.push_back(s[i]);
+  }
+  sort(arr1.begin(),arr1.end());
+  vector<char>ans;
+  for(int i=0;i<n/2+1;i++){
+      ans.push_back(arr1[i]);
+      ans.push_back(arr2[i]);
+      
+  }
+  for(int i=0;i<n;i++){
+      cout<<ans[i];
+  }
+  }
+}
