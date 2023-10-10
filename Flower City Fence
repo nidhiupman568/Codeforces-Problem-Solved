@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define fast ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define forn(i, n) for (int i = 0; i < n; i++)
+#define endl "\n"
+#define yes cout<<"YES"<<endl
+#define no cout<<"NO"<<endl
+#define ll long long int
+#define vi vector<ll>
+#define pb push_back
+#define f first
+#define sec second
+#define sz(v) v.size()
+#define all(v) v.begin(),v.end()
+const int N=2e5+10;
+void solve()
+{
+    ll i,j,n;
+    cin>>n;
+    vector<ll>a(n);
+    forn(i,n)
+    cin>>a[i];
+    reverse(all(a));
+    forn(i,n)
+    {
+        auto it=lower_bound(all(a),i+1)-a.begin();
+        //cout<<it<<endl;
+        if(n-it!=a[n-1-i])
+        {
+            no;
+            return;
+        }
+    }
+    yes;
+}
+int main()
+{
+    //fast
+    int tc,k=1;
+    cin>>tc;
+    while(tc--)
+    {
+        solve();
+    }
+    return 0;
+}
