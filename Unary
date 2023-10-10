@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+const int mod = 1e6 + 3;
+int main()
+{
+    map<char, string> mp;
+    string obj = "";
+    char str[105];
+    long long ans = 0, base = 1;
+    mp['>'] = "1000";
+    mp['<'] = "1001";
+    mp['+'] = "1010";
+    mp['-'] = "1011";
+    mp['.'] = "1100";
+    mp[','] = "1101";
+    mp['['] = "1110";
+    mp[']'] = "1111";
+    cin >> str;
+    for (int i = 0; str[i] != '\0'; ++i)
+        obj += mp[str[i]];
+    for (int i = obj.size() - 1; i >= 0; --i)
+    {
+        if (obj[i] == '1')
+            ans = (ans + base) % mod;
+        base = 2 * base % mod;
+    }
+    cout << ans << endl;
+    return 0;
+}
