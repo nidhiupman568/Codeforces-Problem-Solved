@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+vector<int> vis(200001),visa(200001),v[200001];
+string ans;
+void dfs(int a,int b){
+	for(auto i:v[a]){
+		if(vis[i] && i!=b && vis[i]<visa[i]){
+			ans="YES";
+		}
+		if(vis[i]){
+			continue;
+		}
+		vis[i]=vis[a]+1;
+		dfs(i,a);
+	}
+}
+int main(){
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	int xyz;
+	cin>>xyz;
+	while(xyz--){
+		int n,a,b;
+		cin>>n>>a>>b;
+		for(int i=0;i<=n;i++){
+			v[i].clear();
+			vis[i]=0;
+			visa[i]=0;
+		}
+		for(int i=0;i<n;i++){
+			int k,t;
+			cin>>k>>t;
+			v[k].push_back(t);
+			v[t].push_back(k);
+		}
+		queue<int> q;
+		q.push(a);
+		visa[a]=1;
+		while(!q.empty()){
+			int t=q.front();
+			q.pop();
+			for(auto i:v[t]){
+				if(visa[i]){
+					continue;
+				}
+				q.push(i);
+				visa[i]=visa[t]+1;
+			}
+		}
+		ans="NO";
+		vis[b]=1;
+		dfs(b,0);
+		cout<<ans<<"\n";
+	}
+}
