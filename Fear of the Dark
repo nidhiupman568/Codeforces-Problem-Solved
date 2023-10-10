@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+const int q = 1e9 + 7;
+
+int32_t main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int px,py,ax,ay,bx,by;
+        cin>>px>>py>>ax>>ay>>bx>>by;
+        double s1=sqrt(ax*ax+ay*ay);
+        double s2=sqrt((ax-px)*(ax-px)+(ay-py)*(ay-py));
+        double s3=sqrt(bx*bx+by*by);
+        double s4=sqrt((bx-px)*(bx-px)+(by-py)*(by-py));
+        double ans1=min(max(s1,s2),max(s3,s4));
+        double s5=sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by))/2;
+        double ans2=max(s1,max(s4,s5));
+        double ans3=max(s2,max(s3,s5));
+        double ans=min(ans1,min(ans2,ans3));
+        cout<<setprecision(11)<<ans<<endl;
+    }
+    return 0;
+}
