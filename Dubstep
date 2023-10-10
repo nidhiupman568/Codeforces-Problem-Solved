@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s, ans="";
+    cin>>s;
+    int i=0;
+    while(i<s.length()){
+        if(s[i]=='W' && s[i+1]=='U' && s[i+2]=='B'){
+            if(ans.length()!=0 && ans[ans.length()-1]!=' ') ans+=' ';
+            i+=2;
+        }
+        else{
+            ans+=s[i];
+        }
+        i++;
+    }
+    cout<<ans<<endl;
+    return 0;
+}
