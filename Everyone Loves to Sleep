@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, H, M;
+        cin >> n >> H >> M;
+        pair<int, int> arr[n];
+        for (int i = 0; i < n; i++) {
+            int h, m;
+            cin >> h >> m;
+            arr[i] = make_pair(h, m);
+        }
+        int diff_minH = INT16_MAX;
+        int diff_minM = INT16_MAX;
+        int minutes_S;
+        int minutes_A;
+        int minutes_F = INT16_MAX;
+        int flag;
+        int diff;
+        int count1 = 0;
+        int count2 = 0;
+        int ans_min1 = INT16_MAX;
+        int ans_min2 = INT16_MIN;
+        minutes_S = H * 60 + M;
+        int Diff[n];
+        for (int i = 0; i < n; i++) {
+            minutes_A = 60 * arr[i].first + arr[i].second;
+            diff = minutes_A - minutes_S;
+            if(diff<0){
+                diff=diff+1440;
+            }
+            
+            Diff[i] = diff;
+            /*if (diff < 0) {
+                count1++;
+            }*/
+        }
+        /*if (count1 != n) {
+            for (int i = 0; i < n; i++) {
+                if (Diff[i] >= 0) {
+                    if (ans_min1 >= Diff[i]) {
+                        ans_min1 = Diff[i];
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < n; i++) {
+                if (ans_min2 <= abs(Diff[i])) {
+                    ans_min2 = abs(Diff[i]);
+                }
+            }
+        }*/
+        int minimum=INT16_MAX;
+        for(int i=0;i<n;i++) {
+            if(minimum>Diff[i]){
+                minimum=Diff[i];
+            }
+        }
+
+        int ans_h;
+        int ans_m;
+        /*if (count1 != n) {
+            ans_h = abs(ans_min1) / 60;
+            ans_m = abs(ans_min1 % 60);
+        } else {
+            ans_h = abs(ans_min2) / 60;
+            ans_m = abs(ans_min2 % 60);
+        }*/
+        ans_h=minimum/60;
+        ans_m=minimum%60;
+        cout << ans_h << " " << ans_m << endl;
+    }
+    return 0;
+}
