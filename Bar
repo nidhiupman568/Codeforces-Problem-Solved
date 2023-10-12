@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    unordered_set<string> alcoholic_drinks = {"ABSINTH", "BEER", "BRANDY", "CHAMPAGNE", "GIN", "RUM", "SAKE", "TEQUILA", "VODKA", "WHISKEY", "WINE"};
+    vector<string> input(n);
+    for(int i=0;i<n;i++){
+        cin>>input[i];
+    }
+    int check = 0;
+    for(int i=0;i<n;i++){
+        if(isdigit(input[i][0])){
+            int age = stoi(input[i]);
+            if(age<18){
+                check++;
+            }
+        }
+        else{
+            if(alcoholic_drinks.find(input[i])!=alcoholic_drinks.end()){
+                check++;
+            }
+        }
+    }
+    cout<<check;
+    return 0;
+}
