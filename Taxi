@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+#define speed ios_base::sync_with_stdio(0), cin.tie(0)
+
+using namespace std;
+const int N = 1e5 + 100, eps = 1e-7;
+int n, x, a, b, c, d, ans;
+int main() {
+
+    speed;
+
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        a += (x == 1);
+        b += (x == 2);
+        c += (x == 3);
+        d += (x == 4);
+    }
+    d += b / 2;
+    b %= 2;
+    while (a && c) {
+        a--;
+        c--;
+        d++;
+    }
+    while (a > 1 && b) {
+        a -= 2;
+        b--;
+        d++;
+    }
+    while (a && b) {
+        a--;
+        b--;
+        c++;
+    }
+    d += a / 4;
+    a %= 4;
+    c += a / 3;
+    a %= 3;
+    b += a / 2;
+    a %= 2;
+    cout << a + c + b + d;
+
+	return 0;
+
+}
