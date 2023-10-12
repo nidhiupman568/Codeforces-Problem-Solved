@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+ll mod=1000000007;
+
+void solve()
+{
+   ll n,d;
+   cin>>n>>d;
+   ll mn=sqrt(d);
+   for(int i=0;i<mn;i++)
+   {
+       if(i+(d+i)/(i+1)<=n)
+       {
+           cout<<"YES";
+           return;
+       }
+   }
+   cout<<"NO";
+   
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);    
+    cout.tie(NULL);  
+    ll tt=1;
+    cin>>tt;
+    
+    while(tt--)
+    {
+     solve();
+     cout<<"\n";
+    }
+}
