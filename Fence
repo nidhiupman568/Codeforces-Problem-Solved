@@ -1,0 +1,40 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n,k;
+    cin>>n>>k;
+    long long a[n+1];
+    memset(a,0,sizeof(a));
+    int h;
+   
+    for(int i=1;i<n+1;i++){
+        cin>>h;
+        a[i]=h;
+        a[i]+=a[i-1];
+    }
+    /*
+    for(int i=0;i<n+1;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<"\n";
+*/
+    int r=0,res=1e9,v=0;
+    long long x=0;
+    
+    for(int i=k;i<n+1;i++){
+         x=a[i]-a[v];
+        if(x<res){
+        res=x;
+        r=i;
+        }
+        v++;
+    }
+    
+ cout<<r-k+1;
+
+    // El nersh
+    return 0;
+}
