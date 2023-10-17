@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;const int N=2e5+7;
+int a[N],m[35];int T_T,n,i,j,k,f,p,x,y;typedef long long ll;ll s;
+int main(){
+	for(scanf("%d",&T_T);T_T--;){
+		for(memset(m,0,sizeof(m)),scanf("%d",&n),s=0,i=1;i<=n;++i)scanf("%d",a+i),s+=a[i];
+		if(s%n){puts("No");continue;}f=1;s/=n;
+		for(i=1;i<=n;++i){
+			p=s-a[i];x=-1;y=-1;
+			for(j=0;j<=30;++j)
+				for(k=0;k<=30;++k)
+					if((1<<j)-(1<<k)==p){
+						x=j;y=k;break;
+					}
+			if(x==-1){f=0;break;}
+			m[x]++;m[y]--;
+		}
+		for(i=0;i<=30;++i)if(m[i])f=0;
+		puts(f?"Yes":"No");
+	}
+}
