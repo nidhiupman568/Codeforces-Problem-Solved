@@ -1,0 +1,14 @@
+#include<cstdio>
+#include<cstring>
+#include<vector>
+
+const int N=2e5+1;int n,c,mk[N],d[N];std::vector<int>g[N];
+
+void dfs(int u,int p){for(int v:g[u])if(v!=p)
+{d[v]=d[u]+1;if(d[v]>d[c]&&mk[v])c=v;dfs(v,u);}}
+
+int main(){int _;scanf("%d",&_);while(_--){int k;scanf("%d%d",&n,&k);
+int t=0;for(int i=1,x;i<=k;i++)scanf("%d",&x),mk[x]=1,t=x;
+for(int i=1,u,v;i<n;i++)scanf("%d%d",&u,&v),g[u].push_back(v),g[v].push_back(u);
+c=t;dfs(t,0);d[c]=0;dfs(c,0);printf("%d\n",d[c]-d[c]/2);
+for(int i=1;i<=n;i++)g[i].clear();memset(mk,0,sizeof mk);memset(d,0,sizeof d);}return 0;}
