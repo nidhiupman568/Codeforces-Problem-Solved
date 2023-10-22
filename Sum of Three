@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+#define all(a) a.begin(),a.end()
+#define pb push_back
+#define vl vector<long long int>
+#define vlp vector<pair<long long int,long long int>>
+#define vlv vector<vector<long long int>>
+#define cy cout<<"YES"<<endl
+#define cn cout<<"NO"<<endl
+#define mkp make_pair
+#define vt(t) vector<t>
+#define vp(t,l) vector<pait<t,l>>
+#define fi(i,a,n) for( i=a;i<n;i++)
+#define fd(i,a,n) for( i=a;i>=n;i--)
+ll i,j;
+bool sortbysec(const pair<int,int> &a,
+              const pair<int,int> &b)
+{
+    return (a.second < b.second);
+}
+
+int countOccurrences(vector<ll> arr,vector<ll> brr, ll size, ll target) {
+    ll count = 0;
+
+    for (ll i = 0; i < size; ++i) {
+        if (arr[i] == target) {
+            count++;
+        }
+    }
+    for (ll i = 0; i < size; ++i) {
+        if (brr[i] == target) {
+            count++;
+        }
+    }
+
+    return count;
+}
+int gcd(int a, int b)
+{
+    // Find Minimum of a and b
+    int result = min(a, b);
+    while (result > 0) {
+        if (a % result == 0 && b % result == 0) {
+            break;
+        }
+        result--;
+    }
+ 
+    // Return gcd of a and b
+    return result;
+}
+
+void solve()
+{
+    ll n;
+    cin>>n;
+    for (int x = 1; x <= 20; x++) {
+	    for (int y = 1; y <= 20; y++) {
+	        if (x + y >= n || x == y) continue;
+	        int z = n - x - y;
+	        if (z == x || z == y) continue;
+	        if (x % 3 == 0 || y % 3 == 0 || z % 3 == 0) {
+	            continue;
+	        }
+	        puts("YES");
+	        cout << x << ' ' << y << ' ' << z << endl;
+	        return;
+	    }
+	}
+	puts("NO");
+}
+
+int main() {
+    ll tc;
+    cin>>tc;
+    while(tc--){
+        solve();
+    }
+	return 0;
+}
