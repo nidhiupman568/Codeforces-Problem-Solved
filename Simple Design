@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+#pragma GCC optimize("Ofast,unroll-loops")
+#define bupol __builtin_popcount
+//#define int long long
+#define ll long long
+#define ld long double
+#define fi first
+#define se second
+#define pb push_back
+#define lf (id<<1)
+#define rg ((id<<1)|1)
+#define md ((l+r)>>1)
+using namespace std;
+const int MAXN = 1e5+20;
+const int LOG = 31;
+const int MOD = 998244353;
+const int INF = 1e9+10;
+const int SQRT = 520;
+typedef pair<int,int> pii;
+typedef pair<pii,int> ipii;
+
+int n;
+int m, k;
+int a[MAXN];
+
+signed main(){
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    int T; cin >> T;
+    while(T--){
+        cin >> n >> m;
+        int te = 0, t2 = n;
+        while(t2 != 0){
+            te += t2%10; t2 /= 10;
+        }
+        if(te%m == 0){
+            cout << n << '\n'; continue;
+        }
+        for(int i=n+1; i<=n+100; i++){
+            te++;
+            if(i%10 == 0){
+                int t2 = i; te = 0;
+                while(t2 != 0){
+                    te += t2%10; t2 /= 10;
+                }
+            }
+            if(te%m == 0){
+                cout << i << '\n'; break;
+            }
+        }
+    }
+}
