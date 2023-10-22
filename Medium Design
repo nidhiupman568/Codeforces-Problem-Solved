@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+const int N = 200010;
+
+ll d[N], a[N];
+
+int find(int x, vector<int> &index) {
+    int l = 0, r = index.size() - 1;
+    while(l < r) {
+        int mid = l + r + 1 >> 1;
+        if(index[mid] <= x) l = mid;
+        else r = mid - 1;
+    }
+    return l;
+}
+
+void solve() {
+    int n, m;
+    scanf("%d%d", &n, &m);
+    
+    map<int, int> diff;
+    map<int, int> c1, cn;
+
+    for(int i = 0; i < n; i ++ ) {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        diff[l] ++ ;
+        diff[r + 1] -- ;
+        if(l == 1) {
+            c1[l] ++ ;
+            c1[r + 1] -- ;
+        }
+        if(r == m) {
+            cn[l] ++ ;
+            cn[r + 1] -- ;
+        }
+    }
+
+    int cur = 0, cur1 = 0, curn = 0, ans = 0;
+    for(auto x : diff) {
+        int temp = x.first;
+        if(temp > m ) {
+            break;
+        }
+        cur += x.second;
+        cur1 += c1[x.first];
+        curn += cn[x.first];
+        ans = max(ans, max(cur - cur1, cur - curn));
+    }
+
+    printf("%d\n", ans);
+}
+
+int main()
+{
+    int t;
+    scanf("%d", &t);
+
+    while(t -- ) {
+        solve();
+    }
+
+    //solve();
+
+    return 0;
+}
