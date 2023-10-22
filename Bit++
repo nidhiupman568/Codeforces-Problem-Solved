@@ -1,0 +1,22 @@
+n=0
+while(1):
+    n=int(input())
+    if n>=1 and n<=150:
+        break
+
+operate=[]
+
+for i in range(n):
+    operate.append(input())
+
+X=0
+for i in range(n):
+
+    if operate[i]=="X++" or operate[i]=="++X":
+        X=X+1
+    elif operate[i]=="--X" or operate[i]=="X--":
+        X=X-1
+
+print(X)
+
+
