@@ -1,0 +1,55 @@
+// for (int i = 0; i < n; i++)
+// {
+//     ll a, b;
+//     cin >> a >> b;
+//     for (int j = a; j <= b; j++)
+//     {
+//         result += j;
+//     }
+
+//     cout << result << new;
+//     result = 0;
+// }
+#include <bits/stdc++.h>
+using namespace std;
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+#define new "\n";
+#define ll long long
+void input()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+#endif
+}
+string s;
+int main()
+{
+    fast
+    input();
+    ll size;
+    cin >> size;
+    cin >> s;
+    if (s.size() < 26)
+    {
+        cout << "NO" << new;
+        return 0;
+    }
+    set<char> ss;
+    for (int i = 0; i < s.size(); i++)
+    {
+        ss.insert(toupper(s[i]));
+    }
+
+    if (ss.size() >= 26)
+    {
+        cout << "YES" << new;
+    }
+
+    else
+    {
+        cout << "NO" << new;
+    }
+}
+
+
+ 		 	 		 		  	 			   	  	     	
