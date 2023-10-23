@@ -1,0 +1,40 @@
+#include<cstdio>
+#include<vector>
+using namespace std;
+const int N=1e6+10;
+struct edge{
+	int next,to,c;
+}e[N];
+int first[N],len,vis[N],n,t,m;
+vector<int> v[N],v1;
+void add(int x,int y,int z)
+{
+	e[++len]=edge{first[x],y,z};
+	first[x]=len;
+}
+void work(int x)
+{
+	if(vis[x]) return;
+	vis[x]=1;
+	for(int i=first[x];i;i=e[i].next)
+		v[e[i].c].push_back(e[i].to);
+}
+int main()
+{
+	scanf("%d%d",&n,&t);
+	for(int i=1;i<=t;i++)
+	{
+		scanf("%d",&m);
+		for(int j=1,x,y;j<=m;j++)
+			scanf("%d%d",&x,&y),add(x,y,i),add(y,x,i);
+	}
+	scanf("%d",&m);
+	work(1);
+	for(int i=1,x;i<=m;i++)
+	{
+		scanf("%d",&x),v1=v[x],v[x].clear();
+		for(int y:v1) work(y);
+		if(vis[n]) return printf("%d\n",i),0;
+	}
+	puts("-1");
+}
