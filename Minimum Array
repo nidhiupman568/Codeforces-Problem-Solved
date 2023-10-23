@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;using i64=long long;const int M=998244353;
+struct S
+{     
+    void solve()
+    {
+        int n;cin>>n;vector<i64>a(n+1,0);
+        for(int i=1;i<=n;i++)cin>>a[i];for(int i=n;i;i--)a[i]-=a[i-1];
+        int q;cin>>q;map<int,i64>opre;
+        while(q--)
+        {
+            int l,r,v;cin>>l>>r>>v;
+            opre[l]+=v;if(r<n)opre[r+1]-=v;
+            while(!opre.empty())
+            {
+                auto ite=opre.begin();auto p=*ite;if(p.second>0)break;
+                if(!p.second){opre.erase(ite);continue;}
+                for(auto k:opre)a[k.first]+=k.second;opre.clear();
+            }
+        }
+        for(int i=1;i<=n;i++)a[i]+=a[i-1],cout<<a[i]<<" \n"[i==n];
+    }
+};
+int main(){ios::sync_with_stdio(0);cin.tie(0);int t=1;cin>>t;/**/for(int T=1;T<=t;T++){S SS;SS.solve();}}
