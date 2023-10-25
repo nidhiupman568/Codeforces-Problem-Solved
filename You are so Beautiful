@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=2e6+10;
+long long t,n,a[N],num,ans;
+int main(){
+	cin>>t;
+	while(t--){
+		cin>>n;
+		map<int,long long> mp1,mp2;
+		num=0;ans=0;
+		for(int i=1;i<=n;i++) cin>>a[i];
+		for(int i=1;i<=n;i++) mp1[a[i]]=i;
+		for(int i=1;i<=n;i++){
+			if(!mp2[a[i]]) mp2[a[i]]=i,num++;
+			if(mp1[a[i]]==i) ans+=num;
+		}
+		cout<<ans<<endl;
+	}
+}
