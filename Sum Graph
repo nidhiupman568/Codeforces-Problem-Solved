@@ -1,0 +1,96 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <cmath>
+#include <string>
+#include <set>
+#include <iomanip>
+#define ft first
+#define sd second
+#define endl '\n'
+#define lowbit(x) (x & (-x))
+using namespace std;
+using LL = long long;
+using ULL = unsigned long long;
+using PII = pair<int, int>;
+using PUU = pair<ULL, ULL>;
+using PLL = pair<LL, LL>;
+using i128 = __int128;
+const double eps = 1e-9;
+const int N = 300100, mod = 1e9 + 7, INF = 2147483647;
+int dx[4] = {-1, 1, 0, 0}, dy[4] = {0, 0, -1, 1};
+int qmi(int a, int b)
+{
+    int res = 1, t = a;
+    while(b)
+    {
+        if(b & 1)res = (LL)res * t % mod;
+        t = (LL)t * t % mod;
+        b >>= 1;
+    }
+    return res;
+}
+
+int n, op;
+int ord[N], a[N], b[N];
+
+void solve()
+{
+    cin >> n;
+    cout << "+ " << n + 1 << endl; cin >> op; cout.flush();
+    cout << "+ " << n + 2 << endl; cin >> op; cout.flush();
+
+    int l = 1, r = n;
+    for(int i = 1; i <= n ; i++)
+    {
+        if(i & 1)ord[i] = l++;
+        else ord[i] = r--;
+    }
+
+    int mx = 0, idx;
+    for(int i = 2; i <= n ; i++)
+    {
+        int k;
+        cout << "? " << 1 << ' ' << i << endl;
+        cin >> k; cout.flush();
+        if(k > mx)mx = k, idx = i;
+    }
+
+    a[idx] = ord[1];
+    b[idx] = ord[n];
+    for(int i = 1; i <= n ; i++)
+    {
+        if(i == idx)continue;
+        int x;
+        cout << "? " << i << ' ' << idx << endl;
+        cin >> x; cout.flush();
+        a[i] = ord[1 + x];
+        b[i] = ord[n - x];
+    }
+
+    cout << "! ";
+    for(int i = 1; i <= n ; i++)cout << a[i] << ' ';
+    for(int i = 1; i <= n ; i++)cout << b[i] << ' ';
+    cout << endl;
+    cout.flush();
+    cin >> op;
+    //if(op == -2)return;
+}
+
+signed main()
+{
+    //ios::sync_with_stdio(false);
+    //cin.tie(0), cout.tie(0);
+    //cout << setprecision(20);
+    //init();
+
+    int T = 1;
+    cin >> T;
+    while(T -- )solve();
+    return 0;
+}
