@@ -1,0 +1,228 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
+ 
+using namespace std;
+using namespace __gnu_pbds;
+ 
+template<class T> using inset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>; //Ordered set
+// less is a comparator
+// less -> ascending ordered set
+// less_equal -> ascending multi set
+// greater -> descending ordered set
+// greater_equal -> descending multi set
+#define ok(x) order_of_key(x) //gives index of x, if not present then gives the index at which it would come
+#define fo(x) find_by_order(x) //gives the iterator to the element at the index x, so use with * to get the element at index x
+ 
+// Print
+#define int long long
+#define endl '\n'
+#define yes {cout << "Yes" << endl; return;}
+#define no {cout << "No" << endl; return;}
+#define cout(x) {cout << x << endl; return;}
+#define elif else if
+ 
+// Type
+using ll = long long;
+using ld = long double;
+using str = string;
+using pl = pair<ll, ll>;
+using vl = vector<ll>;
+using vvl = vector<vl>;
+using vpl = vector<pl>;
+using vs = vector<str>;
+using sl = set<ll>;
+using ml = map<ll, ll>;
+using mc = map<char, ll>;
+using uml = unordered_map<ll, ll>;
+ 
+// Pair
+#define fi first
+#define se second
+ 
+// Vector
+#define pb emplace_back
+#define sz(v) (ll)(v).size()
+#define all(v) (v).begin(),(v).end()
+#define allr(v) (v).rbegin(),(v).rend()
+#define asc(v) sort(all(v))
+#define desc(v) sort(allr(v))
+#define rev(v) reverse(all(v))
+#define maxe(v) *max_element(all(v))
+#define mine(v) *min_element(all(v))
+#define sum(v)  accumulate(all(v), 0ll)
+#define ass(v,x)  iota(all(v), x)
+#define pre(a,pf)  partial_sum(all(a), (pf).begin()+1) // pf is of n+1 size
+#define unq(v)  (v).resize(unique(all(v)) - (v).begin()); // sort and then pass v, it will remove all duplicate and reduce the size of v also
+ 
+// Set and Map
+#define in emplace
+#define er erase
+#define lb lower_bound
+#define ub upper_bound
+ 
+// Priority queue
+template<class T> using mxq = priority_queue<T>;
+template<class T> using mnq = priority_queue<T, vector<T>, greater<T>>;
+ 
+// Disjoint Set
+class DisjointSet {
+public:
+  vector<int> rank, par;
+  DisjointSet(int n) {
+    rank.resize(n + 1, 0);
+    par.resize(n + 1);
+    for (int i = 0; i <= n; i++) {
+      par[i] = i;
+    }
+  }
+ 
+  int findPar(int node) {
+    if (node == par[node])
+      return node;
+    return par[node] = findPar(par[node]);
+  }
+ 
+  void merge(int u, int v) {
+    int ulp_u = findPar(u);
+    int ulp_v = findPar(v);
+    if (ulp_u == ulp_v) return;
+    if (rank[ulp_u] < rank[ulp_v]) {
+      par[ulp_u] = ulp_v;
+    }
+    else if (rank[ulp_v] < rank[ulp_u]) {
+      par[ulp_v] = ulp_u;
+    }
+    else {
+      par[ulp_v] = ulp_u;
+      rank[ulp_u]++;
+    }
+  }
+};
+ 
+// Binary Trie
+/*
+struct BTrieNode {
+  BTrieNode *child[2];
+ 
+  bool isPresent(int bit) {
+    return child[bit] != NULL;
+  }
+ 
+  void put(int bit) {
+    child[bit] = new BTrieNode();
+  }
+ 
+  BTrieNode *get(int bit) {
+    return child[bit];
+  }
+};
+ 
+class BTrie {
+private:
+  BTrieNode *root;
+ 
+public:
+  BTrie(int x) {
+    root = new BTrieNode();
+  }
+ 
+  void insert(int num) {
+    BTrieNode *cur = root;
+ 
+    for (int i = 31; i >= 0; i--) {
+      int bit = (num >> i) & 1;
+ 
+      if (!cur->isPresent(bit)) cur->put(bit);
+      cur = cur->get(bit);
+    }
+  }
+ 
+  int getMax(int x) {
+    int ans = 0;
+    BTrieNode *cur = root;
+ 
+    for (int i = 31; i >= 0; i--) {
+      int bit = (x >> i) & 1;
+ 
+      if (cur->isPresent(!bit)) {
+        ans = ans | (1 << i);
+        cur = cur->get(!bit);
+      }
+ 
+      else cur = cur->get(bit);
+    }
+ 
+    return ans;
+  }
+};
+*/
+ 
+// Loop
+#define f(i, a, b) for (ll i = a; i < b; i++)
+#define fr(i, b, a) for (ll i = b; i >= a; i--)
+#define fa(it, v) for (auto &it : v)
+#define fit(it, v) for (auto it = (v).begin(); it != (v).end(); it++)
+ 
+// Maths
+// const ll mod = 1000000007;
+const ll mod = 998244353;
+const ll INF = 9e18;
+void add(ll &ans, ll x) { ans = ((ans % mod) + (x % mod)) % mod; }
+void sub(ll &ans, ll x) { ans = ((ans % mod) - (x % mod) + mod) % mod; }
+void mul(ll &ans, ll x) { ans = ((ans % mod) * (x % mod)) % mod; }
+#define set_bits(n) __builtin_popcountll(n)
+#define gcd(a, b) __gcd(a, b)
+#define log2(n) (__bit_width((unsigned long)(n)) - 1)
+ll binpow(ll a, ll n) { a %= mod; ll res = 1; while (n > 0) { if (n & 1) res = res * a % mod; a = a * a % mod; n >>= 1; } return res; }
+#define isSet(i,n) (((1<<(i))&(n))!=0)
+#define isPow2(n) (((n)&((n)-1))==0)
+ 
+// Input
+template<typename typC, typename typD> istream &operator>>(istream &cin, pair<typC, typD> &a) { return cin >> a.fi >> a.se; }
+template<typename typC> istream &operator>>(istream &cin, vector<typC> &a) { for (auto &x : a) cin >> x; return cin; }
+ 
+// Output
+template<typename typC, typename typD> ostream &operator<<(ostream &cout, const pair<typC, typD> &a) { return cout << a.fi << ' ' << a.se; }
+template<typename typC> ostream &operator<<(ostream &cout, const vector<typC> &a) { ll n = sz(a); if (!n) return cout << endl; cout << a[0]; f(i, 1, n) cout << ' ' << a[i]; return cout << endl; }
+template<typename typC> ostream &operator<<(ostream &cout, const vector<vector<typC>> &a) { ll n = sz(a); if (!n) return cout << endl; f(i, 0, n) cout << a[i]; return cout; }
+template<typename typC, typename typD> ostream &operator<<(ostream &cout, const vector<pair<typC, typD>> &a) { fa(x, a) cout << x << endl; return cout; }
+template<typename typC> ostream &operator<<(ostream &cout, const set<typC> &a) { fa(it, a) cout << it << ' '; return cout << endl; }
+template<typename typC> ostream &operator<<(ostream &cout, const unordered_set<typC> &a) { fa(it, a) cout << it << ' '; return cout << endl; }
+template<typename typC> ostream &operator<<(ostream &cout, const multiset<typC> &a) { fa(it, a) cout << it << ' '; return cout << endl; }
+template<typename typC, typename typD> ostream &operator<<(ostream &cout, const map<typC, typD> &a) { fa(it, a) cout << it << endl; return cout; }
+template<typename typC, typename typD> ostream &operator<<(ostream &cout, const unordered_map<typC, typD> &a) { fa(it, a) cout << it << endl; return cout; }
+template<typename typC, typename typD> ostream &operator<<(ostream &cout, const multimap<typC, typD> &a) { fa(it, a) cout << it << endl; return cout; }
+ 
+// Debug
+#define debug(v) cout << "Line(" << __LINE__ << ") -> " << #v << " = " << (v) << endl
+template<typename... Args> void dbg(Args... args) { ((cout << args << ' '), ...) << endl; }
+ 
+void solve();
+ 
+int32_t main() {
+  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+ 
+  ll TC = 1;
+  cin >> TC;
+ 
+  f(x, 1, TC + 1) {
+    // cout<<"Case #"<<x<<": ";
+    solve();
+  }
+  cout<<endl;
+}
+ 
+void solve() {
+  str s; cin>>s;
+  ll ans=0,prev=1;
+  f(i,0,4){
+    ll dig=s[i]-'0';
+    if(dig==0) dig=10;
+    ans+=abs(dig-prev)+1;
+    prev=dig;
+  }
+  cout<<ans<<endl;
+}
