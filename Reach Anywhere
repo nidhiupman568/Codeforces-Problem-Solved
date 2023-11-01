@@ -1,0 +1,154 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define LagaKar ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define pb push_back
+#define pf push_front
+#define pob pop_back
+#define pof pop_front
+#define mp make_pair
+#define fi first
+#define se second
+#define precise(ans)  cout<<fixed<<setprecision(15)<<ans
+#define fo(i,n) for(ll i=0;i<n;i++)
+#define Fo(i,k,n) for(ll i=k;k<n?i<n:i>n;k<n?i+=1:i-=1)
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
+#define sz(x) ((ll)(x).size())
+#define all(x) x.begin(), x.end()
+#define lb lower_bound
+#define ub upper_bound
+#define MAX(x) *max_element(all(x))
+#define MIN(x) *min_element(all(x))
+#define SUM(x) accumulate(all(x), 0LL)
+#define CNT(x) __builtin_popcountll(x)
+#define nline "\n"
+#define PI 3.1415926535897932384626
+#define MOD 1000000007
+#define MOD1 998244353
+typedef long long ll; typedef unsigned long long ull; typedef long double lld;
+typedef pair<ll, ll>  pl;typedef vector<ll>  vl;typedef vector<vl>  vvl; typedef vector<pl>  vpl;
+template <typename T> using prq_mx  = priority_queue<T>; 
+template <typename T> using prq_mn = priority_queue<T, vector<T>, greater<T>>;
+const double eps=1e-9;const ll INF=(ll)1e9;const ll inf64=2e18;const ll INF64=9e18;
+#ifdef hydracody
+    #include <C:\Users\Anurag Dwivedi\Desktop\cpc\debug.h>
+#else
+#define debug(x)
+#endif
+ 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+void  chal(){ 
+  ll n,m;
+  cin>>n>>m;
+  vvl g(n+1);
+  fo(i,m){
+    ll u,v;
+    cin>>u>>v;
+    g[u].pb(v);
+    g[v].pb(u);
+  }
+
+  vl dep(n+1,-1);
+  queue<ll> q;
+  q.push(1);
+  vl ans1(n+1,INF64),ans2(n+1,INF64);
+  ans1[1]=0;
+  dep[1]=0;
+  while(sz(q)){
+    ll ch=q.front();q.pop();
+    for(auto ch2:g[ch]){
+      if(dep[ch2]==-1){
+        dep[ch2]=dep[ch]+1;
+        if(dep[ch2]%2==0)ans1[ch2]=dep[ch2];
+        else ans2[ch2]=dep[ch2];
+        q.push(ch2);
+      }
+    }
+  }
+  Fo(i,1,n+1){
+    if(dep[i]==-1){
+      cout<<-1<<nline;
+      return;
+    }
+  }
+  // debug(dep);
+  set<pair<ll,pl>> que;
+  Fo(i,1,n+1){
+    if(ans1[i]!=INF64){
+      que.insert({ans1[i],{1,i}});
+    }
+    if(ans2[i]!=INF64){
+      que.insert({ans2[i],{2,i}});
+    }
+  }
+  // cout<<sz(q)<<nline;
+  while(sz(que)){
+    pair<ll,pl> x=*que.begin();
+    que.erase(que.find(*que.begin()));
+    // cerr<<x.se.se<<nline;
+    for(auto ch:g[x.se.se]){
+      if(x.se.fi==1){
+        if(ans2[ch]==INF64 && ans2[ch]>x.fi+1){
+          ans2[ch]=x.fi+1;
+          que.insert({ans2[ch],{2,ch}});
+        }
+      }else{
+        if(ans1[ch]==INF64 && ans1[ch]>x.fi+1){
+          ans1[ch]=x.fi+1;
+          que.insert({ans1[ch],{1,ch}});
+        }
+      }
+    }
+  }
+  // debug(ans1);
+  // debug(ans2);
+  ll x=0,y=0;
+  Fo(i,1,n+1){
+    x=max(x,ans1[i]);
+    y=max(y,ans2[i]);
+  }
+  x=min(x,y);
+  if(x==INF64){
+    cout<<-1<<nline;
+    return;
+  }
+  cout<<x<<nline;
+
+
+
+
+
+
+
+
+
+
+}
+ 
+ 
+ 
+ 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+int32_t main() {
+  LagaKar;
+#ifdef hydracody
+  freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout); freopen("error.txt", "w", stderr);
+#endif
+  ll  t; t = 1;
+  cin>>t;
+  for (ll i = 1; i <= t; i++) {
+    // cerr<<"Case : "<<i<<endl;
+    // cout<<"Case #"<<i<<": ";
+    chal();
+  } 
+  return 0;
+}
