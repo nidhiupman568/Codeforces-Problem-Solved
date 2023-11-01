@@ -1,0 +1,25 @@
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+#include <set>
+#define rep(i,a,b) for(int i=a; i<b; i++)
+
+using namespace std;
+
+typedef long long ll;
+
+void solve(){
+    ll n,m,x,y; cin>>n>>m>>x>>y;
+    ll mul=n*m;
+    cout<<max({mul-x*m,mul-m*(n-x+1),mul-y*n,mul-n*(m-y+1)});
+    cout<<"\n";
+}
+
+int main(){
+   ios_base::sync_with_stdio(false);
+   cin.tie(NULL); cout.tie(NULL);
+   int t; cin>>t; while(t--)solve();
+   return 0;
+}
