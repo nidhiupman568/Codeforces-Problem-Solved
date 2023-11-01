@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int t;
+	cin>>t;
+	while(t--){
+	    int n,s,a,b;
+	    cin>>n;
+	    a=n;
+	    b=n-1;
+	    s=a*b;
+	    {
+	        cout<<s<<endl;
+	    }
+	}
+	return 0;
+}
