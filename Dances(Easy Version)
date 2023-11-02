@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+#include <stdlib.h>
+
+using namespace std;
+
+#pragma GCC optimize("O3,unroll-loops") 
+
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+#ifndef ONLINE_JUDGE
+#define _GLIBCXX_DEBUG 1
+#define _GLIBCXX_DEBUG_PEDANTIC 1
+#define _FORTIFY_SOURCE 2
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#define NDEBUG 1
+#endif
+
+#define sz(x) (int)(x).size()
+#define all(x) (x).begin(),(x).end()
+#define clr(x) memset((x), 0, sizeof(x))
+#define nl cout << '\n';
+#define pb push_back
+#define mp make_pair
+#define F first
+#define S second
+
+using ll = long long;
+using ld = long double;
+using vi = vector<int>;
+using vll = vector<long long>;
+using vvi = vector<vector<int>>;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+using u32 = unsigned long int;
+using u64 = unsigned long long int;
+
+#define FOR(i, a, b) for (int i = (a); i <= (b); ++i)
+#define REP(i, n) for (int i = 1; i <= (n); ++i)
+#define REP0(i, n) for (int i = 0; i < (n); ++i)
+#define REV(i, n) for (int i = (n); i >= 1; --i)
+
+#define MXN (int)(1e5 + 5)
+#define PI 3.1415926535897932384626433832795
+#define EPS 1e-9
+
+void yes() { cout << "YES\n"; }
+void no() { cout << "NO\n"; }
+
+// =========== CODE BEGINS HERE ==========
+int u, v, n, m, k;
+int a[MXN], b[MXN];
+
+int solve()
+{
+    sort(a+1, a+n+1);
+    sort(b+1, b+n+1);
+    
+    int ans = 0, i = 1;
+    while (i <= n - ans)
+    {
+        while (a[i] >= b[i+ans] && i+ans <= n)
+            ++ans;
+        ++i;
+    }
+    return ans;
+}
+
+int main()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    int tc;
+    cin >> tc;
+    while (tc--)
+    {
+        cin >> n >> m; dbg(n);
+        a[1] = 1;
+        FOR(i, 2, n)
+        {
+            cin >> a[i];
+        }
+        REP(i, n)
+            cin >> b[i];
+
+        cout << solve(); nl;
+        // solve() ? yes() : no();
+    }
+}
