@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+#define Fu(i,a,b) for(register int i=a;i<=b;i++)
+using namespace std;
+int n,s,t,g[4][1505],cnt[3005],mx,ans=0x7fffffff;
+int bj[1505],z[1505];
+void solve(int t){
+	memset(cnt,0,sizeof(cnt));
+	memset(bj,0,sizeof(bj));
+	Fu(i,1,g[1][0]) cnt[g[1][i]]++;
+	Fu(i,1,g[3][0]) cnt[max(0,g[3][i]-t-1)]++;
+	int o=1,top=0,tmp=0;
+	Fu(i,0,mx){
+		if(i) cnt[i]+=cnt[i-1];
+		while(o<=g[3][0]&&g[3][o]-t-1<=i) z[++top]=o++;
+		while(top&&cnt[i]>i) cnt[i]--,cnt[g[3][z[top]]]++,bj[z[top--]]=1,tmp++;
+		if(cnt[i]>i) return ;
+	}memset(cnt,0,sizeof(cnt));
+	cnt[t+1]++;
+	Fu(i,1,g[1][0]) cnt[min(mx,g[1][i]+t+1)]++;
+	Fu(i,1,g[2][0]) cnt[g[2][i]]++;
+	Fu(i,1,g[3][0]){
+		cnt[g[3][i]]++;
+		if(bj[i]) cnt[min(mx,g[3][i]+t+1)]++;
+	}
+	Fu(i,0,mx){
+		if(i) cnt[i]+=cnt[i-1];
+		if(cnt[i]>i) return ;
+	}ans=min(ans,tmp);
+}
+int main(){
+	scanf("%d",&n),mx=(n<<1)+2;
+	Fu(i,1,n) scanf("%d%d",&s,&t),g[s][++g[s][0]]=t;
+	sort(g[3]+1,g[3]+g[3][0]+1);
+	Fu(i,0,n) solve(i);
+	if(ans>n) printf("-1");
+	else printf("%d",ans+n+2); 
+	return 0;
+}
