@@ -1,0 +1,1314 @@
+#include <assert.h>
+#include <array>
+#include <algorithm>
+#include <bitset>
+#include <cctype>
+#include <climits>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <deque>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <string>
+#include <vector>
+
+// c++ -std=c++17 file1.cc
+struct MMath {
+	static std::vector<int> get_primes(int N);
+	
+	typedef long long LL;
+	static LL extended_gcd(LL a, LL b, LL &x, LL &y) {
+		LL old_r=a, r=b;
+		LL old_s=1, s=0;
+		LL old_t=0, t=1;
+		
+		while (r) {
+			auto quot=old_r/r;
+			auto oo=old_r; old_r=r; r=oo%r;
+			oo=old_s; old_s=s; s=oo-quot*s;
+			oo=old_t; old_t=t; t=oo-quot*t;
+		}
+		x=old_s;
+		y=old_t;
+		return old_r;
+	}
+	
+	MMath(LL modulo) : mod(modulo) {
+	}
+	
+	LL add(LL a, LL b) const { return (a+b)%mod;}
+	LL sub(LL a, LL b) const { return (a-b)%mod;}
+	LL mul(LL a, LL b) const { return (a*b)%mod;}
+	
+	typedef std::array<LL,2> Frac;
+	Frac add(Frac const &a, Frac const &b) const { return {(a[0]*b[1]+a[1]*b[0])%mod,(a[1]*b[1])%mod};}
+	Frac sub(Frac const &a, Frac const &b) const { return {(a[0]*b[1]-a[1]*b[0])%mod,(a[1]*b[1])%mod};}
+	Frac mul(Frac const &a, Frac const &b) const { return {(a[0]*b[0])%mod,(a[1]*b[1])%mod};}
+	Frac div(Frac const &a, Frac const &b) const { return {(a[0]*b[1])%mod,(a[1]*b[0])%mod};}
+	
+	static void print(Frac const &a) {
+		LL gcd=std::gcd(a[0],a[1]);
+		if (gcd==0) gcd=1;
+		std::cout << a[0]/gcd << "/" << a[1]/gcd;
+	}
+	
+	// P/Q returns unique integer R such that R*Q=P [a]
+	LL convert1(Frac const &a) const {
+		LL x,y;
+		MMath::extended_gcd(mod,a[1],x,y);
+		LL rr=(a[0]*y)%mod;
+		if (rr<0) rr +=mod;
+		return rr;
+	}
+	LL mod;
+};
+
+std::vector<int> MMath::get_primes(int N) {
+	std::vector<bool> p(N+1,true);
+	p[0]=p[1]=false;
+	for (int i=2; i<=N; ++i) {
+		if (i*i>N) break;
+		if (!p[i]) continue;
+		int ii=2*i;
+		while (ii<=N) {
+			p[ii]=false;
+			ii+=i;
+		}
+	}
+	std::vector<int> res;
+	for (int i=2; i<=N; ++i) {
+		if (p[i]) res.push_back(i);
+	}
+	return res;
+}
+
+
+typedef std::array<long long,2> Interval;
+class IntervalList {
+public:
+	IntervalList()
+	: data()
+	{
+	}
+	
+	void insert(Interval const &v);
+	template< class InputIt > void insert( InputIt first, InputIt last ) {
+		for (auto it=first ; it!=last; ++it) { insert(*it); }
+	}
+	
+	void erase(Interval const &v);
+	template< class InputIt > void erase( InputIt first, InputIt last ) {
+		for (auto it=first ; it!=last; ++it) { erase(*it); }
+	}
+	
+	IntervalList intersect(IntervalList const &l) const {
+		IntervalList l1;
+		IntervalList const *l2;
+		if (size()<l.size()) {
+			l1 = l;
+			l2 = this;
+		}
+		else {
+			l1 = *this;
+			l2 = &l;
+		}
+		
+		long long minVal=LLONG_MIN;
+		auto it = l2->data.begin();
+		while (it != l2->data.end()) {
+			l1.erase({minVal,(*it)[0]-1});
+			minVal=(*it)[1]+1;
+			++it;
+		}
+		l1.erase({minVal,LLONG_MAX});
+		return l1;
+	}
+	bool empty() const {
+		return data.empty();
+	}
+	size_t size() const {
+		return data.size();
+	}
+	long long total() const {
+		long long num=0;
+		for (auto const &it: data) num+=1+it[1]-it[0];
+		return num;
+	}
+	void print() const {
+		std::cout << "------------\n";
+		for (auto &v : data) std::cout << v[0] << "x" << v[1] << ", ";
+		std::cout << "\n";
+	}
+	std::set<Interval> data;
+};
+
+
+void IntervalList::insert(Interval const &v)
+{
+	if (v[1]<v[0]) return;
+	auto vm=v[0];
+	auto it=data.lower_bound({vm,LLONG_MIN});
+	if(it!=data.begin()) {
+		auto jIt=it;
+		--jIt;
+		if ((*jIt)[1]+1>=vm) {
+			it=jIt;
+			vm=(*it)[0];
+		}
+	}
+	if (it==data.end() || (*it)[0]>v[1]+1) {
+		data.insert(v);
+		return;
+	}
+	auto vM=v[1];
+	while (it!=data.end()) {
+		if ((*it)[0]>v[1]+1)
+			break;
+		if ((*it)[1]>vM)
+			vM=(*it)[1];
+		it=data.erase(it);
+	}
+	data.insert({vm,vM});
+}
+
+void IntervalList::erase(Interval const &v)
+{
+	if (v[1]<v[0]) return;
+	auto it=data.lower_bound({v[0],LLONG_MIN});
+	if(it!=data.begin()) {
+		auto jIt=it;
+		--jIt;
+		if ((*jIt)[1]>=v[0])
+			it=jIt;
+	}
+	if (it!=data.end() && (*it)[0]<v[0])
+		data.insert({(*it)[0],v[0]-1});
+	while (it!=data.end()) {
+		if ((*it)[1]>v[1])
+			break;
+		it=data.erase(it);
+	}
+	if (it!=data.end() && (*it)[0]<=v[1]) {
+		auto vM=(*it)[1];
+		data.erase(it);
+		data.insert({v[1]+1,vM});
+	}
+}
+
+struct Graph {
+	struct Node {
+		Node(int f_=-1, int l_=-1) : f(f_), l(l_) {}
+		
+		int f, l;
+		bool set=false;
+	};
+	
+	struct Edge {
+		Edge(int next, int v=-1) : n(next), val(v) {}
+		
+		bool operator<(Edge const &e1) const {
+			return n<e1.n;
+		}
+		bool operator==(Edge const &e1) const {
+			return n==e1.n;
+		}
+		bool operator!=(Edge const &e1) const {
+			return !(*this==e1);
+		}
+		int n, val;
+	};
+	
+	typedef std::function<bool(Graph const &g, Edge const &v)> callG; // returns true to stop
+	
+	explicit Graph(int N, bool direct_=false)
+	: direct(direct_)
+	, nodes(N)
+	, edges(N) {
+	}
+	void read(int M) {
+		for (int i=0; i<M; ++i) {
+			int u,v, w;
+			std::cin >> u >> v >> w;
+			add(u-1,v-1, w);
+		}
+	}
+	size_t size() const { return nodes.size(); }
+	
+	void add(int a, int b, int w) {
+		edges[a].insert({b,w});
+		if (!direct)
+			edges[b].insert({a,w});
+	}
+	void remove(int a, int b) {
+		edges[a].erase({b,-1});
+		if (!direct)
+			edges[b].erase({a,-1});
+	}
+	bool has(int a, int b) {
+		return edges[a].count({b,-1})>0;
+	}
+	void dj(int v, callG f) const;
+	void remove_isolated_child(); // only for undirect graph
+	
+	void bfs(int v) const {
+		int num=0;
+		dj(v,[&num](Graph const &g, Edge const &v)->bool {
+			++num;
+			return false;
+		});
+	}
+	bool direct;
+	mutable std::vector<Node> nodes;
+	std::vector<std::set<Edge> > edges;
+};
+
+void Graph::remove_isolated_child() {
+	std::set<int> unique;
+	for (size_t i=0; i<edges.size(); ++i) {
+		if (edges[i].size()==1)
+			unique.insert(i);
+	}
+	while (!unique.empty()) {
+		int i=*unique.begin();
+		unique.erase(i);
+		if (edges[i].empty())
+			continue;
+		auto j=edges[i].begin()->n;
+		remove(i,j);
+		if (edges[j].size()==1)
+			unique.insert(j);
+	}
+}
+
+void Graph::dj(int v, Graph::callG f) const {
+	std::set<int> seens;
+	seens.insert(v);
+	
+	std::vector<int> stack;
+	stack.push_back(v);
+	while (!stack.empty()) {
+		std::vector<int> newStack;
+		for (auto i : stack) {
+			for (auto const &j : edges[i]) {
+				if (seens.count(j.n))
+					continue;
+				seens.insert(j.n);
+				if (f(*this, j)) return;
+				newStack.push_back(j.n);
+			}
+		}
+		std::swap(stack,newStack);
+	}
+}
+
+class DisjointSet {
+public:
+	// constructor knowing the number of elements
+	explicit DisjointSet(size_t num)
+	: m_ids()
+	, m_size()
+	, m_sign()
+	{
+		m_ids.resize(num);
+		m_size.assign(num, 1);
+		m_sign.assign(num, 1);
+		for (int i = 0; i < int(num); i++)
+			m_ids[i] = i;
+	}
+	DisjointSet(DisjointSet const &)=delete;
+	DisjointSet &operator=(DisjointSet const &)=delete;
+	
+	void merge(int a, int b, bool sameSign) {
+		int rootA = findRoot(a);
+		int rootB = findRoot(b);
+		if(rootA == rootB) return;
+		if(m_size[rootB] < m_size[rootA]) std::swap(rootA, rootB);
+		
+		if (m_sign[rootA]==-1) m_sign[rootB]=-1; // merge an incoherent tree, update new root
+		m_ids[rootA]=rootB;
+		// a=>rootA : ssA, b=>rootB : ssB, so we want a=>b : sameSign^ssA^ssB
+		m_sign[rootA]=(m_sign[a]==m_sign[b])==sameSign ? 1 : -1;
+		m_size[rootB] += m_size[rootA];
+	}
+	
+	
+	//
+	// access to data
+	//
+	
+	// connect a node and its parents to the root and return the root
+	int findRoot(int i) const{
+		// find the root
+		int rootId=m_ids[i], sign=1;
+		while (rootId!=m_ids[rootId]) { sign=(sign==m_sign[rootId]) ? 1 : -1; rootId=m_ids[rootId]; }
+		// connect all the path to root
+		while (i!=rootId) {
+			auto newI=m_ids[i];
+			m_ids[i] = rootId;
+			bool newSameSign=(sign==m_sign[i]);
+			sign = m_sign[i] = newSameSign ? 1 : -1;
+			i=newI;
+		}
+		return rootId;
+	}
+	//! returns the size of the set containing i
+	int getSetSize(int i) const {
+		return m_size[findRoot(i)];
+	}
+	
+	//! returns true if the two elements are in the same set
+	bool isInSameSet(int a, int b) const {
+		return findRoot(a)==findRoot(b);
+	}
+	bool isInSameSign(int a, int b) const {
+		return m_sign[a]==m_sign[b];
+	}
+	
+	// return the number of sets
+	int getNumSets() const {
+		// count the different roots
+		int num = 0;
+		for (int i = 0; i < m_ids.size(); i++) {
+			if (i == findRoot(i)) ++num;
+		}
+		return num;
+	}
+	
+	// return the number of set and fill setId
+	template <class T>
+	T getSetsId(std::vector<T> &idToSetId) const {
+		// prepare the correspondance root Id => setId
+		idToSetId.resize(m_ids.size());
+		int numSets = 0;
+		for (int i = 0; i < m_ids.size(); i++) {
+			if (i == findRoot(i)) {
+				idToSetId[i] = T(numSets);
+				numSets++;
+			}
+		}
+		// fill the other set Ids
+		for (int i = 0; i < m_ids.size(); i++)
+			idToSetId[i] = idToSetId[m_ids[i]];
+		return T(numSets);
+	}
+	
+	// return the number of values
+	size_t size() const {
+		return m_ids.size();
+	}
+	// return the parent indices
+	std::vector<int> const &data() const {
+		return m_ids;
+	}
+protected:
+	mutable std::vector<int> m_ids;
+	std::vector<int> m_size;
+	mutable std::vector<int> m_sign;
+};
+
+struct Tree {
+	struct Node {
+		Node(int pId=-1) : parent(pId) {
+		}
+		mutable int size=0;
+		int parent;
+		std::vector<int> childs;
+	};
+	
+	struct SubTree {
+		SubTree(Tree &t, int r)
+		: tree(t)
+		, root(r)
+		{
+		}
+		
+		friend bool operator<(SubTree const &a,SubTree const &b)  {
+			return a.tree.isLess(a.root, b.tree, b.root);
+		}
+		Tree &tree;
+		int root;
+	};
+	
+	Tree(bool _isGraph=false) : nodes(), isGraph(_isGraph) {
+	}
+	void read(int N);
+	void readFather(int N) {
+		nodes.resize(N);
+		for (int i=1; i<N; ++i) {
+			int f;
+			std::cin >> f;
+			--f;
+			nodes[i].parent=f;
+			nodes[f].childs.push_back(i);
+			if (isGraph) nodes[i].childs.push_back(f);
+		}
+		
+		updateGraph();
+	}
+	void print(int id) const {
+		auto const &node = nodes[id];
+		std::cout << id << "[p=" << node.parent << ",sz=" << node.size << "]\n";
+		if (!node.childs.empty()) {
+			std::cout << "\tCHILD:";
+			for (auto &c : node.childs) std::cout << c << " ";
+			std::cout << "\n";
+		}
+		for (auto &c : node.childs) print(c);
+	}
+	Node const &operator[](int id) const {
+		return nodes[id];
+	}
+	Node &operator[](int id) {
+		return nodes[id];
+	}
+	
+	int compare(int id, Tree const &b, int bId) const {
+		if (nodes[id].size<b.nodes[bId].size)
+			return 1;
+		if (nodes[id].size>b.nodes[bId].size)
+			return -1;
+		if (nodes[id].childs.size()<b.nodes[bId].childs.size())
+			return 1;
+		if (nodes[id].childs.size()>b.nodes[bId].childs.size())
+			return -1;
+		for (size_t i=0; i<nodes[id].childs.size(); ++i) {
+			int cmp=compare(nodes[id].childs[i],b,b.nodes[bId].childs[i]);
+			if (cmp) return cmp;
+		}
+		return 0;
+	}
+	
+	bool isLess(int id, Tree const &b, int bId) const {
+		return compare(id,b,bId)<0;
+	}
+	bool operator<(Tree const &a) const {
+		return isLess(0, a, 0);
+	}
+	size_t size() const { return nodes.size(); }
+	bool empty() const { return nodes.empty(); }
+	
+	void updateSize(int root) {
+		nodes[root].size=1;
+		DF(root, [this](int,int b) {nodes[b].size=1;}, [this](int a,int b) {nodes[b].size+=nodes[a].size;} );
+	}
+	std::vector<int> getNumChilds(int root) const {
+		std::vector<int> res(size(), 0);
+		res[root]=nodes[root].childs.empty() ? 1 : 0;
+		DF(root, [this, &res](int,int b) {res[b]=nodes[b].childs.empty() ? 1 : 0;}, [&res](int a,int b) {res[b]+=res[a];} );
+		return res;
+	}
+	
+	
+	void getChild(int id, std::vector<int> &res) const {
+		res.push_back(id);
+		DF(id,[&res](int, int b){res.push_back(b);});
+	}
+	
+	typedef std::function<void(int a, int b)> DFFunction;
+	void DF(int id, DFFunction down, DFFunction up=[](int,int){}) const {
+		int const N=nodes.size();
+		std::vector<bool> done(N,false);
+		done[id]=true;
+		
+		std::vector<int> roots;
+		roots.push_back(-1);
+		
+		std::vector<std::array<int,2> > stack;
+		stack.push_back({id,-1});
+		
+		while(!stack.empty()) {
+			int rId=stack.back()[0], fId=stack.back()[1];
+			stack.pop_back();
+			
+			while (fId!=roots.back()) {
+				int aId=roots.back();
+				roots.pop_back();
+				up(aId,roots.back());
+			}
+			
+			roots.push_back(rId);
+			if (fId>=0) down(fId,rId);
+			auto const &node=nodes[rId].childs;
+			for (auto it=node.rbegin(); it!=node.rend(); ++it) {
+				auto c=*it;
+				if (done[c]) continue;
+				done[c]=true;
+				stack.push_back({c,rId});
+			}
+		}
+		while (roots.back()!=-1) {
+			int aId=roots.back();
+			roots.pop_back();
+			if (roots.back()==-1) break;
+			up(aId,roots.back());
+		}
+	}
+	
+	std::vector<Node> nodes;
+	bool isGraph;
+	
+protected:
+	void updateGraph() {
+		updateSize(0);
+		if (isGraph) return;
+		for (auto &node : nodes)
+			std::sort(node.childs.begin(), node.childs.end(),[this](int a, int b){return isLess(a,*this,b);});
+	}
+};
+
+void Tree::read(int N) {
+	nodes.resize(N);
+	
+	std::multimap<int,int> edges;
+	for (size_t i=0; i+1<N; ++i) {
+		int e1, e2;
+		std::cin >> e1 >> e2;
+		edges.insert(std::make_pair(e1-1,e2-1));
+		edges.insert(std::make_pair(e2-1,e1-1));
+	}
+	
+	std::set<int> roots;
+	roots.insert(0);
+	while (!roots.empty()) {
+		int n1=*roots.begin();
+		roots.erase(n1);
+		auto it=edges.find(n1);
+		while (it!=edges.end() && it->first==n1) {
+			int n2=it->second;
+			if (n2!=n1 && nodes[n1].parent!=n2) {
+				nodes[n1].childs.push_back(n2);
+				nodes[n2].parent = n1;
+				if (isGraph)
+					nodes[n2].childs.push_back(n1);
+				roots.insert(n2);
+			}
+			it=edges.erase(it);
+		}
+	}
+	
+	updateGraph();
+}
+
+struct TreeInterval : public Tree {
+	TreeInterval(int N) : Tree() {
+		if (N<=0)
+			return;
+		nodes.reserve(2*N-1);
+		intervals.reserve(2*N-1);
+		modifiers.resize(2*N-1,false);
+		nodes.push_back(Node());
+		intervals.push_back({0,N-1});
+		createIntervalTree(0);
+		
+		updateGraph();
+	}
+	bool isInside(int a, Interval const &I) const {
+		auto const &interv=intervals[a];
+		return I[0]<=interv[0] && I[1]>=interv[1];
+	}
+	typedef std::function<void(int)> SearchFunction;
+	void find(Interval const &I, SearchFunction down, SearchFunction up=[](int){}) const {
+		std::vector<int> roots; // id
+		roots.push_back(-1);
+		
+		std::vector<std::array<int,2> > stack;
+		stack.push_back({0,-1});
+		
+		while(!stack.empty()) {
+			int rId=stack.back()[0], fId=stack.back()[1];
+			stack.pop_back();
+			
+			while (fId!=roots.back()) {
+				up(roots.back());
+				roots.pop_back();
+			}
+			
+			down(rId);
+			if (isInside(rId,I))
+				continue;
+			
+			roots.push_back(rId);
+			auto const &inter=intervals[rId];
+			int m=(inter[0]+inter[1])/2;
+			auto const &node=nodes[rId].childs;
+			if (m<I[1] && node.size()>=2)
+				stack.push_back({node[1],rId});
+			if (m>=I[0] && node.size()>=1)
+				stack.push_back({node[0],rId});
+		}
+		while (roots.back()!=-1) {
+			up(roots.back());
+			roots.pop_back();
+		}
+	}
+	
+	std::vector<Interval> intervals;
+	mutable std::vector<bool> modifiers;
+	
+protected:
+	void createIntervalTree(int r);
+};
+
+void TreeInterval::createIntervalTree(int r)
+{
+	auto const &inter=intervals[r];
+	int a=inter[0], b=inter[1];
+	if (a==b)
+		return;
+	int m=(a+b)/2;
+	
+	for (int st=0; st<2; ++st) {
+		int n=nodes.size();
+		nodes.push_back(Node());
+		nodes[r].childs.push_back(n);
+		nodes.back().parent=r;
+		if (st==0)
+			intervals.push_back({a,m});
+		else
+			intervals.push_back({m+1,b});
+		createIntervalTree(n);
+	}
+}
+
+template <class Value> // need Value.merge(Value)=>Value Value.invert()=>Value
+struct TreeIntervalAlgorithm {
+	TreeIntervalAlgorithm(TreeInterval const &_T) : T(_T) {
+		values.resize(T.nodes.size());
+	}
+	void create(std::function<Value(int)> f) {
+		T.DF(0,[this, &f](int,int a){
+			auto &i=T.intervals[a];
+			if (i[0]==i[1]) values[a]=f(i[0]);
+		},
+			 [this](int b, int a){ if (T.nodes[a].childs.back()==b) updateValue(a); });
+	}
+	
+	Value getValue(Interval const &I) {
+		Value res;
+		bool first=true;
+		T.find(I, [&first, &I, this, &res](int a) {
+			if (!isInside(a,I)) {
+				updateChild(a);
+				return;
+			}
+			auto const &val=values[a];
+			if (first) {
+				res=val;
+				first=false;
+			}
+			else
+				res=res.merge(val);
+		});
+		return res;
+	}
+	void modify(Interval const &I) {
+		T.find(I, [&I, this](int a) {
+			if (!isInside(a,I)) {
+				updateChild(a);
+				return;
+			}
+			invert(a);
+		},
+			   [this](int a) { updateValue(a); });
+	}
+	void invert(int a) {
+		values[a]=values[a].invert();
+		T.modifiers[a]=!T.modifiers[a];
+	}
+	void updateValue(int a) {
+		auto &nd = T.nodes[a];
+		if (nd.childs.size()==1)
+			values[a]=values[nd.childs[0]];
+		else if (nd.childs.size()==2)
+			values[a]=values[nd.childs[0]].merge(values[nd.childs[1]]);
+	}
+	void updateChild(int a) {
+		if (!T.modifiers[a]) return;
+		
+		T.modifiers[a]=false;
+		for (auto &ch : T.nodes[a].childs) invert(ch);
+	}
+	
+	bool isInside(int a, Interval const &I) const { return T.isInside(a, I); }
+	
+	TreeInterval const &T;
+	std::vector<Value> values;
+};
+
+// see also Queap insert in O(1)
+namespace MultiArray {
+typedef std::vector<int> Index;
+struct IndexFunction {
+	static Index addAndProject(Index const &a, Index const &b, Index const &maxIndex) {
+		Index c;
+		c.resize(a.size());
+		for (size_t i=0; i<a.size(); ++i) c[i]=std::min(maxIndex[i], a[i]+b[i]);
+		return c;
+	}
+	static Index add(Index const &a, Index const &b, Index const &maxIndex) {
+		Index c;
+		c.resize(a.size());
+		for (size_t i=0; i<a.size(); ++i) {
+			if (a[i]+b[i]>maxIndex[i]) {
+				c[0]=-1;
+				return c;
+			}
+			c[i]=a[i]+b[i];
+		}
+		return c;
+	}
+	static bool badIndex(Index const &a) {
+		return a[0]<0;
+	}
+};
+
+template <class Value, std::vector<int> FAdd(std::vector<int> const &a, std::vector<int> const &b, std::vector<int> const &maxIndex)>
+struct Array {
+	typedef std::vector<int> Index;
+	
+	Array(std::vector<int> const &max) : maxIndex(max) {
+		init(Value::defValue);
+	}
+	Index add(Index const &a, Index const &b) const {
+		return FAdd(a,b,maxIndex);
+	}
+	Index convert(std::set<int> const &s) const {
+		Index res(maxIndex.size(),0);
+		for (auto v : s) res[v]=1;
+		return res;
+	}
+	Value &operator[](Index const &a) {
+		size_t pos=a[0];
+		for (size_t i=1; i<maxIndex.size(); ++i) pos=a[i]+pos*(1+maxIndex[i]);
+		return data[pos];
+	}
+	Value const &operator[](Index const &a) const {
+		size_t pos=a[0];
+		for (size_t i=0; i<maxIndex.size(); ++i) pos=a[i]+pos*(1+maxIndex[i]);
+		return data[pos];
+	}
+	void init(Value const &v) {
+		size_t s=1;
+		for (auto m : maxIndex) s*=(m+1);
+		data.assign(s,v);
+	}
+	void add(Index const &a, Value const &v) {
+		go([&a,&v,this](Array &array, Index const &b) { if (array[b].isDef() || IndexFunction::badIndex(add(a,b))) return; array[add(a,b)].update(Value::add(array[b],v)); });
+	}
+	void add(Index const &a, Value const &v, std::set<Index> &changes) {
+		go([&a,&v,&changes,this](Array &array, Index const &b) {
+			auto id=add(a,b);
+			if (array[b].isDef() || IndexFunction::badIndex(id)) return;
+			auto old=array[id];
+			array[id].update(Value::add(array[b],v));
+			if (old!=array[id])
+				changes.insert(id);
+		});
+	}
+	int count(Value const &a) const {
+		int num=0;
+		for (auto const &v : data) if (v==a) ++num;
+		return num;
+	}
+	void go(std::function<void(Array &array, Index const &a)> f) {
+		std::vector a=maxIndex;
+		while (!IndexFunction::badIndex(a)) {
+			f(*this, a);
+			bool done=false;
+			for (int i=maxIndex.size()-1; i>=0; --i) {
+				if (a[i]==0) {
+					a[i]=maxIndex[i];
+					continue;
+				}
+				done=true;
+				--a[i];
+				break;
+			}
+			if (!done)
+				break;
+		}
+	}
+	std::vector<Value> data;
+	Index maxIndex;
+};
+
+template <class T>
+struct Value {
+	typedef T Type;
+	Value(T v=defValue) : value(v) {}
+	static Value add(Value const &a, Value const &b) { return a.value+b.value; }
+	void update(T const &a) {
+		if (value == defValue)
+			value=a;
+		else
+			value=std::min<T>(value,a);
+	}
+	operator T() const { return value; }
+	
+	bool isDef() const { return value==defValue; }
+	T value;
+	static T constexpr defValue=-1;
+};
+
+template <>
+struct Value<bool> {
+	typedef bool T;
+	typedef T Type;
+	Value(T v=defValue) : value(v) {}
+	static Value add(Value const &a, Value const &b) { return a.value+b.value; }
+	void update(T const &a) {
+		if (value == defValue)
+			value=a;
+	}
+	operator T() const { return value; }
+	
+	bool isDef() const { return value==defValue; }
+	T value;
+	static T constexpr defValue=false;
+};
+}
+
+struct Perm {
+	typedef std::function<void(std::vector<int> const &p)> Function;
+	Perm(int n) {
+		p.resize(n);
+		for (int i=0;i<n; ++i) p[i]=i;
+	}
+	int operator[](int i) const {
+		return p[i];
+	}
+	void apply(Function const &f, int n=-1) {
+		if (n<0) n=p.size();
+		if (n<=1) {
+			f(p);
+			return;
+		}
+		for (int i=0; i<n; ++i) {
+			std::swap(p[i],p[n-1]);
+			apply(f,n-1);
+			std::swap(p[i],p[n-1]);
+		}
+	}
+	std::vector<int> p;
+};
+
+class SkipList {
+public:
+	struct Node;
+	struct Edge {
+		Edge(Node *nd=nullptr) : next(nd) {
+		}
+		bool empty() const { return next==nullptr; }
+		Node *next;
+		long long total=0;
+	};
+	struct Node {
+		int key;
+		long long value;
+		// pointers to successor nodes
+		std::vector<Edge> forward;
+		
+		Node (int k, long long v, int level) : key(k), value(v)
+		{
+			forward.assign(level, Edge());
+		}
+		
+		friend std::ostream &operator<<(std::ostream &s, Node const &nd) {
+			s << "value: "<< nd.value <<", key: "<< nd.key <<", level: "<< nd.forward.size();
+			s << "[";
+			for (auto const &ed : nd.forward) {
+				if (!ed.next || ed.next->isLastNode()) break;
+				s << ed.total << ",";
+			}
+			s << "]";
+			return s;
+		}
+		
+		bool isLastNode() const {
+			return isLastNode(forward);
+		}
+		static bool isLastNode(std::vector<Edge> const &forward) {
+			return forward[0].next==nullptr;
+		}
+		int level () const {
+			return level(forward);
+		}
+		static int level (std::vector<Edge> const &forward) {
+			if (isLastNode(forward)) return 1;
+			
+			int currentLevel = 1;
+			for (auto const &v : forward) {
+				if (v.next==nullptr || v.next->isLastNode())
+					break;
+				++currentLevel;
+			}
+			return currentLevel;
+		}
+		static int level (std::vector<Node *> const &forward) {
+			if (forward[0]==nullptr) return 1;
+			
+			int currentLevel = 1;
+			for (auto v : forward) {
+				if (v==nullptr || v->isLastNode())
+					break;
+				++currentLevel;
+			}
+			return currentLevel;
+		}
+	};
+	
+	struct Compute {
+		virtual long long add(long long a, long long b) const { return a+b; }
+		virtual long long remove(long long a, long long b) const { return a-b; }
+		long long zeroValue=0;
+	};
+	SkipList (Compute const &comp, int mLevel=16) : maxLevel(mLevel), compute(comp)
+	{
+		// Initialize the head of the skip list
+		
+		// smallest possible key
+		head = new Node(std::numeric_limits<int>::min(), 0, maxLevel);
+		
+		// Initialize the last element of the list
+		
+		// largest possible key
+		tail = new Node(std::numeric_limits<int>::max(), 0, maxLevel);
+		
+		// Connect start to end
+		// connect all the levels/forward pointers of the header to NIL
+		for (auto &nd : head->forward) nd = tail;
+	}
+	~SkipList () {
+		auto nd=head;
+		while (nd!=nullptr) {
+			auto next=nd->forward[0].next;
+			delete nd;
+			nd = next;
+		}
+	}
+	
+	// non-modifying member functions
+	void print() const {
+		auto nd=head;
+		while (nd->forward[0].next!=nullptr) {
+			std::cout << *nd << "\n";
+			nd=nd->forward[0].next;
+		}
+	}
+	Node const *pred(int searchKey, long long *val=nullptr) const {
+		std::vector<Node*> update;
+		std::vector<long long> total;
+		fillUpdate(searchKey, update, val ? &total : nullptr);
+		
+		Node const *x = update[0];
+		if (val) {
+			*val=compute.zeroValue;
+			for (auto v : total)
+				*val=compute.add(*val, v);
+		}
+		return x;
+	}
+	
+	Node const *find(int searchKey, long long *val=nullptr) const {
+		Node const *p = pred(searchKey, val);
+		Node const *x = p->forward[0].next;
+		if (x->key != searchKey) return nullptr;
+		if (val)
+			*val=compute.add(*val, p->forward[0].total);
+		return x;
+	}
+	
+	// modifying member functions
+	void insert (int searchKey, long long newValue, long long total=1);
+	void erase (int searchKey);
+private:
+	// pointer to first node
+	Node* head;
+	// last node
+	Node* tail;
+	
+	// implicitly used member functions
+	int randomLevel () const {
+		int v = 1;
+		while ((std::rand()%2)==0 && v < maxLevel) ++v;
+		return v;
+	}
+	Node* makeNode (int key, long long val, int level) const {
+		return new Node(key, val, level);
+	}
+	void fillUpdate(int key, std::vector<Node*> &update, std::vector<long long> *total=nullptr) const {
+		update.assign(head->forward.size(), head);
+		if (total) total->assign(head->forward.size(), compute.zeroValue);
+		
+		unsigned int currentMaximum = head->level();
+		Node *x = head;
+		
+		// search the list
+		for (unsigned int i = currentMaximum; i-- > 0;) {
+			while (x->forward[i].next != nullptr && x->forward[i].next->key < key) {
+				if (total)
+					(*total)[i]=compute.add((*total)[i],x->forward[i].total);
+				x = x->forward[i].next;
+			}
+			update[i] = x;
+		}
+	}
+	
+	// data members
+	int maxLevel;
+	Compute const &compute;
+};
+
+void SkipList::insert(int searchKey, long long newValue, long long total) {
+	// first check if a node exists
+	Node const *xx = find(searchKey);
+	if (xx) {
+		if (xx->value==newValue) return;
+		erase(searchKey);
+	}
+	
+	// vector of pointers that needs to be updated to account for the new node
+	std::vector<Node*> update;
+	std::vector<long long> totals;
+	fillUpdate(searchKey, update, &totals);
+	
+	// create new node
+	int newNodeLevel = randomLevel();
+	int currentLevel = Node::level(update);
+	
+	if (newNodeLevel > currentLevel) {
+		for (int i = currentLevel + 1; i < newNodeLevel; ++i)
+			update[i] = head;
+	}
+	Node *x = makeNode(searchKey, newValue, newNodeLevel);
+	
+	// connect pointers of predecessors and new node to successors
+	long long s=compute.zeroValue;
+	for (int i = 0; i < newNodeLevel; ++i) {
+		x->forward[i].next = update[i]->forward[i].next;
+		x->forward[i].total = compute.remove(update[i]->forward[i].total,s);
+		update[i]->forward[i].next = x;
+		update[i]->forward[i].total = s;
+		s=compute.add(s,totals[i]);
+	}
+	
+	for (size_t i = 0; i < update.size(); ++i)
+		update[i]->forward[i].total = compute.add(update[i]->forward[i].total,total);
+}
+
+
+void SkipList::erase (int searchKey) {
+	// vector of pointers that needs to be updated to account for the deleted node
+	std::vector<Node*> update;
+	fillUpdate(searchKey, update);
+	Node *x = update[0]->forward[0].next;
+	
+	if (x->key != searchKey) return;
+	long long total=update[0]->forward[0].total;
+	
+	// update pointers and delete node
+	for (size_t i = 0; i < update.size(); ++i) {
+		if (update[i]->forward[i].next != x) break;
+		update[i]->forward[i].total= compute.add(update[i]->forward[i].total,x->forward[i].total);
+		update[i]->forward[i].next = x->forward[i].next;
+	}
+	for (size_t i = 0; i < update.size(); ++i)
+		update[i]->forward[i].total = compute.remove(update[i]->forward[i].total,total);
+	delete x;
+}
+
+template <class T> struct IntersectList {
+	struct Node {
+		Node(int _f=-1, int _l=-1) : f(_f), l(_l) {
+		}
+		
+		friend std::ostream &operator<<(std::ostream &s, Node const &n) {
+			s << n.f << "<->" << n.l;
+			if (!n.childs.empty()) {
+				s << ",c=[";
+				for (auto c : n.childs) s << c << " ";
+				s << "]";
+			}
+			return s;
+		}
+		int f,l;
+		std::vector<int> childs;
+	};
+	
+	static void create(std::vector<T> const &s, std::vector<int> &succ, bool next=true, bool simple=false) {
+		int N=s.size();
+		succ.assign(N,-1);
+		std::map<T,int> last;
+		if (!next) {
+			for (size_t i=0; i<N; ++i) {
+				if (last.count(s[i])) {
+					succ[i]=last[s[i]];
+					if (simple) {
+						last.erase(s[i]);
+						continue;
+					}
+				}
+				last[s[i]]=i;
+			}
+		}
+		else {
+			for (int i=N-1; i>=0; --i) {
+				if (last.count(s[i])) {
+					succ[i]=last[s[i]];
+					if (simple) {
+						last.erase(s[i]);
+						continue;
+					}
+				}
+				last[s[i]]=i;
+			}
+		}
+	}
+	
+	void print() const {
+		for (size_t i=0; i<nodes.size(); ++i)
+			std::cout << i << ":" << nodes[i] << "\n";
+	}
+	void create(std::vector<T> const &s);
+	
+	std::vector<Node> nodes;
+};
+
+template <class T>
+void IntersectList<T>::create(std::vector<T> const &s) {
+	std::vector<int> next, prev;
+	create(s,next,true);
+	create(s,prev,false);
+	std::set<std::pair<int,bool> > set;
+	int N=s.size();
+	for (size_t i=0; i<N; ++i) {
+		if (next[i]>=0)
+			set.insert(std::make_pair(i,true));
+	}
+	
+	auto it=set.begin();
+	std::set<std::array<int,2> > stack;
+	
+	nodes.clear();
+	nodes.reserve(set.size()+1);
+	nodes.push_back(Node());
+	
+	while (it!=set.end()) {
+		auto v=*it;
+		int i=v.first;
+		if (v.second)
+			set.insert(std::make_pair(next[i],false));
+		else {
+			int p=prev[i];
+			auto sIt=stack.lower_bound({p,-1});
+			nodes.push_back(Node(p,i));
+			
+			auto &node = nodes.back();
+			while (sIt!=stack.end()) {
+				node.childs.push_back((*sIt)[1]);
+				sIt=stack.erase(sIt);
+			}
+			stack.insert({p,int(nodes.size())-1});
+		}
+		++it;
+	}
+	for (auto const &it : stack)
+		nodes[0].childs.push_back(it[1]);
+}
+
+struct BitSet {
+	template<int N>
+	static long long getValues(std::array<int,N> const &val) {
+		long long f=1;
+		long long res=0;
+		for(int b=0; b<N; ++b) { res+=f*val[b]; f*=2;}
+		return res;
+	}
+	
+	template<int N>
+	static void add(std::array<int,N> &val, long long w, int f=1) {
+		std::bitset<N> vw(w);
+		for(int b=0; b<N; ++b) val[b]+=f*vw[b];
+	}
+	template<int N>
+	static void add(std::array<int,N> &val, std::array<int,N> const &a, int f=1) {
+		for(int b=0; b<N; ++b) val[b]+=f*a[b];
+	}
+};
+
+
+#define II Interval
+#define IL IntervalList
+#define DS DisjointSet
+#define PE Perm
+
+#define FOR(t,a,b) for(t a=0; a<b; ++a)
+#define CI std::cin >>
+#define CO std::cout <<
+#define COE std::cout << "\n"
+
+#define LL long long
+#define ST std::string
+
+#define DQ(t) std::deque<t>
+#define LI(t) std::list<t>
+#define MA(t,v) std::map<t,v>
+#define MS(t) std::multiset<t>
+#define PA(t) std::array<t,2>
+#define SE(t) std::set<t>
+#define VE(t) std::vector<t>
+
+#define DC(t,T) t T; std::cin >> T
+#define DCI(T) int T; std::cin >> T
+#define DV(t,T,n) std::vector<t> T; T.resize(n); for (auto &tt_ : T) std::cin >> tt_
+
+#define RT int te_; std::cin >> te_; for (int tte_=0; tte_ < te_; ++tte_)
+#define RV(v) for (auto &v_ : v) std::cin >> v_
+#define WV(v) for (auto const &v_ : v) std::cout << v_ << " "
+
+int main()
+{
+	// DV(int,v,N);
+	// FOR(int,n,N) {
+	RT {
+		int P[2],A[2],B[2];
+		RV(P);
+		RV(A);
+		RV(B);
+
+		int w1,w2;
+		int x=P[0]-A[0],y=P[1]-A[1];
+		int AA=A[0]*A[0]+A[1]*A[1];
+		int D1=x*x+y*y;
+		if (D1>AA)
+			w1=D1;
+		else
+			w1=AA;
+		int BB=B[0]*B[0]+B[1]*B[1];
+		x=P[0]-B[0],y=P[1]-B[1];
+		int D2=x*x+y*y;
+		if (D2>BB)
+			w2=D2;
+		else
+			w2=BB;
+		x=B[0]-A[0],y=B[1]-A[1];
+		int w3=x*x+y*y;
+		if (4*AA>w3 && 4*BB>w3)
+			w3=4*std::min(AA,BB);
+		if (4*D1>w3 && 4*D2>w3)
+			w3=4*std::min(D1,D2);
+		double w=std::min(w1,w2);
+		if (w3<4*w) w = double(w3)/4;
+		CO std::setprecision(12) << std::sqrt(w); COE;
+	}
+	return 0;
+}
+
