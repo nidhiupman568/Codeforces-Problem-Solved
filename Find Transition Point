@@ -1,0 +1,26 @@
+class Solution
+{
+    public:    
+    void help(int* arr,int s,int e,int& ind)
+    {
+        //base case
+        if(s>e)
+        return ;
+        
+        int mid=(s+e)/2;
+        if(arr[mid])
+        {
+            ind=mid;
+            help(arr,s,mid-1,ind);
+        }
+        else if(!arr[mid])
+        help(arr,mid+1,e,ind);
+    }
+    
+    int transitionPoint(int arr[], int n) {
+        int ind=-1;
+        help(arr,0,n-1,ind);
+        
+        return ind==-1?-1:ind;
+    }
+};
