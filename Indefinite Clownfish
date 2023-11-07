@@ -1,0 +1,118 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int mm=18,inf=1e9;
+int n,d,a[200069],ls[200069],pr[2][2][200069][mm];
+
+inline int bl(int xx,int yy,int x,int w)
+{
+	int i;
+	
+	for(i=mm-1;i>=0;i--)
+	{
+		if(1<<i<=w)
+		{
+			x=pr[xx][yy][x][i];
+			w-=1<<i;
+		}
+	}
+	return x;
+}
+
+inline int slv(int xx,int x,int y)
+{
+	int u,lh,rh,md,w,w2,z;
+	
+	u=!xx*2-1;
+	z=-inf*u;
+	for(lh=0,rh=d;lh<=rh;)
+	{
+		md=(lh+rh)/2;
+		w=bl(xx,0,x,md);
+		w2=bl(xx,1,y,d-md);
+		z=max(z*u,min(w*u,w2*u))*u;
+		if(w*u>=w2*u)
+		{
+			lh=md+1;
+		}
+		else
+		{
+			rh=md-1;
+		}
+	}
+	if(z<1)
+	{
+		z=-inf;
+	}
+	else if(z>n)
+	{
+		z=inf;
+	}
+	return z;
+}
+
+int main()
+{
+	int i,j,ii,jj,u,u2,k,l,z=inf;
+	
+	scanf("%d%d",&n,&d);
+	if(d%2)
+	{
+		printf("-1\n");
+		return 0;
+	}
+	d=d/2-1;
+	for(i=1;i<=n;i++)
+	{
+		scanf("%d",a+i);
+	}
+	for(ii=0;ii<2;ii++)
+	{
+		u=!ii*2-1;
+		for(i=0;i<=n+1;i++)
+		{
+			ls[i]=(n+1)*ii;
+		}
+		for(jj=0;jj<2;jj++)
+		{
+			for(i=0;i<mm;i++)
+			{
+				pr[ii][jj][(n+1)*ii][i]=(n+1)*ii;
+			}
+		}
+		for(i=1+(n-1)*ii;i&&i<=n;i+=u)
+		{
+			for(jj=0;jj<2;jj++)
+			{
+				u2=!jj*2-1;
+				pr[ii][jj][i][0]=ls[a[i]-u2];
+				for(j=1;j<mm;j++)
+				{
+					pr[ii][jj][i][j]=pr[ii][jj][pr[ii][jj][i][j-1]][j-1];
+				}
+			}
+			ls[a[i]]=i;
+		}
+	}
+	for(i=1;i<=n;i++)
+	{
+		ls[i]=0;
+	}
+	for(i=1;i<=n;i++)
+	{
+		if(ls[a[i]])
+		{
+			k=ls[a[i]];
+			l=i;
+			z=min(z,slv(1,l,l)-max(slv(0,k,l),slv(0,l,k)));
+			z=min(z,min(slv(1,k,l),slv(1,l,k))-slv(0,k,k));
+		}
+		ls[a[i]]=i;
+	}
+	if(z>n-1)
+	{
+		z=-1;
+	}
+	printf("%d\n",z);
+}
