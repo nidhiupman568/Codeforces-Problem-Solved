@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+#define il inline 
+#define re register
+#define ll long long
+#define pii pair<int,int>
+using namespace std;
+const int N=1e6+10,INF=INT_MAX;
+#define gc() getchar()
+il int rd(){
+	int x=0,f=1;
+	char ch=gc();
+	while(!isdigit(ch)){if(ch=='-')f=-1;ch=gc();}
+	while(isdigit(ch))x=(x<<3)+(x<<1)+(ch^48),ch=gc();
+	return x*f;
+}
+int a[N],b[N];
+void Main(){
+	int n=rd(),k=rd();
+	bool fl=1;
+	for(int i=1; i<=n; ++i)a[i]=rd(),fl&=(a[i]==1),b[i]=0;
+	if(fl){
+		printf("%d\n",n-k);
+		return;
+	}
+	if(n==1){
+		puts("0");
+		return;
+	}
+	int ans=0;
+	for(int i=1; i<n; ++i)ans+=(__gcd(a[i],a[i+1])==1);
+	for(int i=1; i<=n; ++i){
+		int j=i;
+		if(a[i]==1){
+			while(j<n&&a[j+1]==1)++j;
+			if(i>1&&j<n)++b[j-i+1];
+		}else{
+			while(j<n&&a[j+1]>1&&__gcd(a[j+1],a[j])==1)++j;
+			b[1]+=(j-i)/2;
+		}
+		i=j;
+	}
+	ans-=k;
+	for(int i=1; i<=n; ++i)while(k>=i&&b[i])--b[i],--ans,k-=i;
+	cout<<max(ans,0)<<endl;
+}
+signed main(){
+//	freopen(".in","r",stdin);
+//	freopen(".out","w",stdout);
+	int T=rd();
+	while(T--)Main();
+	return 0;
+}
