@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod=1e9+7;
+int qpow(int a,int b){int c=1;
+for(;b;b>>=1){
+	if(b&1)c=1ll*a*c%mod;
+	a=1ll*a*a%mod;
+}
+return c;
+}
+struct qq{int a[60][60];}A,B;
+int m;
+qq mul(qq x,qq y){
+	qq z;memset(z.a,0,sizeof(z.a));
+	for(int k=0;k<m;k++)for(int i=0;i<m;i++)for(int j=0;j<m;j++)
+	(z.a[i][j]+=1ll*x.a[i][k]*y.a[k][j]%mod)%=mod;
+	return z;
+}
+void sol(){
+	int n,k;scanf("%d%d%d",&n,&m,&k);
+	int cs=1ll*qpow(k*2+1,n-1)*(m+k)%mod;
+	if(m==0){printf("%d\n",cs);return;}
+	//减去全部<x的序列数即可
+	memset(A.a,0,sizeof(A.a));
+	for(int i=0;i<m;i++)for(int j=0;j<m;j++)if(abs(i-j)<=k)
+	A.a[i][j]=1;
+	for(int i=0;i<m;i++)B.a[0][i]=1;
+	for(n--;n;n>>=1){
+		if(n&1)B=mul(B,A);
+		A=mul(A,A);
+	}
+	for(int i=0;i<m;i++)(cs-=B.a[0][i])%=mod;
+	printf("%d\n",(cs+mod)%mod);
+}
+int main(){
+	int T;scanf("%d",&T);while(T--)sol();
+	return 0;
+}
