@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+using namespace std;
+int t,n,m,a[200005],b[200005],c[400005];
+int main(){
+  cin>>t;
+  while(t--){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)cin>>a[i];
+    for(int i=1;i<=m;i++)cin>>b[i];
+    sort(b+1,b+m+1,greater<int>()),merge(a+1,a+n+1,b+1,b+m+1,c+1,greater<int>());
+    for(int i=1;i<=n+m;i++)cout<<c[i]<<(i==n+m?'\n':' ');
+  }
+  return 0;
+}
