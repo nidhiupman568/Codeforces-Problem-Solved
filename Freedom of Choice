@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define N 1000100
+int t,m,n,l,r,val[N],cnt[N];
+int work()
+{
+	map<int,int> sk1,sk2;
+	int suml = 0,sumr = 0;
+
+	cin>>m;
+	while(m--) {
+		cin>>n>>l>>r;
+		suml += l;
+		sumr += r;
+		int num = 0;
+		for(int i = 1;i <= n;++i) cin>>val[i];
+		for(int i = 1;i <= n;++i) cin>>cnt[i],num += cnt[i];
+		for(int i = 1;i <= n;++i) {
+			sk1[val[i]] += max(r - (num - cnt[i]),0ll);
+			sk2[val[i]] += max(min(r - (num - cnt[i]),r - l),0ll);
+		}
+	}
+
+	if(sumr - suml > 2e5) return 0;
+
+	int ans = 1e18;
+	for(int i = suml;i <= sumr;++i)
+		ans = min(ans,max(sk1[i] - min(sumr - i,sk2[i]),0ll));
+	return ans;
+}
+signed main() 
+{
+	ios::sync_with_stdio(false);
+	
+	cin>>t;
+	while(t--) cout<<work()<<endl;
+	
+	return 0;
+}
