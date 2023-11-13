@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+#define pb push_back
+#define fr first
+#define sc second
+using namespace std;const int N=3e5+7;typedef long long ll;typedef pair<int,int> pa;
+int n,m,a[N],fa[N],i,t,l,r,x,x1,u1,u;ll w[N],ans[N];priority_queue<pa>q;vector<pa> tmp,vc[N];vector<int> vc1[N];
+int find(int x){if(x==fa[x])return x;int t=find(fa[x]);if(t!=fa[x])w[x]+=w[fa[x]];return fa[x]=t;}
+void merge(int x,int y){x=find(x);y=find(y);if(x!=y)w[x]-=w[y],fa[x]=y;}
+int main(){
+	for(scanf("%d",&n),i=1;i<=n;++i)scanf("%d",a+i);
+	for(scanf("%d",&m),i=1;i<=m;++i)fa[i]=i,scanf("%d%d%d",&l,&r,&x),vc1[l].pb(i),vc[r].pb(pa(x,i));
+	for(i=n;i;--i){
+		for(auto j:vc[i])q.push(j);x1=2e9;u1=0;tmp.clear();
+		while(!q.empty()){
+			auto [x,u]=q.top();if(x<=a[i])break;q.pop();w[find(u)]+=1LL*(x-a[i]+1)/2*i;
+			x=(x+a[i])/2;if(x<x1)tmp.pb(pa(x,u)),x1=x,u1=u;else merge(u,u1);
+		}for(auto j:tmp)q.push(j);for(auto j:vc1[i])t=find(j),ans[j]=j==t?w[t]:w[j]+w[t];
+	}for(i=1;i<=m;++i)printf("%lld\n",ans[i]);
+}
