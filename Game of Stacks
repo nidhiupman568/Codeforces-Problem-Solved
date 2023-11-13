@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+5;
+int n,k,x,vis[N],ans[N];
+stack<int>s[N],cur;
+signed main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		scanf("%d",&k);
+		while(k--)
+			scanf("%d",&x),s[i].push(x);
+	}
+	for(int i=1;i<=n;i++){
+		int x=i,w=0;
+		while(1){
+			if(ans[x]){w=ans[x];break;}
+			if(!s[x].size()){w=x;break;}
+			if(vis[x]){
+				while(1){
+					int y=cur.top();cur.pop();
+					s[y].pop(),vis[y]=0;
+					if(y==x) break;
+				}
+			}
+			else vis[x]=1,cur.push(x),x=s[x].top();
+		}
+		while(cur.size())
+			ans[cur.top()]=w,cur.pop();
+		printf("%d ",w);
+	}
+	return 0;
+}
