@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+#define pb emplace_back
+using namespace std;
+typedef long long ll;
+const int maxn = 1000100;
+const ll mod = 998244353;
+inline ll qpow(ll b, ll p) {
+	ll res = 1;
+	for (; p; p >>= 1) { if (p & 1) res = res * b % mod; b = b * b % mod; }
+	return res;
+}
+ll n, m, f[maxn], a[maxn], tot;
+vector< pair<ll, ll> > G[maxn];
+bool vis[maxn];
+void dfs(int u, int fa) {
+	vis[u] = 1;
+	for (auto p : G[u]) {
+		ll v = p.first, d = p.second;
+		if (v == fa) continue;
+		if (vis[v]) { if (f[u] < f[v]) a[++tot] = f[v] - f[u] + d; continue; }
+		f[v] = f[u] + d; dfs(v, u);
+	}
+}
+int main() {
+	scanf("%lld%lld", &n, &m);
+	ll te = 0, tn = n;
+	for (int i = 1, u, v, d; i <= m; ++i) {
+		scanf("%d%d%d", &u, &v, &d);
+		te += d + 1, tn += d;
+		G[u].pb(v, d + 1), G[v].pb(u, d + 1);
+	}
+	if ((n + m) & 1) return puts("0"), 0;
+	dfs(1, -1);
+	ll br = te;
+	for (int i = 1; i <= tot; ++i) br -= a[i];
+	ll ans = qpow(665496236, br);
+	for (int i = 1; i <= tot; ++i) ans = ans * (qpow(2, a[i]) + ((a[i] & 1) ? mod - 2 : 2)) % mod, tn -= a[i];
+	ans = ans * qpow(2, tot) % mod * qpow(3, tn) % mod;
+	printf("%lld\n", ans);
+}
