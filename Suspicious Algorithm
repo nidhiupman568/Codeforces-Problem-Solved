@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+#define int unsigned long long
+#define fast ios::sync_with_stdio(NULL); cin.tie(0); cout.tie(0);
+using namespace std;
+const int mod=1e9+7;
+int t,l,r,ans,d,p,rr,u;
+signed main(){
+	fast
+	cin>>t;
+	while(t--){
+		cin>>l>>r;
+		ans=0;d=2;
+		while(l<=r){
+			u=(1ull<<d+1)-1;
+			if(u<l){
+				d++;
+				continue;
+			}
+			rr=min(r,u);
+			p=d;
+			while(p<=rr){
+				ans=(ans+rr-max(p,l)+1)%mod;
+				if(rr/p<d)break;
+				p*=d;
+			}
+			l=rr+1;d++;
+		}
+		cout<<ans<<endl;
+	}
+} 
