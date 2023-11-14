@@ -1,0 +1,46 @@
+// LUOGU_RID: 134384892
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int N=3e6+5;
+struct nade{
+	ll h,w;
+	nade(ll x=0,ll y=0){h=x;w=y;}
+}st[N];
+const ll mod=1e9+7;
+int n,a[N],mx,pos,top;
+ll sum[N],ans,r[N],l[N],now;
+void solve(){
+	scanf("%d",&n);mx=0;
+	for(int i=1;i<=n;i++)scanf("%d",&a[i]),mx=max(mx,a[i]);
+	for(int i=1;i<=n;i++)a[i]=mx-a[i];
+	for(int i=n+1;i<=3*n;i++)a[i]=a[i-n];
+	for(int i=1;i<=3*n;i++)sum[i]=sum[i-1]+max(a[i]-a[i-1],0);
+	for(int i=n+1;i<=2*n;i++)
+		if(!a[i]){pos=i;break;}
+	top=0;now=0;
+	for(int i=pos+1,j=1;i<pos+n;i++,j++){
+		ll val=1;
+		while(top&&st[top].h>a[i]){
+			now=(now-(st[top].h-a[i])*st[top].w%mod+mod)%mod;
+			val+=st[top--].w;
+		}r[j]=(r[j-1]+2*now+a[i])%mod;
+		now=(now+a[i])%mod;st[++top]=nade(a[i],val);		
+	}top=0;now=0;
+	for(int i=pos-1,j=1;i>pos-n;i--,j++){
+		ll val=1;
+		while(top&&st[top].h>a[i]){
+			now=(now-(st[top].h-a[i])*st[top].w%mod+mod)%mod;
+			val+=st[top--].w;
+		}l[j]=(l[j-1]+2*now+a[i])%mod;
+		now=(now+a[i])%mod;st[++top]=nade(a[i],val);
+	}for(int i=n+1;i<=2*n;i++){
+		if(i<=pos)ans=(l[pos-i]+r[i+n-1-pos])%mod;
+		else ans=(l[pos-(i-n)]+r[i-1-pos])%mod;
+		printf("%lld %lld\n",sum[i+n-1]-sum[i]+a[i],ans);
+	}
+}
+int main(){
+	int T;scanf("%d",&T);
+	while(T--)solve();
+}
