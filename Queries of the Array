@@ -1,0 +1,7 @@
+// LUOGU_RID: 125369600
+#include<cstdio>
+#include<cstring>
+const int N=2e5+10;char s[N],t[N];
+int main(){int _;for(scanf("%d",&_);_--&&scanf("%s",s);){int n=strlen(s),k=0,up=0,uu=0;
+for(int i=0;i<n;i++){char c=s[i];if(c=='+')k++;if(c=='-'){k--;if(k<uu)uu=0;if(k<up)up=k;}
+if(c=='0'){if(k==up||k<2)goto N;if(!uu)uu=k;}if(c=='1'){if(uu)goto N;up=k;}}puts("YES");if(0)N:puts("NO");}return 0;}
