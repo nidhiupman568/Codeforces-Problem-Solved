@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+#define ll long long
+const ll mod=1e9+7;
+using namespace std;
+int N; vector<int>road[200005];
+ll f[203][203],g[203][203][203];
+int m[203];void add(ll &x,const ll y){if((x+=y)>=mod)x-=mod;}
+int main(){
+	scanf("%d",&N);
+	for(int i=1;i<=N;++i)scanf("%d",&m[i]);
+	if(m[1]==N){puts("0");return 0;}
+	for(int l=1;l<=N+1;++l)g[l][l-1][0]=1ll;
+	for(int l=N;l>=1;--l)
+	 for(int r=l;r<=N;++r){
+	 	for(int x=1;x<=r-l+1;++x)g[l][r][x]=g[l][r-1][x-1]*1ll*x%mod;
+	 	for(int k=l+1;k<=r;++k)if(m[k]>=r)for(int c=0;c<=k-l;++c)g[l][r][c]=(g[l][r][c]+g[l][k-1][c]*(mod-f[k][r]))%mod;
+	    for(int c=0;c<=r-l+1;++c)add(f[l][r],g[l][r][c]);
+	    if(m[l]>=r)g[l][r][0]=(g[l][r][0]+mod-f[l][r])%mod;
+	 }
+	cout<<f[1][N]<<endl;
+	return 0;
+}
