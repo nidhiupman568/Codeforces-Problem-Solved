@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+#include <cstdio>
+using namespace std;
+#define ENG_3B3ATY ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+typedef long long int ll;
+typedef long double ld;
+typedef unsigned long long ull;
+const long long K = 2e3 + 20, N = 2e5 + 4, mod = 1e9 + 7, M = 1000 + 4, maxn = 500005, oo = 1e17;
+ 
+ll gcd(ll a,ll b) {
+  if (a==0)
+    return b;
+  if (b==0)
+    return a;
+  if (a==b)
+    return a;
+  if (a>b)
+    return gcd(a%b,b);
+  return gcd(a,b%a);
+}
+ 
+ll lcm(ll a,ll b) {
+  return a*(b/gcd(a,b));
+}
+ 
+bool sortbysec(const pair<ll,ll>&a,const pair<ll,ll>&b) {
+  if(a.second==b.second)
+    return (a.first>b.first);
+  return (a.second<b.second);
+}
+ 
+bool found(string x,string y) {
+  if (y.find(x)!=-1)
+    return true;
+  else
+    return false;
+}
+ 
+bool IsPrime(ll n) {
+  if (n<=1)
+    return false;
+  for (int i=2;i*i<=n;i++) {
+    if (n%i==0) 
+        return false;
+  }
+  return true;
+}
+ 
+string DecimalToBinary(ll n) {
+  if (n==0) 
+    return "0";
+  string binary="";
+  while (n>0) {
+    binary+=to_string(n%2);
+    n/=2;
+  }
+  reverse(binary.begin(),binary.end());
+  return binary;
+}
+ 
+void Solve () {
+    ll n,count=0,ans=0;cin>>n;
+    for(int i=1;i<=pow(n,0.1);i++){
+        count=0;
+        while(n%i==0){
+            count++;
+            ans=max(count,ans);
+            i++;
+        }
+    }
+    cout<<ans;
+}
+ 
+int32_t main()
+{
+    ENG_3B3ATY
+    // freopen("", "r", stdin);
+    // freopen("", "w", stdout);
+    int tc;
+    tc=1;
+    cin>>tc;
+    while (tc--){
+        cout << fixed << setprecision(0);
+        Solve();
+        cout<<endl;
+    }
+    return 0;
+}
