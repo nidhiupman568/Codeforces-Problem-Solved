@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ 
+int main() {
+	int n, q; scanf("%d%d", &n, &q);
+	vector <ll> a0(n);
+	for(ll &x : a0) scanf("%lld", &x);
+	for(++q; --q;) {
+		vector <ll> a=a0;
+		ll k; scanf("%lld", &k);
+		ll ans=0, p=(1ll)<<60;
+		for(int bit=60; bit>=0; --bit) {
+			ll necess=0;
+			for(ll &x : a) {
+				necess+=max(p-x, 0ll);
+				if(necess>k) break;
+			}
+			//printf("%d %lld\n", bit, necess);
+			if(necess<=k) {
+				ans+=p;
+				k-=necess;
+				for(ll &x : a) x=max(x, p);
+			}
+			for(ll &x : a) x%=p;
+			p>>=1;
+		}
+		printf("%lld\n", ans);
+	}
+	return 0;
+}
