@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+std::vector<std::vector<int>> getInputMatrix(int size) {
+    std::vector<std::vector<int>> matrix(size + 1, std::vector<int>(size + 1));
+    for (int i = 1; i <= size; ++i) {
+        for (int j = 1; j <= size; ++j) {
+            std::cin >> matrix[i][j];
+        }
+    }
+    return matrix;
+}
+
+std::vector<int> calculateIntermediateValues(const std::vector<std::vector<int>>& matrix, int size) {
+    std::vector<int> result(size + 1);
+    for (int i = 1; i <= size; ++i) {
+        int temp = (1LL << 30) - 1;
+        for (int j = 1; j <= size; ++j) {
+            if (i != j) {
+                temp = (temp & matrix[i][j]);
+            }
+        }
+        result[i] = temp;
+    }
+    return result;
+}
+
+bool checkValidity(const std::vector<std::vector<int>>& matrix, const std::vector<int>& result, int size) {
+    bool is_valid = true;
+    for (int i = 1; i <= size; ++i) {
+        for (int j = 1; j <= size; ++j) {
+            if ((result[i] | result[j]) != matrix[i][j] && i != j) {
+                is_valid = false;
+            }
+        }
+    }
+    return is_valid;
+}
+
+void printResults(bool is_valid, const std::vector<int>& result) {
+    std::cout << (is_valid ? "YES" : "NO") << std::endl;
+    if (is_valid) {
+        for (size_t i = 1; i < result.size(); ++i) {
+            std::cout << result[i] << ' ';
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() {
+    int test_cases;
+    std::cin >> test_cases;
+
+    while (test_cases--) {
+        int size;
+        std::cin >> size;
+
+        std::vector<std::vector<int>> matrix = getInputMatrix(size);
+        std::vector<int> result = calculateIntermediateValues(matrix, size);
+        bool is_valid = checkValidity(matrix, result, size);
+
+        printResults(is_valid, result);
+    }
+
+    return 0;
+}
