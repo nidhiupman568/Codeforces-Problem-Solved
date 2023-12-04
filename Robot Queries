@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+set<int>g[201000];
+#define ll long long
+const int N=2e5+10;
+ll ik(int x,int y){x+=N,y+=N;return 1ll*x*N*2+y;}
+map<ll,int>is;
+int sx[200100],sy[201000],m;
+char c[201000];
+bool que(int l,int r,int x,int y){
+	int o=is[ik(x,y)];
+	if(!o)return 0;
+	auto it=g[o].lower_bound(l);
+	if(it==g[o].end()||(*it)>r)return 0;
+	return 1;
+}
+int main(){
+	int n,q;
+	scanf("%d%d%s",&n,&q,c+1);
+	for(int i=0,x=0,y=0;i<=n;i++){
+		if(i){
+			if(c[i]=='U')y++;
+			if(c[i]=='D')y--;
+			if(c[i]=='L')x--;
+			if(c[i]=='R')x++;
+		}
+		sx[i]=x,sy[i]=y;ll o=ik(x,y);
+		if(!is[o])is[o]=++m;
+		g[is[o]].insert(i);
+	}
+	for(int i=1,l,r,x,y;i<=q;i++){
+		scanf("%d%d%d%d",&x,&y,&l,&r);
+		l--;
+		if(que(0,l,x,y)||que(r,n,x,y))puts("YES");
+		else{
+			//s[l]+s[r]-s[i]=(x,y)
+			if(que(l,r,sx[l]+sx[r]-x,sy[l]+sy[r]-y))
+			puts("YES");else puts("NO");
+		}
+	}
+	return 0;
+}
