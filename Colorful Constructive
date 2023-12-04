@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> pii;
+int main(){
+  ios::sync_with_stdio(false);
+  int t; cin>>t;
+  while(t--){
+    int n,m; cin>>n>>m;
+    vector<int> a(n),s(m),d(m);
+    priority_queue<pii> q;
+    for(int i=0;i<n;i++){
+      int x; cin>>x; a[x-1]++;
+    }
+    for(int i=0;i<n;i++)
+      if(a[i])q.emplace(a[i],i);
+    for(auto &i:s)cin>>i;
+    for(auto &i:d)cin>>i;
+    bool f=true;
+    vector<vector<int> > r(m);
+    for(int i=0;i<m&&f;i++)
+      for(int j=0;j<s[i]+d[i]-1;j++){
+        if(j<s[i]){
+          if(q.empty()){f=false; break;}
+          r[i].emplace_back(q.top().second),q.pop();
+        }
+        if(j>=d[i]-1){
+          int x=r[i][j-d[i]+1];
+          if(--a[x])q.emplace(a[x],x);
+        }
+      }
+    if(f)for(auto i:r){
+      for(int j:i)cout<<j+1<<' ';
+      cout<<'\n';
+    }
+    else cout<<"-1\n";
+  }
+  return 0;
+}
