@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+int T,n,s;
+string a;
+int main(){
+	cin>>T;
+	for(int u=1;u<=T;u++){
+		cin>>n;
+		cin>>a;
+		s=0;
+		while(n&&a[n-1]=='A')n--;
+		while(s<=a.size()-1&&a[s]=='B')s++;
+		cout<<max(n-s-1,0)<<'\n';
+	}
+}
