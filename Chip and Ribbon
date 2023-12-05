@@ -1,0 +1,628 @@
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+#define ull unsigned long long int
+#define ll long long
+#define vll vector<ll>
+#define vpll vector<pair<ll, ll>>
+#define vvll vector<vector<ll>>
+#define pll pair<ll, ll>
+#define mpll map<ll, ll>
+#define ld long double
+#define fd double double
+#define f(i, x, n) for (int i = x; i < n; i++)
+#define rf(i, x, n) for (int i = x; i >= n; i--)
+#define pb push_back
+#define PI (3.141592653589)
+#define sp(n) setprecision(n)
+#define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
+#define sz(a) (ll) a.size()
+#define pi (3.141592653589)
+#define min3(a, b, c) min(a, min(b, c))
+#define min4(a, b, c, d) min(a, min(b, min(c, d)))
+#define max3(a, b, c) max(a, max(b, c))
+#define max4(a, b, c, d) max(a, max(b, max(c, d)))
+#define max5(a, b, c, d, e) max(a, max(b, max(c, max(d, e))))
+#define min5(a, b, c, d, e) min(a, min(b, min(c, min(d, e))))
+#define mod 1000000007
+#define dl endl
+
+// ll power(ll a,ll b) {
+//     ll res = 1;
+//     while (b > 0) {
+//         if (b & 1)
+//             res = res * a;
+//         a = a * a;
+//         b >>= 1;
+//     }
+//     return res;
+// }
+
+// bool isPowerOfTwo(unsigned int n) {
+//     return n && !(n & (n - 1));
+// }
+
+// // //clear the most right set bit:- n & (n-1)
+// int countSetBits(int n)
+// {
+//     int count = 0;
+//     while (n)
+//     {
+//         n = n & (n - 1);
+//         count++;
+//     }
+//     return count;
+// }
+//<-----------------------------------------------------------------------bit manipulation----------------------------------------------------------------------------->
+//return set bit in num :- __builtin_popcount(n)
+// 1.has_single_bit: checks if the number is a power of two
+// 2.bit_ceil / bit_floor: round up/down to the next power of two
+// 3.rotl / rotr: rotate the bits in the number
+// 4.countl_zero / countr_zero / countl_one / countr_one: count the leading/trailing zeros/ones
+// 5.popcount: count the number of set bits
+//6. __builtin_popcount(unsigned int) returns the number of set bits (__builtin_popcount(0b0001'0010'1100) == 4)
+// 7.__builtin_ffs(int) finds the index of the first (most right) set bit (__builtin_ffs(0b0001'0010'1100) == 3)
+// 8.__builtin_clz(unsigned int) the count of leading zeros (__builtin_clz(0b0001'0010'1100) == 23)
+// 9.__builtin_ctz(unsigned int) the count of trailing zeros (__builtin_ctz(0b0001'0010'1100) == 2)
+
+//apple tree
+// ll dfs(ll node,ll par,vector<ll> adj[],vector<ll> &leaf)
+// {
+//     ll cnt=0;
+//     for(auto it : adj[node])
+//     {
+//         if(it!=par)
+//         {
+//             cnt+=dfs(it,node,adj,leaf);
+//         }
+//     }
+// }
+// void solve()
+// {
+//    ll n;
+//    cin>>n;
+//    vector<ll> adj[n+1];
+//    for(ll i=0;i<n-1;i++)
+//    {
+//         ll u,v;
+//         cin>>u>>v;
+//         adj[u].pb(v);
+//         adj[v].pb(u);
+//    }
+//    vector<ll> vis(n+1,0),leaf(n+1);
+//    dfs(1,-1,adj,leaf);
+//    ll quu;
+//    cin>>quu;
+//    while(quu--)
+//    {
+//      ll a,b;
+//      cin>>a>>b;
+//      cout<<leaf[a]*leaf[b]<<endl;
+//    }
+    
+
+// }
+
+
+// int main() {
+    
+//     int t;
+//     cin>>t;
+//     while(t--)
+//     {
+//         solve();
+//     }
+//     return 0;
+// }
+bool isPrime(ll n) 
+{ 
+    // Corner case 
+    if (n <= 1) 
+        return false; 
+
+    // Check from 2 to n-1 
+    for (ll i = 2; i*i<=n; i++) 
+        if (n % i == 0) 
+            return false; 
+
+    return true; 
+}
+
+// //store freq of prime present in array
+// void fop(vector<ll> v,unordered_map<ll,ll>& m){
+//     for(auto i:v)
+//     {
+//         ll f=2;
+//         while(i>1)
+//         {
+//             while(i%f==0) i/=f,m[f]++;
+//             if(f==2) f++;
+//             else f+=2;
+//             if(isPrime(i)){
+//                 m[i]++;
+//                 break;
+//             }
+//         }
+//     }
+// }
+void fop(ll n,unordered_map<ll,ll>& m){
+    
+        ll f=2;
+        while(n>1)
+        {
+            while(n%f==0) n/=f,m[f]++;
+            if(f==2) f++;
+            else f+=2;
+            if(isPrime(n)){
+                m[n]++;
+                break;
+            }
+        }
+    
+}
+
+
+// void solve() {
+//    ll n;
+//    cin>>n;
+//    vll v(n);
+//    f(i,0,n)
+//    {
+//         cin>>v[i];
+//    }
+//    ll min=v[0];
+//    vll s;
+//    s.pb(v[0]);
+//    int count=1;
+//    f(i,1,n)
+//    {
+//         s.pb(s[i-1]&v[i]);
+//         while(s[i]<=s[i-1] and s[i]!=0 and i<n)
+//         {
+//             i++;
+//             s.pb(s[i-1]&v[i]);
+//         }
+       
+//         i++;
+//         s.pb(v[i]);
+        
+//    }
+//    f(i,0,n)
+//    {
+//      if(s[i]<s[i+1])
+//      {
+//         count++;
+//      }
+       
+//    }
+//    cout<<count<<endl;
+
+
+// }
+
+// bool isPerfect(ll N){
+//     ll x = sqrt(N);
+//     if(x*x==N)return true;
+ 
+//     return false;
+// }
+
+// void matrix()
+// {
+//    ll n;
+//     cin>>n;
+//     char a[n+1][n+1];
+//     f(i,1,n+1)f(j,1,n+1)cin>>a[i][j];
+//     ll ans = 0;
+//     f(i,1,n/2 +1){
+//         f(j,1,(n+1)/2 +1){
+//             ll dx=i,dy=j;
+//             ll s = 0;
+//             f(k,0,4){
+//                 s += (a[dx][dy]-'0');
+//                 dx = n-dx+1;
+//                 swap(dx,dy);
+//             }
+//             ans += (2-abs(s-2));
+//         }
+//     }
+//     cout<<ans<<'\n';
+// }
+
+//------------------------------------------------topo sort----------------------------------->
+
+// vector<int> topo(int src, vector<int> adj[])
+// {
+//     int indegree[src] = {0};
+//     for (int i = 0; i < src; i++)
+//     {
+//         for (auto it : adj[i])
+//         {
+//             indegree[it]++;
+//         }
+//     }
+
+//     queue<int> q;
+//     for (int i = 0; i < src; i++)
+//     {
+//         if (indegree[i] == 0)
+//         {
+//             q.push(i);
+//         }
+//     }
+
+//     vector<int> topo;
+//     while (!q.empty())
+//     {
+//         int e = q.front();
+//         q.pop();
+//         topo.push_back(e);
+//         for (auto it : adj[e])
+//         {
+//             indegree[it]--;
+//             if (indegree[it] == 0)
+//             {
+//                 q.push(it);
+//             }
+//         }
+//     }
+//     return topo;
+// }
+
+//--------------------------------------------alien dic--------------------------------------------->
+
+// string findOrder(string dict[], int N, int K) {
+//         vector<int> adj[K];
+//         for(int i=0;i<N-1;i++)
+//         {
+//             string a=dict[i];
+//             string b=dict[i+1];
+//             for(int j=0;j<min(a.size(),b.size());j++)
+//             {
+//                 if(a[j]!=b[j])
+//                 {
+//                     adj[a[j]-'a'].push_back(b[j]-'a');
+//                     break;
+//                 }
+//             }
+//         }
+        
+//         vector<int> topos;
+//         topos = topo(K,adj);
+//         string ans="";
+//         for(auto i:topos)
+//         {
+//             ans+=i+'a';
+//         }
+//         return ans;
+//     }
+
+// int isSubstring(string s1, string s2)
+// {
+//     int M = s1.length();
+//     int N = s2.length();
+ 
+    
+//     for (int i = 0; i <= N - M; i++) {
+//         int j;
+ 
+    
+//     for (j = 0; j < M; j++)
+//         if (s2[i + j] != s1[j])
+//             break;
+ 
+//     if (j == M)
+//     return i;
+//     }
+ 
+//     return -1;
+// }
+
+
+
+
+// void stringhash()
+// {
+//      string s;
+//     cin>>s;
+//     ll m = s.length();
+//     ll n;
+//     cin>>n;
+//     string s1,s2;
+//     cin>>s1>>s2;
+//     ll left = -1;
+//     f(i,0,n){
+//         ll start = s1[i]-'0';
+//         ll end = s2[i]-'0';
+//         vll vis(10,LONG_LONG_MAX);
+//         f(j,left+1,m){
+//             ll id = s[j]-'0';
+//             vis[id] = min(vis[id],(ll)j);
+//         }
+//         f(j,start,end+1){
+//             if(vis[j] == LONG_LONG_MAX){
+//                 cout<<"YES"<<endl;
+//                 return;
+//             }
+//             left = max(left,vis[j]);
+//         }
+//     }
+//     cout<<"NO"<<endl;
+// }
+// template< class T >
+// constexpr T bit_floor( T x ) noexcept;
+// template<std::unsigned_integral T>
+//     requires !std::same_as<T, bool> && !std::same_as<T, char> &&
+//              !std::same_as<T, char8_t> && !std::same_as<T, char16_t> &&
+//              !std::same_as<T, char32_t> && !std::same_as<T, wchar_t>
+// constexpr T bit_floor(T x) noexcept
+// {
+//     if (x != 0)
+//         return T{1} << (std::bit_width(x) - 1);
+//     return 0;
+// }
+// int factorial(int n)
+// {
+//     // single line to find factorial
+//     return (n == 1 || n == 0) ? 1 : ((n%mod) * (factorial(n - 1)%mod)%mod);
+// }
+long long gcd(long long int a, long long int b)
+{
+  if (b == 0)
+    return a;
+  return gcd(b, a % b);
+}
+ 
+// Function to return LCM of two numbers
+long long lcm(int a, int b)
+{
+    return (a / gcd(a, b)) * b;
+}
+
+vector<ll> primeFactors(int n)
+{
+    vector<ll> v;
+    while (n % 2 == 0)
+    {
+        v.push_back(2);
+        n = n / 2;
+    }
+ 
+    // n must be odd at this point. So we can skip
+    // one element (Note i = i +2)
+    for (int i = 3; i <= sqrt(n); i = i + 2)
+    {
+        // While i divides n, print i and divide n
+        while (n % i == 0)
+        {
+            v.push_back(i);
+            n = n / i;
+        }
+    }
+ 
+    if (n > 2)
+        v.push_back(n);
+    return v;
+}
+
+int isSubstring(string s1, string s2)
+{
+    int M = s1.length();
+    int N = s2.length();
+ 
+    /* A loop to slide pat[] one by one */
+    for (int i = 0; i <= N - M; i++) {
+        int j;
+ 
+        /* For current index i, check for
+ pattern match */
+        for (j = 0; j < M; j++)
+            if (s2[i + j] != s1[j])
+                break;
+ 
+        if (j == M)
+            return i;
+    }
+ 
+    return -1;
+}
+ll fun(ll i,vll &v,vll &dp)
+{
+    // if(i>=v.size()) return 0;
+
+    // if(dp[i]!=-1) return dp[i];
+
+    // ll pick=1e9;
+    // ll npick=1+fun(i+1,v,dp);
+
+    // if(i+v[i]+1<=v.size())
+    // {
+    //     pick = fun(i+v[i]+1,v,dp);
+    // }
+
+    // return dp[i]=min(pick,npick);
+
+}
+ 
+// void bitmani(){
+//    ll n,k;
+//    cin >> n >> k;
+//    vll v(n);
+//    f(i,0,n)
+//    {
+//         cin>>v[i];
+//    }
+//    ll ans=0;
+//    rf(j,30,0)
+//    {
+//         ll cnt=0;
+//         f(i,0,n)
+//         {
+//             if(v[i] & (1<<j)) // check but set or not
+//             {
+//                 cnt++;
+//             }
+//         }
+//         cnt=n-cnt;//non set bit
+//         if(cnt<=k) ans+=(1<<j),k-=cnt;
+//    }
+//    cout<<ans<<endl;
+// }
+// unsigned int onesComplement(unsigned int n)
+// {
+//     // Find number of bits in the given integer
+//     int number_of_bits = floor(log2(n)) + 1;
+ 
+//     // XOR the given integer with pow(2,number_of_bits-1)
+//     // and print the result
+//     return ((1 << number_of_bits) - 1) ^ n;
+// }
+
+// #define forn(i, n) for (int i = 0; i < int(n); i++)
+
+// struct point{
+//     int weight, position, id;
+// };
+
+// void solve(){
+//     int n, m;
+//     cin >> n >> m;
+//     vector<point>points(m);
+
+//     forn(i, m) {
+//         cin >>  points[i].position >> points[i].weight;
+//         points[i].id = i + 1;
+//     }
+
+//     sort(points.begin(), points.end(), [] (point a, point b){
+//         return a.weight < b.weight;
+//     });
+
+//     int sum = 0;
+//     forn(i, m){
+//         if(i < 2 * n) sum += points[i].weight;
+//         else points.pop_back();
+//     }
+
+//     sort(points.begin(), points.end(), [] (point a, point b){
+//         return a.position < b.position;
+//     });
+
+//     cout << sum << endl;
+//     forn(i, n){
+//         cout << points[i].id << ' ' << points[2 * n - i - 1].id << endl;
+//     }
+// }
+//s.insert(s.begin()+i,{'0','1'});
+// bool halfsum(string a)
+// {
+//     ll si=a.size();
+//     si=si/2;
+//     ll sum1=0,sum2=0;
+//     f(i,0,si)
+//     {
+//         sum1+=(a[i]-'0');
+//     }
+//     f(i,si,2*si)
+//     {
+//         sum2+=(a[i]-'0');
+//     }
+//     if(sum1==sum2)
+//     {
+//         //cout<<a<<endl;
+//         return 1;
+//     }
+//     return 0;
+// }
+bool myComp(string &a,string &b)
+{
+    return a.size()<b.size();
+}
+void leftRotate(vector<ll> &arr, int d, int n)
+{
+    // Storing rotated version of array
+    int temp[n];
+ 
+    // Keeping track of the current index
+    // of temp[]
+    int k = 0;
+ 
+    // Storing the n - d elements of
+    // array arr[] to the front of temp[]
+    for (int i = d; i < n; i++) {
+        temp[k] = arr[i];
+        k++;
+    }
+ 
+    // Storing the first d elements of array arr[]
+    //  into temp
+    for (int i = 0; i < d; i++) {
+        temp[k] = arr[i];
+        k++;
+    }
+ 
+    // Copying the elements of temp[] in arr[]
+    // to get the final rotated array
+    for (int i = 0; i < n; i++) {
+        arr[i] = temp[i];
+    }
+}
+int getIndex(vector<ll> v, int K) 
+{ 
+    auto it = find(v.begin(), v.end(), K); 
+  
+    // If element was found 
+    if (it != v.end())  
+    { 
+      
+        // calculating the index 
+        // of K 
+        int index = it - v.begin(); 
+        return index;
+    } 
+    else { 
+        // If the element is not 
+        // present in the vector 
+        return -1;
+    } 
+} 
+void solve(){
+ ll n;
+ cin>>n;
+ vll v1(n);
+ f(i,0,n)
+ {
+    cin>>v1[i];
+ }
+ if(n==1)
+ {
+    cout<<v1[0]-1<<endl;
+    return;
+ }
+ ll ans=0;
+ f(i,0,v1.size()-1)
+ {
+    if(v1[i]<v1[i+1])
+    {
+        ans+=(v1[i+1]-v1[i]);
+    }
+ }
+ cout<<ans+v1[0]-1<<endl;
+
+}
+
+int main() {
+    int T;
+    cin >> T;
+
+    while(T--)
+    {
+        solve();
+    }
+
+    return 0;
+}
+
+
+
