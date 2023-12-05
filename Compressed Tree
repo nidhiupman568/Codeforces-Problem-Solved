@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int i,j,k,n,m,t;
+ll f[500500][4],res,a[500500];
+vector<int> v[500500];
+
+void dfs(int x,int fa){
+	ll t1;
+	for(auto i:v[x])if(i!=fa){
+		dfs(i,x);
+
+		t1=max({f[i][3]+a[i],f[i][2]+a[i],f[i][1],a[i]});
+		f[x][3]=max({f[x][3],f[x][3]+t1,f[x][2]+t1});
+		f[x][2]=max({f[x][2],f[x][1]+t1});
+		f[x][1]=max({f[x][1],t1});
+	}
+
+	res=max({res,f[x][3]+a[x],f[x][2],f[x][1]+a[x]});
+}
+
+int main() {
+	ios::sync_with_stdio(0); cin.tie(0);
+	cin>>t;
+	while(t--){
+		cin>>n; res=0;
+		for(i=1;i<=n;i++){
+			cin>>a[i];
+			memset(f[i],-0x3f,sizeof(f[i]));
+			res=max(res,a[i]);
+		}
+		for(i=1;i<n;i++){
+			cin>>j>>k;
+			v[j].push_back(k);
+			v[k].push_back(j);
+		}
+		dfs(1,0);
+		cout<<res<<'\n';
+		for(i=1;i<=n;i++)v[i].clear();
+	}
+}
