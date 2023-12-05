@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+
+struct Position {
+    char qaz;
+    int wsx;
+};
+
+std::vector<Position> edc(const Position& rfv) {
+    std::vector<Position> tgb;
+
+    // Horizontal movement
+    for (char ujh = 'a'; ujh <= 'h'; ++ujh) {
+        if (ujh != rfv.qaz) {
+            tgb.push_back({ujh, rfv.wsx});
+        }
+    }
+
+    // Vertical movement
+    for (int yhn = 1; yhn <= 8; ++yhn) {
+        if (yhn != rfv.wsx) {
+            tgb.push_back({rfv.qaz, yhn});
+        }
+    }
+
+    return tgb;
+}
+
+int main() {
+    int plm;
+    std::cin >> plm;
+
+    while (plm--) {
+        Position uhb;
+        std::cin >> uhb.qaz >> uhb.wsx;
+
+        std::vector<Position> tfc = edc(uhb);
+
+        // Uncomment the line below if you want to print the header
+        // std::cout << "Movable spaces for the rook at position " << uhb.qaz << uhb.wsx << ":\n";
+
+        for (const auto& rdx : tfc) {
+            std::cout << rdx.qaz << rdx.wsx << "\n";
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
