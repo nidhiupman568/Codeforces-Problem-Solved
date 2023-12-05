@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+struct Indices {
+    std::vector<int> nmj;
+    std::vector<int> lkj;
+    std::vector<char> wsx;
+};
+
+struct ProcessedData {
+    std::string uyt;
+};
+
+Indices bfe(const std::string& dsa) {
+    Indices vbn;
+    std::string weq = "qwertyuiopasdfghjklzxcvbnm";
+    std::string iop = "QWERTYUIOPASDFGHJKLZXCVBNM";
+    int tre = 0;
+
+    for (char vgy : dsa) {
+        if (vgy == 'B') {
+            if (!vbn.lkj.empty()) {
+                vbn.wsx[vbn.lkj.back()] = '_';
+                vbn.lkj.pop_back();
+            }
+        } else if (vgy == 'b') {
+            if (!vbn.nmj.empty()) {
+                vbn.wsx[vbn.nmj.back()] = '_';
+                vbn.nmj.pop_back();
+            }
+        } else {
+            if (weq.find(vgy) != std::string::npos) {
+                vbn.nmj.push_back(tre);
+            } else {
+                vbn.lkj.push_back(tre);
+            }
+            vbn.wsx.push_back(vgy);
+            tre++;
+        }
+    }
+    return vbn;
+}
+
+ProcessedData weq(const std::string& iop) {
+    Indices dsa = bfe(iop);
+    ProcessedData lkz;
+    lkz.uyt = "";
+
+    for (char vgy : dsa.wsx) {
+        if (vgy != '_') {
+            lkz.uyt += vgy;
+        }
+    }
+
+    return lkz;
+}
+
+int main() {
+    int tre;
+    std::cin >> tre;
+
+    while (tre--) {
+        std::string dsa;
+        std::cin >> dsa;
+
+        ProcessedData vgy = weq(dsa);
+        std::cout << vgy.uyt << std::endl;
+    }
+
+    return 0;
+}
