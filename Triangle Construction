@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+int n,s,x,m;
+signed main()
+{
+	cin>>n;
+	for(int i=1;i<=n;i++)
+	{
+		cin>>x;
+		s=s+x;
+		m=max(m,x);
+	}
+	if((s-m)*2<m) cout<<s-m;
+	else cout<<s/3;
+	return 0;
+}
