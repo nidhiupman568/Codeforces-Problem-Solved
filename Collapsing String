@@ -1,0 +1,24 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+int ch[2010000][26],t1[2001000],t2[2010000],cn=1;
+char c[1010000];int n;
+#define ll long long
+ll ans;
+int cb(int u,int z){
+	if(!ch[u][z])ch[u][z]=++cn;
+	return ch[u][z];
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		scanf("%s",c+1);int L=strlen(c+1);
+		ans+=2ll*L*n;
+		int u=1;
+		for(int j=1;j<=L;j++)u=cb(u,c[j]-'a'),t1[u]++;
+		u=1;
+		for(int j=L;j;j--)u=cb(u,c[j]-'a'),t2[u]++;
+	}
+	for(int i=2;i<=cn;i++)ans-=1ll*t1[i]*t2[i]*2;
+	return printf("%lld",ans),0;
+}
