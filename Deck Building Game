@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+const ll mod=998244353;
+const int N=(1<<17)+10;
+ll a[N];
+int n;
+void XOR(ll *a,ll x,int n)
+{
+	for(int len=1;len<=n;++len)
+	{
+		int mid=1<<(len-1);
+		for(int i=0;i<(1<<n);i+=(1<<len))
+		{
+			for(int j=0;j<mid;++j)
+			{
+				ll lv=a[i+j],rv=a[i+mid+j];
+				a[i+j]=(lv+rv)*x%mod;
+				a[i+mid+j]=(lv-rv+mod)*x%mod;
+			}
+		}
+	}
+}
+ll ksm(ll a,ll b)
+{
+	ll res=1;
+	while(b)
+	{
+		if(b&1)
+		res=res*a%mod;
+		a=a*a%mod;
+		b>>=1;
+	}
+	return res;
+}
+int main()
+{
+	scanf("%d",&n);
+	for(int i=1,x;i<=n;++i)
+	{
+		scanf("%d",&x);
+		++a[x];
+	}
+	XOR(a,1,17);
+	for(int i=0;i<(1<<17);++i)
+	{
+		int cnt0=(n+a[i])*ksm(2,mod-2)%mod;
+		int cnt1=n-cnt0;
+		//cout<<a[i]<<'\n';
+		a[i]=ksm(3,cnt0)*ksm(mod-1,cnt1)%mod;
+	}
+	XOR(a,ksm(2,mod-2),17);
+	printf("%lld",a[0]);
+	return 0;
+}
