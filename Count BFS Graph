@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int a[5000];
+long long dp[5001][5000],pw[5001],mod=998244353;
+int main(){
+	ios::sync_with_stdio(false),cin.tie(0);
+	int n,i,j;
+	long long c;
+	cin>>n;
+	for(i=0;i<n;i++)cin>>a[i];
+	pw[0]=1;
+	for(i=1;i<=n;i++)pw[i]=pw[i-1]*2%mod;
+	dp[0][0]=1;
+	for(i=0;i<n;i++)
+	{
+		c=0;
+		for(j=i;j<n;j++)
+		{
+			c=(c+dp[i][j]*pw[j-i])%mod;
+			dp[i+1][j]=c;
+			if(i<n-1&&a[j]>a[j+1])c=dp[i][j]*pw[j-i]%mod;
+		}
+	}
+	cout<<dp[n][n-1]<<'\n';
+	return 0;
+}
