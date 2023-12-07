@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+int main()
+{
+	int t;cin>>t;
+	while(t--){
+		int n;cin>>n;ll a[n],c=1,b=0,ans,sum=0;
+		for(int i=0;i<n;i++)cin>>a[i];
+		if(n==1){cout<<1<<endl;continue;}
+		sort(a,a+n);
+		for(int i=0;i<n;i++)b=__gcd(b,a[n-1]-a[i]);
+		for(int i=0;i<n;i++)sum+=(a[n-1]-a[i])/b;
+		ans=a[n-1]-b;
+		for(int i=n-2;i>=0;i--){
+			if(ans!=a[i])break;
+			ans-=b;c++;
+		}
+		cout<<sum+c<<endl;
+	}
+}
