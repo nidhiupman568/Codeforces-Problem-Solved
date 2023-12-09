@@ -1,0 +1,44 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int c1[30],c2[30];
+long long dp[27][200001],mod=998244353;
+long long tt[400001],intt[400001];
+string s;
+int main(){
+	ios::sync_with_stdio(false),cin.tie(0);
+	int n,m,i,j,t,x;
+	long long cur;
+	cin>>n>>m;
+	tt[0]=1;
+	intt[0]=1;
+	tt[1]=1;
+	intt[1]=1;
+	for(i=2;i<=400000;i++)
+	{
+		tt[i]=i;
+		intt[i]=(mod-mod/i)*intt[mod%i]%mod;
+	}
+	for(i=2;i<=400000;i++)
+	{
+		tt[i]=tt[i]*tt[i-1]%mod;
+		intt[i]=intt[i]*intt[i-1]%mod;
+	}
+	cin>>s;
+	for(i=0;i<n;i++)c1[s[i]-'A']++;
+	cin>>s;
+	for(i=0;i<m;i++)c2[s[i]-'A']++;
+	dp[0][c2[0]]=1;
+	for(i=0;i<26;i++)
+	{
+		t=c2[i];
+		cur=0;
+		for(j=0;j<=c2[i+1]&&j<=c1[i];j++)
+		{
+			x=c1[i]-j;
+			for(;t>=x;t--)cur=(cur+dp[i][t])%mod;
+			dp[i+1][c2[i+1]-j]=cur*intt[j]%mod*intt[x]%mod;
+		}
+	}
+	cout<<dp[26][0]*tt[n]%mod<<'\n';
+	return 0;
+}
