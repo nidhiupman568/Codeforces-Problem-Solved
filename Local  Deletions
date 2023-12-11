@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n,a[100003],T;
+vector<int>calc(vector<int>v,bool op) {
+	vector<int>g;
+	for(int i=0;i<v.size();i++)
+		if((i==0||(op?a[v[i]]>a[v[i-1]]:a[v[i]]<a[v[i-1]]))&&(i==v.size()-1||(op?a[v[i]]>a[v[i+1]]:a[v[i]]<a[v[i+1]])))
+			g.push_back(v[i]);
+	return g;
+}
+vector<int>t[18];
+
+void solve(int k,vector<int>l,int L,int R,vector<int>r)
+{
+	if(L>=R)
+	{
+		for(int i=L;i<=R;i++)
+			l.push_back(t[k][i]);
+		for(auto i:r)
+			l.push_back(i);
+		while(l.size()>1)
+			l=calc(l,k&1),k++;
+		cout<<a[l[0]]<<endl;
+		return;
+	}
+
+	l.push_back(t[k][L]);
+	l.push_back(t[k][L+1]);
+
+	r.insert(r.begin(),t[k][R]);
+	r.insert(r.begin(),t[k][R-1]);
+
+	l=calc(l,k&1);r=calc(r,k&1);
+
+	if(l.back()==t[k][L+1])
+		l.pop_back();
+	if(r[0]==t[k][R-1])
+		r.erase(r.begin());
+	solve(k+1,l,lower_bound(t[k+1].begin(),t[k+1].end(),t[k][L+1])-t[k+1].begin(),lower_bound(t[k+1].begin(),t[k+1].end(),t[k][R])-t[k+1].begin()-1,r);
+}
+int main()
+{
+	ios::sync_with_stdio(0);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin>>n>>T;
+
+	for(int i=0;i<n;i++)
+		cin>>a[i],t[0].push_back(i);
+	for(int i=0;i<17;i++)
+		t[i+1]=calc(t[i],i&1);
+	while(T--)
+	{
+		int l,r;
+		cin>>l>>r;
+		l--;r--;
+		solve(0,{},l,r,{});
+	}
+}
