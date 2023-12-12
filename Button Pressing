@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  ios::sync_with_stdio(false);
+  int t; cin>>t;
+  while(t--){
+    int n; string a,b; cin>>n>>a>>b;
+    auto f=[&](string s){
+      int c=0,p=0;
+      for(char i:s)c+=p^=i&1;
+      return min(c,n-c+1);
+    };
+    cout<<(f(a)==f(b)?"YES\n":"NO\n");
+  }
+  return 0;
+}
