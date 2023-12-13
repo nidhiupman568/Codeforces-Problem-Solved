@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=200005,H=18,V=7000005,E=17800005;
+int n,m,d[N],dfn[N],dfm[N],index,fa[N][H],id1[N][H],id2[N][H],idx,ans[N],t;
+int head[V],nxt[E],ver[E],tot,in[V];
+vector<int> e[N];
+int read() {
+	int x=0,f=1; char c=getchar();
+	for(;c<'0'||c>'9';c=getchar()) if(c=='-') f=-1;
+	for(;c>='0'&&c<='9';c=getchar()) x=x*10+c-48;
+	return x*f;
+}
+void dfs(int x,int Fa) {
+    dfn[x]=++index;
+    d[x]=d[Fa]+1; fa[x][0]=Fa; id1[x][0]=id2[x][0]=x;
+    for(int i=1;1<<i<=d[x];i++) fa[x][i]=fa[fa[x][i-1]][i-1],id1[x][i]=++idx,id2[x][i]=++idx;
+    for(int y:e[x]) if(y!=Fa) dfs(y,x);
+    dfm[x]=index;
+}
+void add(int x,int y) {
+    nxt[++tot]=head[x]; head[x]=tot; ver[tot]=y; in[y]++;
+}
+int lca(int x,int y) {
+    if(d[x]<d[y]) swap(x,y);
+    if(d[x]>d[y]) for(int c=d[x]-d[y],i=__lg(c);~i;i--) if(c>>i&1) x=fa[x][i];
+    if(x==y) return x;
+    for(int i=__lg(d[x]);~i;i--) if(fa[x][i]!=fa[y][i]) x=fa[x][i],y=fa[y][i];
+    return fa[x][0];
+}
+bool topo() {
+    queue<int> q;
+    for(int i=1;i<=idx;i++) if(!in[i]) q.push(i);
+    while(!q.empty()) {
+        int x=q.front(); q.pop();
+        if(x<=n) ans[x]=++t;
+        for(int i=head[x];i;i=nxt[i]) if(!--in[ver[i]]) q.push(ver[i]);
+    }
+    return t==n;
+}
+int main() {
+    n=read(); m=read();
+    for(int i=1;i<n;i++) {
+        int x=read(),y=read();
+        e[x].push_back(y);
+        e[y].push_back(x);
+    }
+    idx=n; dfs(1,0);
+    for(int i=1;i<=n;i++)
+        for(int j=1;1<<j<=d[i];j++) {
+            add(id1[i][j],id1[i][j-1]); add(id1[i][j],id1[fa[i][j-1]][j-1]);
+            add(id2[i][j-1],id2[i][j]); add(id2[fa[i][j-1]][j-1],id2[i][j]);
+        }
+    while(m--) {
+        int t=read(),x=read(),y=read(),w=read(),z=lca(x,y);
+        auto con=[&](int x,int y,int z) {
+            if(t==1) add(x,id1[y][z]);
+            else add(id2[y][z],x);
+        };
+        if(dfn[w]<=dfn[y]&&dfn[y]<=dfm[w]) swap(x,y);
+        if(d[x]>d[w]) for(int c=d[x]-d[w],i=__lg(c);~i;i--) if(c>>i&1) con(w,x,i),x=fa[x][i];
+        x=fa[x][0];
+        if(d[x]>d[z]) for(int c=d[x]-d[z],i=__lg(c);~i;i--) if(c>>i&1) con(w,x,i),x=fa[x][i];
+        if(w!=z) con(w,z,0);
+        if(d[y]>d[z]) for(int c=d[y]-d[z],i=__lg(c);~i;i--) if(c>>i&1) con(w,y,i),y=fa[y][i];
+    }
+    if(topo()) for(int i=1;i<=n;i++) printf("%d ",ans[i]);
+    else puts("-1");
+    return 0;
+}
