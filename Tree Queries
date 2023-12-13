@@ -1,0 +1,144 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+
+const int N = 2e5+5;
+
+int n,q,dep[N],fa[20][N],st[N],ed[N],ans[N];
+ll t[N<<2],tg[N<<2];
+vector<int> g[N];
+
+struct Qs {
+	int id;
+	vector<int> v;
+};
+
+vector<Qs> qs[N];
+
+void pu(int k){
+	t[k]=max(t[k<<1],t[k<<1|1]);
+}
+
+void pd(int k){
+	t[k<<1]+=tg[k];
+	tg[k<<1]+=tg[k];
+	t[k<<1|1]+=tg[k];
+	tg[k<<1|1]+=tg[k];
+	tg[k]=0;
+}
+
+void upd(int l,int r,int vl,int k=1,int ql=0,int qr=n){
+	if (r<=ql || l>=qr){
+		return;
+	}
+	if (ql>=l && qr<=r){
+		t[k]+=vl;
+		tg[k]+=vl;
+		return;
+	}
+	pd(k);
+	int mid=ql+qr>>1;
+	upd(l,r,vl,k<<1,ql,mid);
+	upd(l,r,vl,k<<1|1,mid,qr);
+	pu(k);
+}
+
+int tim;
+
+int up(int u,int d){
+	for (int i=0; i<20; i++){
+		if (d>>i&1){
+			u=fa[i][u];
+		}
+	}
+	return u;
+}
+
+void dfs(int u){
+	st[u]=tim++;
+	for (auto v : g[u]){
+		if (v!=fa[0][u]){
+			fa[0][v]=u;
+			dep[v]=dep[u]+1;
+			dfs(v);
+		}
+	}
+	ed[u]=tim;
+//	cout<<st[u]<<','<<ed[u]<<endl;
+}
+
+void mod(int u,int v,int vl){
+	if (st[v]<=st[u] && ed[u]<=ed[v]){
+		int vv=up(u,dep[u]-dep[v]-1);
+		upd(0,n,vl),upd(st[vv],ed[vv],-vl);
+	}
+	else{
+		upd(st[v],ed[v],vl);
+	}
+}
+
+void dfss(int u){
+//	cout<<"uu"<<u<<endl;
+	for (auto p : qs[u]){
+//		cout<<"!"<<endl;
+		for (auto v : p.v){
+			mod(u,v,-n);
+		}
+//		cout<<t[1]<<endl;
+		ans[p.id]=t[1];
+		for (auto v : p.v){
+			mod(u,v,n);
+		}
+	}
+	for (auto v : g[u]){
+		if (v!=fa[0][u]){
+			upd(0,n,1),upd(st[v],ed[v],-2);
+			dfss(v);
+			upd(st[v],ed[v],2),upd(0,n,-1);
+		}
+	}
+}
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	cin>>n>>q;
+	for (int i=1; i<n; i++){
+		int u,v;
+		cin>>u>>v;
+		u--;
+		v--;
+		g[u].push_back(v);
+		g[v].push_back(u);
+	}
+	for (int i=0; i<q; i++){
+		int x,k;
+		cin>>x>>k;
+		x--;
+		vector<int> v(k);
+		for (auto &u : v){
+			cin>>u;
+			u--;
+		}
+//		cout<<x<<"!"<<endl;
+		qs[x].push_back({i,v}); 
+	}
+	dfs(0);
+	for (int i=1; i<20; i++){
+		for (int j=0; j<n; j++){
+			fa[i][j]=fa[i-1][fa[i-1][j]];
+		}
+	}
+	for (int i=0; i<n; i++){
+		upd(st[i],st[i]+1,dep[i]);
+	}
+//	cout<<t[1]<<endl;
+	dfss(0);
+	for (int i=0; i<q; i++){
+		cout<<ans[i]<<endl;
+	}
+	return 0;
+}
