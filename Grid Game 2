@@ -1,0 +1,17 @@
+v#include<bits/stdc++.h>
+using namespace std;
+int S(int a,int b){
+	if(a<b)swap(a,b);
+	if(!b)return 0;
+	return (((a/b)&1)?1:0)^S(a%b,b);
+}
+int main(){
+	int n,xo=0;cin>>n;
+	for(int i=0,x,y;i<n;i++){
+		scanf("%d%d",&x,&y);
+		xo^=S(x,y)^S(x-1,y-1)^S(x-1,y)^S(x,y-1);
+	}
+	if(xo)puts("FIRST");
+	else puts("SECOND");
+	return 0;
+}
