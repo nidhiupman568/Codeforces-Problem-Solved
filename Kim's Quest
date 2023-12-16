@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int mod=998244353;
+inline void fix(int&x) {if(x>=mod) x-=mod;}
+int main(){
+	cin.tie(0)->sync_with_stdio(0);
+	int b,ans=0;
+	cin>>b;
+	vector<int> a(b);
+	for(int&x:a) cin>>x;
+	for(int s:{0,3,5,6}){
+		vector<int> f(6);
+		f[0]=1;
+		for(int i=0;i<b;i++){
+			auto g=f;
+			for(int j=0;j<6;j++) if((s>>(j+1)%3^a[i])%2==0) fix(g[j==5?3:j+1]+=f[j]);
+			f=g;
+		}
+		for(int i:{3,4,5}) fix(ans+=f[i]);
+	}
+	cout<<ans;
+	return 0;
+}
