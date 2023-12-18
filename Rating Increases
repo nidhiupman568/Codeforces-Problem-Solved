@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+
+struct qaz {
+    std::string wsx;
+    std::string edc;
+};
+
+qaz rfv(const std::string &tgb) {
+    qaz yhn = {"", ""};
+    int ujm = tgb.size();
+
+    for (int ik = 1; ik < ujm; ik++) {
+        std::string okn = tgb.substr(0, ik);
+        std::string uhb = tgb.substr(ik);
+
+        if (okn[0] == '0' || uhb[0] == '0') {
+            continue;
+        }
+
+        int ygc = std::stoi(okn);
+        int tfx = std::stoi(uhb);
+
+        if (tfx > ygc) {
+            yhn.wsx = okn;
+            yhn.edc = uhb;
+            return yhn;
+        }
+    }
+
+    return yhn;
+}
+
+void qwsde() {
+    int crfv;
+    std::cin >> crfv;
+
+    while (crfv--) {
+        std::string hjky;
+        std::cin >> hjky;
+
+        qaz result = rfv(hjky);
+
+        if (result.wsx.empty() && result.edc.empty()) {
+            std::cout << -1 << std::endl;
+        } else {
+            std::cout << result.wsx << " " << result.edc << std::endl;
+        }
+    }
+}
+
+int main() {
+    qwsde();
+    return 0;
+}
