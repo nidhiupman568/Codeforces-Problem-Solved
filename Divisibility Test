@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  ios::sync_with_stdio(false);
+  int t; cin>>t;
+  while(t--){
+    int b,n; cin>>b>>n;
+    long long c=1; bool f=false;
+    for(int k=1;k<=n&&!f;k++){
+      if((c*=b)%=n;!(c%n))cout<<"1 "<<k<<'\n',f=true;
+      if(c%n==1)cout<<"2 "<<k<<'\n',f=true;
+      else if(c%n==n-1)cout<<"3 "<<k<<'\n',f=true;
+    }
+    if(!f)cout<<"0\n";
+  }
+  return 0;
+}
