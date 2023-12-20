@@ -1,0 +1,109 @@
+// LUOGU_RID: 140256551
+#include<bits/stdc++.h>
+#define ll long long
+#define ull unsigned long long
+#define uint unsigned int
+#define ldb long double
+#define pii pair<int,int>
+#define mkp make_pair
+#define mkt make_tuple
+#define fr first
+#define se second
+#define uset unordered_set
+#define umap unordered_map
+#define pqueue priority_queue
+#define all(_box) _box.begin(),_box.end()
+#define ppc __builtin_popcount
+#define ctz __builtin_ctz
+#define clz __builtin_clz
+#define lbd lower_bound
+#define ubd upper_bound
+#define deb(x) cerr<<#x<<'='<<(x)<<' '
+#define int long long
+using namespace std;
+mt19937 rng(random_device{}());
+const int B=13131;
+const ll invB=1435730138095435363;
+const int msk=rng()&8191;
+const int N=3e5+4;
+int n;
+string s;
+ull pw[N],ip[N],s1[N],s2[N];
+ll d1[N],d2[N];
+ll add[N][26];
+
+signed main(){
+	ios::sync_with_stdio(0);
+	cin.tie(0),cout.tie(0);
+	
+	cin>>n>>s;
+	pw[0]=1,ip[0]=1,s=' '+s;
+	for(int i=1;i<=n;i++){
+		pw[i]=pw[i-1]*B;
+		ip[i]=ip[i-1]*invB;
+		s1[i]=s1[i-1]*B+(s[i]^msk);
+		s2[i]=s2[i-1]+(s[i]^msk)*pw[i-1];
+	}
+	auto sum1=[](int l,int r)->ull{
+		return s1[r]-s1[l-1]*pw[r-l+1];
+	};
+	auto sum2=[](int l,int r)->ull{
+		return (s2[r]-s2[l-1])*ip[l-1];
+	};
+	auto bs=[=](int x,int y)->int{
+		int l=0,r=min(x-1,n-y),res=-1;
+		while(l<=r){
+			int mid=(l+r)>>1;
+			if(sum1(x-mid,x)==sum2(y,y+mid))res=mid,l=mid+1;
+			else r=mid-1;
+		}
+		return res;
+	};
+	
+	ll cnt=0;
+	for(int i=1;i<=n;i++){
+		int l1=bs(i,i);
+		cnt+=l1+1;
+		int l=i-l1,r=i+l1;
+		//del[i-x]+=l1-x+1 [l,i)
+		//del[i+x]+=l1-x+1 (i,r]
+		d1[l]++,d1[i]-=l1+1,d1[i+1]+=l1;
+		d2[r]++,d2[i]-=l1+1,d2[i-1]+=l1;
+		if(--l<1||++r>n)continue;//不同的位置 
+		int l2=bs(l-1,r+1);
+		add[l][s[r]-'a']+=2+l2;
+		add[r][s[l]-'a']+=2+l2;
+	}
+	for(int i=1;i<n;i++){
+		int l1=bs(i,i+1);//l1 may be -1
+		cnt+=l1+1;
+		int l=i-l1,r=i+1+l1;
+		d1[l]++,d1[i+1]-=l1+2,d1[i+2]+=l1+1;
+		d2[r]++,d2[i]-=l1+2,d2[i-1]+=l1+1;
+		if(--l<1||++r>n)continue;
+		int l2=bs(l-1,r+1);
+		add[l][s[r]-'a']+=2+l2;
+		add[r][s[l]-'a']+=2+l2;
+	}
+	//twice!
+	for(int i=1;i<=n;i++)d1[i]+=d1[i-1];
+	for(int i=1;i<=n;i++)d1[i]+=d1[i-1];
+	for(int i=n;i>=1;i--)d2[i]+=d2[i+1];
+	for(int i=n;i>=1;i--)d2[i]+=d2[i+1];
+	
+	ll ans=cnt;
+	pii cc;
+	for(int i=n;i>=1;i--)
+		for(int j=s[i]-'a'-1;~j;j--){
+			ll x=cnt+add[i][j]-d1[i]-d2[i];
+			if(x>=ans)ans=x,cc={i,j};
+		}
+	for(int i=n;i>=1;i--)
+		for(int j=s[i]-'a'+1;j<26;j++){
+			ll x=cnt+add[i][j]-d1[i]-d2[i];
+			if(x>ans)ans=x,cc={i,j};
+		}
+	
+	if(cc.fr)s[cc.fr]='a'+cc.se;
+	cout<<ans<<'\n'<<s.substr(1);
+}//记得取消注释！！ 
