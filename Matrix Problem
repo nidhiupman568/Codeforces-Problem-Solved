@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+const int N=2505;
+int n,m,ans,S,T,a[55][55];
+int tot=1,mncost,mxflow,Fullflow,pre[N],lst[N],inq[N],dis[N],flow[N];
+struct edge{int to,nxt,w,c;} e[N*10];
+void add(int u,int v,int w,int c)
+{
+    e[++tot]={v,pre[u],w,c},pre[u]=tot;
+    e[++tot]={u,pre[v],0,-c},pre[v]=tot;
+}
+ 
+int spfa()
+{
+    memset(lst,0,sizeof(lst));
+    memset(dis,0x3f,sizeof(dis));
+    queue<int> q;q.push(S),dis[S]=0,flow[S]=1e9;
+    while(!q.empty())
+    {
+        int u=q.front();q.pop();
+        inq[u]=0;
+        for(int i=pre[u];i;i=e[i].nxt)
+        {
+            int v=e[i].to,w=e[i].w,c=e[i].c;
+            if(w&&dis[u]+c<dis[v])
+            {
+                lst[v]=i;
+                dis[v]=dis[u]+c;
+                flow[v]=min(flow[u],w);
+                if(!inq[v]) q.push(v),inq[v]=1;
+            }
+        }
+    }
+    return lst[T];
+}
+ 
+void EK()
+{
+    while(spfa())
+    {
+        mncost+=flow[T]*dis[T],mxflow+=flow[T];
+        for(int i=T;i!=S;i=e[lst[i]^1].to)
+        {
+            e[lst[i]].w-=flow[T];
+            e[lst[i]^1].w+=flow[T];
+        }
+    }
+}
+ 
+int main()
+{
+    cin>>n>>m;T=n+m+1;
+    for(int i=1;i<=n;i++)
+        for(int j=1;j<=m;j++)
+            cin>>a[i][j],ans+=a[i][j];
+    for(int i=1,x;i<=n;i++) cin>>x,add(S,i,x,0),Fullflow+=x;
+    for(int i=1,x;i<=m;i++) cin>>x,add(i+n,T,x,0);
+    for(int i=1;i<=n;i++) for(int j=1;j<=m;j++) add(i,j+n,1,a[i][j]?-1:1);
+    EK();
+    if(mxflow!=Fullflow) puts("-1");
+    else cout<<ans+mncost<<'\n';
+}
