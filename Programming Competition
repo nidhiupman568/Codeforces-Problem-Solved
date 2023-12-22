@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+#define N 200005
+using namespace std;
+int f[N],g[N],T,n,a;
+vector<int> e[N];
+void dfs(int now)
+{
+	f[now]=0; 
+	for (auto to : e[now])
+	 {
+	 	dfs(to);
+	 	f[now]+=f[to];
+	 }
+	g[now]=f[now]%2;
+	for (auto to : e[now] ) g[now]=max(g[now],g[to]-(f[now]-f[to]));
+    f[now]++; g[now]++;
+}
+void slove()
+{
+	cin>>n;
+    for (int i=1;i<=n;++i) e[i].clear();
+	for (int i=2;i<=n;++i)
+	 {
+	 	cin>>a;
+	 	e[a].push_back(i);
+	 }
+	dfs(1);
+	cout<<(f[1]-g[1])/2<<endl;
+}
+int main()
+{
+	cin>>T;
+	while (T--)
+	 {
+	 	slove();
+	 }
+	return 0;
+}
