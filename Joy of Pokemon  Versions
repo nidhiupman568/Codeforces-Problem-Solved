@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+ll solve(){
+	int n,s,a,b,c;
+	cin>>n>>s>>a;
+	if(s==1) return n%a==0;
+	cin>>b;
+	int m=a*b/__gcd(a,b);
+	ll res=0;
+	if(s==2){
+		for(int i=0;i<m;i++)
+			if(i%a==0&&(n-i)%b==0) res+=n/m-(i>n%m)+1;
+		return res;
+	}
+	cin>>c;
+	m*=c/__gcd(m,c);
+	for(int i=0;i<m;i++) if(i%a==0) for(int j=0;j<m;j++) if((j-i)%b==0&&(n-j)%c==0){
+		int p=n/m-(j>n%m)+1;
+		if(!p) continue;
+		if(i<=j) res+=p*(p+1ll)/2;
+		else res+=p*(p-1ll)/2;
+	}
+	return res;
+}
+int main(){
+	cin.tie(0)->sync_with_stdio(0);
+	int t;
+	cin>>t;
+	while(t--) cout<<solve()<<"\n";
+	return 0;
+}
