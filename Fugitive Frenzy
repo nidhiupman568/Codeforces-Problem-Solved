@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N=105;
+int n,rt,b[N],d[N][N];
+vector<int> l;
+double f[N];
+int main(){
+	cin>>n;
+	memset(d,0x3f,sizeof d);
+	for(int i=1,u,v;i<n;i++) cin>>u>>v,d[u][v]=d[v][u]=1,b[u]++,b[v]++;
+	for(int i=1;i<=n;i++){
+		d[i][i]=0;f[i]=1;
+		if(b[i]==1) l.push_back(i);
+	}
+	for(int k=1;k<=n;k++) for(int i=1;i<=n;i++) for(int j=1;j<=n;j++) d[i][j]=min(d[i][j],d[i][k]+d[k][j]);
+	auto calc=[&](int x){
+		double sum=l.size()-1,cnt=0;
+		for(int y:l) cnt+=1/f[y],sum+=d[x][y]/f[y];
+		f[x]=sum/cnt;
+	};
+	for(int t=1e4;t--;) for(int x:l) calc(x);
+	cin>>rt;
+	calc(rt);
+	printf("%.9lf\n",f[rt]);
+	return 0;
+}
