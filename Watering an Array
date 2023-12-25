@@ -1,0 +1,22 @@
+#include<stdio.h>
+int a[2001],v[100001];
+void work(){
+	int n,k,d;
+	scanf("%d%d%d",&n,&k,&d);
+	for(int i=1;i<=n;++i)scanf("%d",a+i);
+	for(int i=1;i<=k;++i)scanf("%d",v+i);
+	int res=(d-1)/2,cnt;
+	for(int i=1;i<=n;++i)res+=(a[i]==i);
+	for(int i=1,j=1;i<d&&i<=2*n;++i,j=j<k?j+1:1){
+		for(int t=1;t<=v[j];++t)++a[t];
+		cnt=(d-i-1)/2;
+		for(int t=1;t<=n;++t)cnt+=(a[t]==t);
+		res=cnt>res?cnt:res;
+	}
+	printf("%d\n",res);
+}
+int main(){
+	int t;
+	for(scanf("%d",&t);t--;work());
+	return 0;
+}
