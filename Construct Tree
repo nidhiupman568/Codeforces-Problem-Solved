@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 2010
+#define int long long
+#define pii pair<int,int>
+#define pb push_back
+#define st first
+#define ed second
+#define mod 998244353
+#define INF 0x3f3f3f3f
+#define il inline
+int T=1,n,m,q,x;
+int s[N];
+char c[N];
+void solve(){
+	scanf("%lld%lld",&n,&m);
+	for(int i=1;i<=n;i++)
+		scanf("%lld",&s[i]);
+	sort(s+1,s+1+n);
+	if(s[n]+s[n-1]>m){
+		puts("No");
+		return ;
+	}
+	bitset<N> f[N];
+	f[0][0]=1;
+	for(int i=1;i<=n;i++)
+		for(int j=m;j>=0;j--){
+			if(j+s[i]<=m)
+				f[j+s[i]]|=f[j];
+			f[j]|=(f[j]<<s[i]);
+		}
+	for(int i=s[n];i<=m-s[n]||i==s[n];i++)
+		if(f[i][m-i]){
+			puts("Yes");
+			return ;
+		}
+	puts("No");
+}
+signed main(){
+	scanf("%lld",&T);
+	while(T--)solve();
+	return 0;
+}
