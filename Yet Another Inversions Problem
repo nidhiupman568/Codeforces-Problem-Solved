@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> pii;
+typedef pair<ll,ll> pll;
+#define all(x) x.begin(),x.end()
+
+struct bit{
+	int n;
+	vector<int> c;
+	bit(int n):n(n){
+		c.resize(n+1);
+	}
+	void upd(int x,int y){
+		for(;x;x-=x&-x)c[x]+=y;
+	}
+	int qry(int x){
+		int res=0;
+		for(;x<=n;x+=x&-x)res+=c[x];
+		return res;
+	}
+};
+
+const int mod=998244353;
+void solve(){
+	int n,k;
+	cin>>n>>k;
+	vector<int> p(n),q(k);
+	bit T1(k),T2(2*n-1);
+	for(int i=0;i<n;++i)cin>>p[i];
+	for(int i=0;i<k;++i)cin>>q[i],++q[i];
+	ll ans=0,sum=0;
+	for(int i=0;i<k;++i){
+		sum+=T1.qry(q[i]);
+		T1.upd(q[i],1);
+	}
+	ans=sum%mod*n%mod;
+	for(int i=0;i<n;++i){
+		for(int j=0;j<min(k,19);++j){
+			ans=(ans+1ll*T2.qry(min(2ll*n,(ll)p[i]<<j))*(k-j))%mod;
+		}
+		for(int j=1;j<min(k,19);++j){
+			ans=(ans+1ll*T2.qry((p[i]>>j)+1)*(k-j))%mod;
+		}
+		if(k>19)ans=(ans+1ll*(k-18)*(k-19)/2%mod*i)%mod;
+		T2.upd(p[i],1);
+	}
+	cout<<ans<<'\n';
+}
+
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);
+	int T;
+	cin>>T;
+	while(T--)solve();
+}
