@@ -1,0 +1,26 @@
+// LUOGU_RID: 140999508
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  ios::sync_with_stdio(false);
+  int t; cin>>t;
+  while(t--){
+    int n,k; cin>>n>>k;
+    if(k&1||n>2&&(k==2||k==n*n-2))cout<<"No\n";
+    else{
+      cout<<"Yes\n";
+      vector a(n,vector<int>(n));
+      if(k==2){cout<<"1 0\n0 1\n"; continue;}
+      if(k&3)a[0][1]=a[1][0]=a[0][2]=a[2][0]=a[1][2]=a[2][1]=1,k-=6;
+      for(int i=0;i<n&&k;i+=2)
+        for(int j=0;j<n&&k;j+=2)
+          if(!(a[i][j]+a[i+1][j]+a[i][j+1]+a[i+1][j+1]))
+            a[i][j]=a[i+1][j]=a[i][j+1]=a[i+1][j+1]=1,k-=4;
+      for(auto i:a){
+        for(int j:i)cout<<j<<' ';
+        cout<<endl;
+      }
+    }
+  }
+  return 0;
+}
