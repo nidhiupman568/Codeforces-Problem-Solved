@@ -1,0 +1,2 @@
+#include <bits/stdc++.h>
+using namespace std;using I=int64_t;using U=uint64_t;mt19937_64 g(time(0));int main(){I t,n,i,j,r;cin>>t;while(t--){cin>>n;n*=2;vector<U>c(n+1),h(n+1),hc(n+1);for(i=1;i<=n;i++){cin>>c[i];if(!hc[c[i]])hc[c[i]]=g();h[i]=h[i - 1]^hc[c[i]];}map<U,int>l;for(i=1;i<=n;i++)l[h[i]]=i;I t=0,s=1;for(i=1;i<n;i=j+1){r=1;for(j=i;h[j];j++){r-=l[h[j]]-j;j=l[h[j]];}r+=j-i;t++,s=s*r%998244353;}cout<<t<<" "<<s<<"\n";}}
