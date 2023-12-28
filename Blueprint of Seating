@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N=2e5+5,mod=998244353;
+int p[N],iv[N];
+int inv(int x){
+	int res=1,y=mod-2;
+	for(;y;y>>=1,x=1ll*x*x%mod) if(y&1) res=1ll*res*x%mod;
+	return res;
+}
+int c(int x,int y) {return 1ll*p[x]*iv[y]%mod*iv[x-y]%mod;}
+void solve(){
+	int n,k,ans=0;
+	cin>>n>>k;
+	if(n<=k*2){
+		cout<<"0 "<<c(k-1,n-1-k)<<"\n";
+		return;
+	}
+	for(int l:{0,1}) for(int r:{0,1}) for(int i=0;i<k;i++){
+		int x=n%(k*2)-l-r-i*2;
+		if(0<=x&&x<k-i) (ans+=1ll*c(k-1,i)*c(k-1-i,x)%mod)%=mod;
+	}
+	cout<<(n/(k*2))*(n/(k*2)-1ll)*k+1ll*n%(k*2)*(n/(k*2))<<" "<<ans<<"\n";
+}
+int main(){
+	for(int i=p[0]=1;i<N;i++) p[i]=1ll*i*p[i-1]%mod;
+	iv[N-1]=inv(p[N-1]);
+	for(int i=N-2;~i;i--) iv[i]=(i+1ll)*iv[i+1]%mod;
+	cin.tie(0)->sync_with_stdio(0);
+	int t;
+	cin>>t;
+	while(t--) solve();
+	return 0;
+}
