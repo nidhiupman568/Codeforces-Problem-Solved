@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+typedef long long ll;
+using namespace std;
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		int n;
+		cin>>n;
+		map<ll,bool>m;
+		m[0]=1;
+		ll s=0,f=0;
+		for(int i=1;i<=n;i++){
+			int x;
+			cin>>x;
+			if(i%2==0)s+=x;
+			else s-=x;
+			if(m[s])f=1;
+			m[s]=1;
+		}
+		cout<<(f?"Yes\n":"No\n");
+	}
+}
