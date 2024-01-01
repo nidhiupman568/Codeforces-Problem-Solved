@@ -1,0 +1,18 @@
+#include<cstdio>
+int main()
+{
+	int T;scanf("%d",&T);
+	while(T--)
+	{
+		int n;scanf("%d",&n);
+		long long sum=0;int o=0;
+		for(int i=1,a;i<=n;i++)
+		{
+			scanf("%d",&a);
+			sum+=a;
+			if(a&1) o++;
+			printf("%lld ",i==1?a:sum-o/3-(o%3==1));
+		}
+		printf("\n");
+	}
+}
