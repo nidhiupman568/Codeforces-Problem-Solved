@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=5e5+5,mod=998244353;
+int p,k;
+ll n,pw[N],iv1[N],iv2[N];
+ll qp(ll a,ll b){ll ans=1;for(;b;b>>=1,a=a*a%mod)if(b&1)ans=ans*a%mod;return ans;}
+int main() {
+	cin>>n>>p>>k,iv1[0]=pw[0]=1;
+	for(int i=1;i<=k;i++)pw[i]=pw[i-1]*p%mod,iv1[i]=qp(pw[i],mod-2),iv2[i]=qp(pw[i]-1,mod-2);
+	ll v=qp(p,n),ans=1;
+	for(int i=0;i<=k;i++)cout<<(ans+mod)%mod<<' ',ans=ans*(v-pw[i])%mod*(v-pw[i])%mod*iv1[i]%mod*iv2[i+1]%mod;
+	return 0;
+}
