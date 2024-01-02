@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+const long long mod=998244353;
+long long n,p,k,ans,t1=1,t2=1;
+inline long long qsm(long long a,long long b)
+{
+	long long ans=1%mod;
+	while(b)
+	{
+		if(b&1) ans=ans*a%mod;
+		a=a*a%mod,b>>=1;
+	}
+	return ans;
+}
+int main()
+{
+	scanf("%lld%lld%lld",&n,&p,&k);
+	for(int i=0;i<=min(n,k);++i) ans=t1*t2%mod,t1=t1*(qsm(p,n)-qsm(p,i)+mod)%mod,t2=t2*qsm(qsm(p,i+1)-1,mod-2)%mod*(qsm(p,n-i)-1+mod)%mod,printf("%lld ",ans);
+	for(int i=min(n,k)+1;i<=k;++i) printf("0 ");
+	return 0;
+}
