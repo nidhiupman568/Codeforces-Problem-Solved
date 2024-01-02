@@ -1,0 +1,100 @@
+// LUOGU_RID: 141748363
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=5005;
+
+int _,n1,n2,n,m,idx,num;
+int head[N],dfn[N],low[N];
+bool vis[N],cut[N],mark[N];
+struct edge
+{
+	int fr,to,ne;
+}e[2*N];
+
+void add(int x,int y)
+{
+	e[++idx].fr=x;
+	e[idx].to=y;
+	e[idx].ne=head[x];
+	head[x]=idx;
+}
+
+void tarjan(int u,int fa)
+{
+	dfn[u]=low[u]=++num;
+	vis[u]=1;
+	bool fl=0;
+	int cnt=0;
+	for(int i=head[u];i;i=e[i].ne)
+	{
+		int v=e[i].to;
+		//cout<<u<<"    ----  "<<v<<endl;
+		if(mark[v]||v==fa)continue;
+		if(!dfn[v])
+		{
+			tarjan(v,u);
+			low[u]=min(low[u],low[v]);
+			if(low[v]>=dfn[u])fl=1;
+			cnt++;
+		}
+		else if(vis[v])low[u]=min(low[u],dfn[v]);
+	}
+	vis[u]=0;
+	if(fl&&(fa||cnt>1))cut[u]=1;
+	else cut[u]=0;
+}
+
+int main()
+{
+	cin>>_;
+	while(_--)
+	{
+		cin>>n1>>n2>>m;n=n1+n2;
+		idx=0;
+		memset(head,0,sizeof head);
+		memset(mark,0,sizeof mark);
+		for(int i=1;i<=m;i++)
+		{
+			int u,v;
+			cin>>u>>v;
+			add(u,v),add(v,u);
+		}
+		for(int i=1;i<=n1;i++)
+		{
+			for(int j=1;j<=n;j++)dfn[j]=low[j]=0;
+			for(int j=1;j<=n;j++)if(!mark[j])
+			{
+				num=0;
+				tarjan(j,0);	
+				break;
+			}
+			bool fl=0;
+			for(int j=1;j<=n;j++)if(!mark[j]&&!cut[j])
+			{
+				bool ok=0;
+				for(int k=head[j];k;k=e[k].ne)
+				{
+					int v=e[k].to;
+					ok|=mark[v];
+				}
+				if(ok||i==1)
+				{
+					mark[j]=1;
+					fl=1;
+					break;
+				}
+			}
+			
+		}
+		for(int i=1;i<=n;i++)
+			if(mark[i])
+				cout<<i<<' ';
+		putchar('\n');
+		for(int i=1;i<=n;i++)
+			if(!mark[i])
+				cout<<i<<' ';
+		putchar('\n');
+	}
+	return 0;
+}
