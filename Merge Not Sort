@@ -1,0 +1,46 @@
+#include<iostream>
+using namespace std;
+bool col[10200];
+int t[10200];
+int N,A[10200],pre[10200];
+bool vis[10200];
+bool from[2020][2020];
+int main(){
+	cin>>N;
+	for(int i=1;i<=2*N;++i)
+		cin>>A[i];
+	int nw=0;
+	for(int i=1,mx=0;i<=2*N;++i){
+		if(A[i]<=mx)
+			t[nw]++;
+		else{
+			mx=A[i];
+			t[++nw]=1;
+		}
+	}
+	vis[0]=1;
+	for(int i=1;i<=nw;++i){
+		pre[i]=pre[i-1]+t[i-1];
+		for(int j=N;j>=t[i];--j)
+			if(!vis[j]&&vis[j-t[i]])
+				vis[j]=1,from[i][j]=1;
+	}
+	if(vis[N]){
+		int ptr=N;
+		for(int i=nw;i;--i)
+			if(from[i][ptr]){
+				ptr-=t[i];
+				for(int j=pre[i]+1;j<=pre[i]+t[i];++j)
+					col[j]=1;
+			}
+		for(int i=1;i<=2*N;++i)
+			if(col[i])
+				cout<<A[i]<<' ';cout<<'\n';
+		for(int i=1;i<=2*N;++i)
+			if(!col[i])
+				cout<<A[i]<<' ';
+	}
+	else
+		cout<<-1<<'\n';
+ 
+}
