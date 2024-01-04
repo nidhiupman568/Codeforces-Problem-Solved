@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+#define N 1000
+ll i,j,k,n,m,t;
+
+ll f[N+5][N+5],s[N+5],res;
+vector<pair<ll,ll> > v[N+5];
+
+int main(){
+	ios::sync_with_stdio(0); cin.tie(0);
+	cin>>t;
+	while(t--){
+		cin>>n>>m;
+		for(i=1;i<=m;i++){
+			int x,y,z;
+			cin>>x>>y>>z;
+			v[x].push_back({y,z});
+			v[y].push_back({x,z});
+		}
+		for(i=1;i<=n;i++){
+			cin>>s[i];
+			memset(f[i],-1,sizeof(f[i]));
+		}
+		priority_queue<tuple<ll,ll,ll> > q;
+		q.push({0,1,s[1]});
+		while(!q.empty()){
+			auto [w,x,y]=q.top(); q.pop(); w=-w;
+			
+			if(f[x][y]!=-1)continue;
+			
+			f[x][y]=w;
+			if(x==n){
+				res=w; break;
+			}
+			for(auto [i,j]:v[x]){
+				ll w1=w+1ll*y*j;
+				int z=min(y,s[i]);
+				if(f[i][z]==-1)q.push({-w1,i,z});
+			}
+		}
+		cout<<res<<'\n';
+		for(i=1;i<=n;i++){
+			v[i]={};
+		}
+	}
+}
