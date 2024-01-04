@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+basic_string<int>G[300010],T[300010];
+int n,col[300010],in[300010],out[300010],tot,las[300010],mx[300010<<2],tag[300010<<2];
+long long ans;
+auto app=[](int u,int v){mx[u]+=v,tag[u]+=v;};
+auto pushdown=[](int u){
+   app(u<<1,tag[u]),app(u<<1|1,tag[u]),tag[u]=0;
+};
+void mdf(int u,int l,int r,int L,int R,int v){
+   if(L<=l&&r<=R)return app(u,v);
+   int mid=l+r>>1;pushdown(u);
+   if(L<=mid)mdf(u<<1,l,mid,L,R,v);
+   if(R>mid)mdf(u<<1|1,mid+1,r,L,R,v);
+   mx[u]=max(mx[u<<1],mx[u<<1|1]);
+}
+int qry(int u,int l,int r,int L,int R){
+   if(L<=l&&r<=R)return mx[u];
+   int mid=l+r>>1;pushdown(u);
+   return max(L<=mid?qry(u<<1,l,mid,L,R):0,R>mid?qry(u<<1|1,mid+1,r,L,R):0);
+}
+void dfs1(int u){
+   in[u]=++tot;
+   int _=las[col[u]];
+   if(_)T[_]+=u;
+   las[col[u]]=u;
+   for(int v:G[u])dfs1(v);
+   las[col[u]]=_;
+   out[u]=tot;
+}
+void dfs2(int u){
+   for(int v:G[u])dfs2(v);
+   mdf(1,1,n,in[u],out[u],1);
+   for(int v:T[u])mdf(1,1,n,in[v],out[v],-1);
+   int mx=1;
+   for(int v:G[u]){
+      int x=qry(1,1,n,in[v],out[v]);
+      ans=max(ans,mx*1ll*x);
+      mx=max(mx,x);
+   }
+}
+void solve(){tot=0;ans=1;
+   cin>>n;
+   for(int i=1;i<=n;i++)G[i]=T[i]={};
+   for(int i=1;i<=n*4;i++)mx[i]=tag[i]=0;
+   for(int i=2,x;i<=n;i++)scanf("%d",&x),G[x]+=i;
+   for(int i=1;i<=n;i++)scanf("%d",&col[i]);
+   dfs1(1),dfs2(1);
+   cout<<ans<<endl;
+}
+int main(){
+   int T;for(cin>>T;T--;)solve();
+   return 0;
+}
