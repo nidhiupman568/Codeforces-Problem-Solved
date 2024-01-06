@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Function to determine the winner based on the sum of the input integers
+string determineWinner(int qaz, int wsx) {
+    if ((qaz + wsx) % 2 == 0)
+        return "Bob";
+    else
+        return "Alice";
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int numTestCases;
+    cin >> numTestCases;
+
+    vector<pair<int, int>> dzxc(numTestCases); // Vector to store input pairs
+
+    // Input phase: Storing pairs of integers
+    for (int crt = 0; crt < numTestCases; ++crt) {
+        int yfg, hv;
+        cin >> yfg >> hv;
+        dzxc[crt] = make_pair(yfg, hv);
+    }
+
+    // Output phase: Determine the winner for each pair of inputs and print
+    for (const auto& as : dzxc) {
+        string yui = determineWinner(as.first, as.second);
+        cout << yui << "\n";
+    }
+
+    return 0;
+}
