@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int countDifference(const string& uniquechar) {
+    int diffvar = 0, samevar = 0;
+    for (char iop : uniquechar) {
+        if (iop == '+')
+            diffvar++;
+        else
+            samevar++;
+    }
+    return abs(diffvar - samevar);
+}
+
+int main() {
+    int noone;
+    cin >> noone;
+    
+    while (noone--) {
+        int quality;
+        cin >> quality;
+        string plusog;
+        cin >> plusog;
+        
+        int bnv = countDifference(plusog);
+        cout << bnv << "\n";
+    }
+    
+    return 0;
+}
