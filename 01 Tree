@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int main() {
+	ll t; cin >> t;
+	while(t--){
+		ll n; cin >> n;
+		stack<ll> s;
+		bool lol = 1;
+		ll zro = 0;
+		for(ll i = 0; i <= n; i++){
+			ll a;
+			if(i < n) cin >> a;
+			else a = -1;
+			if(a == 0) zro++;
+			while(!s.empty() && a <= s.top()){
+				ll x = s.top(); s.pop();
+				if(x != a && x != a+1 && (s.empty() || x != s.top()+1)){
+					lol = 0;
+					break;
+				}
+			}
+			s.push(a);
+		}
+		if(zro != 1) lol = 0;
+		lol ? cout << "YES\n" : cout << "NO\n";
+	}
+}
