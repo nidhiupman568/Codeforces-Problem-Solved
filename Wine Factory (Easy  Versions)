@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+int n,m,a[1000001],b[1000001],q[1000001],t[4000001],s[4000001],sum,c[1000001];
+void upd(int p,int l,int r,int x,int num){
+	if(l==r){t[p]=max(num,0ll);s[p]=num;return;}
+	int mid=l+r>>1;if(x<=mid)upd(p*2,l,mid,x,num);
+	else upd(p*2+1,mid+1,r,x,num);
+	s[p]=s[p*2]+s[p*2+1];t[p]=max(t[p*2+1],t[p*2]+s[p*2+1]);
+}
+main(){
+	ios::sync_with_stdio(false);cin.tie(0),cout.tie(0);
+	cin>>n>>m;for(int i=1;i<=n;i++)cin>>a[i],sum+=a[i];
+	for(int i=1;i<=n;i++)cin>>b[i],upd(1,1,n,i,a[i]-b[i]);for(int i=1;i<n;i++)cin>>c[i];
+	while(m--){
+		int x,y,z,k;cin>>k>>x>>y>>z;sum+=x-a[k];a[k]=x;
+		upd(1,1,n,k,x-y);cout<<sum-t[1]<<"\n";
+	}
+	return 0;
+}
