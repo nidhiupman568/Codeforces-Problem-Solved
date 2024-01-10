@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+
+void solve()
+{
+    int n,k,g=0;cin>>n>>k;
+    vector<int> a(n);
+    for(int &i:a) cin>>i,g=__gcd(g,i-k);
+    int ans=0;
+    if(g==0) {cout<<0<<'\n';return;}
+    for(int i:a) if((i-k-g)/g<0) {cout<<-1<<'\n';return;} else ans+=(i-k-g)/g;
+    cout<<ans<<'\n';
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0),cout.tie(0);
+    int t;cin>>t;
+    while(t--) solve();
+}
