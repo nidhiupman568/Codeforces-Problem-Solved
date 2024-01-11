@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int B=500,INF=1e18,N=500010;
+int n,q,p,a[N],b[N],c[N];
+int s[N],w[N],f[N],g[N];
+inline void build(int i){
+	int L=(i-1)*B+1,R=min(n,i*B);
+	w[i]=f[i]=s[i]=0,g[i]=INF;
+	for(int j=L;j<=R;j++){
+		s[i]+=b[j];
+		w[i]+=min(f[i]+a[j],b[j]);
+		f[i]=min(c[j],max(0ll,f[i]+a[j]-b[j]));
+		g[i]=min(g[i],(s[i]-w[i])+(c[j]-f[i]));
+	}
+	return;
+}
+signed main(){
+	ios::sync_with_stdio(false);
+	cin>>n>>q;
+	for(int i=1;i<=n;i++) cin>>a[i];
+	for(int i=1;i<=n;i++) cin>>b[i];
+	for(int i=1;i<n;i++) cin>>c[i];
+	int N=(n-1)/B+1;
+	for(int i=1;i<=N;i++) build(i);
+	while(q--){
+		cin>>p>>a[p]>>b[p]>>c[p];
+		build((p-1)/B+1);
+		int ans=0,S=0;
+		for(int i=1;i<=N;i++){
+			S=min(S,g[i]);
+			int x=min(S,s[i]-w[i]);
+			ans+=x,S-=x;
+			ans+=w[i],S+=f[i]; 
+		} 
+		cout<<ans<<'\n';
+	} 
+	return 0;
+}
