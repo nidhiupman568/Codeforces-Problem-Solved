@@ -1,0 +1,605 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define all(x) begin(x),end(x)
+#define ll long long
+ll mod = 1e9 + 7;
+
+void google(ll t) { cout << "Case #" << t+1 << ": "; }
+bool isVowel(char &c) {
+    return (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u');
+}
+class DisjointSet {
+    vector<int> rank, parent, size; 
+public: 
+    DisjointSet(int n) {
+        rank.resize(n+1, 0); 
+        parent.resize(n+1);
+        size.resize(n+1); 
+        for(int i = 0;i<=n;i++) {
+            parent[i] = i; 
+            size[i] = 1; 
+        }
+    }
+    // ulp = UltimateParent
+    int findUltimateParent(int node) {
+        if(node == parent[node])
+            return node; 
+        return parent[node] = findUltimateParent(parent[node]); 
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUltimateParent(u); 
+        int ulp_v = findUltimateParent(v); 
+        if(ulp_u == ulp_v) return; 
+        if(rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v; 
+        }
+        else if(rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u; 
+        }
+        else {
+            parent[ulp_v] = ulp_u; 
+            rank[ulp_u]++; 
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUltimateParent(u); 
+        int ulp_v = findUltimateParent(v); 
+        if(ulp_u == ulp_v) return; 
+        if(size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v; 
+            size[ulp_v] += size[ulp_u]; 
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v]; 
+        }
+    }
+}; 
+struct Node {
+    Node *links[26];
+    bool end = 0;
+    int countEnd = 0, countPrefix = 0;
+
+    bool containsKey(char c) {
+        return links[c-'a']!=NULL;
+    }
+    void put(char c, Node *node) {
+        links[c-'a'] = node;
+    }
+    Node *get(char c) {
+        return links[c-'a'];
+    }
+    void setEnd() {
+        end = 1;
+    }
+    bool checkEnd() {
+        return end == 1;
+    }
+    void incrementCountEnd() {
+        countEnd++;
+    }
+    void decrementCountEnd() {
+        countEnd--;
+    }
+    void incrementCountPrefix() {
+        countPrefix++;
+    }
+    void decrementCountPrefix() {
+        countPrefix--;
+    }
+    int getEnd() {
+        return countEnd;
+    }
+    int getPrefix() {
+        return countPrefix;
+    }
+    void setToNULL(char c) {
+        links[c-'a'] = NULL;
+    }
+};
+
+struct node {
+    int minimum;
+    int maximum;
+};
+ 
+// A utility function to get the middle index from corner
+// indexes.
+int getMid(int s, int e) { return s + (e - s) / 2; }
+ 
+/*  A recursive function to get the minimum and maximum
+   value in a given range of array indexes. The following
+   are parameters for this function.
+ 
+    st    --> Pointer to segment tree
+    index --> Index of current node in the segment tree.
+   Initially 0 is passed as root is always at index 0 ss &
+   se  --> Starting and ending indexes of the segment
+                  represented  by current node, i.e.,
+   st[index] qs & qe  --> Starting and ending indexes of
+   query range */
+struct node MaxMinUntill(struct node* st, int ss, int se,
+                         int qs, int qe, int index)
+{
+    // If segment of this node is a part of given range,
+    // then return
+    //  the minimum and maximum node of the segment
+    struct node tmp, left, right;
+    if (qs <= ss && qe >= se)
+        return st[index];
+ 
+    // If segment of this node is outside the given range
+    if (se < qs || ss > qe) {
+        tmp.minimum = INT_MAX;
+        tmp.maximum = INT_MIN;
+        return tmp;
+    }
+ 
+    // If a part of this segment overlaps with the given
+    // range
+    int mid = getMid(ss, se);
+    left = MaxMinUntill(st, ss, mid, qs, qe, 2 * index + 1);
+    right = MaxMinUntill(st, mid + 1, se, qs, qe,
+                         2 * index + 2);
+    tmp.minimum = min(left.minimum, right.minimum);
+    tmp.maximum = max(left.maximum, right.maximum);
+    return tmp;
+}
+ 
+// Return minimum and maximum of elements in range from
+// index qs (query start) to qe (query end).  It mainly uses
+// MaxMinUtill()
+struct node MaxMin(struct node* st, int n, int qs, int qe)
+{
+    struct node tmp;
+ 
+    // Check for erroneous input values
+    if (qs < 0 || qe > n - 1 || qs > qe) {
+        tmp.minimum = INT_MAX;
+        tmp.maximum = INT_MIN;
+        return tmp;
+    }
+ 
+    return MaxMinUntill(st, 0, n - 1, qs, qe, 0);
+}
+ 
+// A recursive function that constructs Segment Tree for
+// array[ss..se]. si is index of current node in segment
+// tree st
+void constructSTUtil(vector<ll> &arr, int ss, int se,
+                     struct node* st, int si)
+{
+    // If there is one element in array, store it in current
+    // node of segment tree and return
+    if (ss == se) {
+        st[si].minimum = arr[ss];
+        st[si].maximum = arr[ss];
+        return;
+    }
+ 
+    // If there are more than one elements, then recur for
+    // left and right subtrees and store the minimum and
+    // maximum of two values in this node
+    int mid = getMid(ss, se);
+    constructSTUtil(arr, ss, mid, st, si * 2 + 1);
+    constructSTUtil(arr, mid + 1, se, st, si * 2 + 2);
+ 
+    st[si].minimum = min(st[si * 2 + 1].minimum,
+                         st[si * 2 + 2].minimum);
+    st[si].maximum = max(st[si * 2 + 1].maximum,
+                         st[si * 2 + 2].maximum);
+}
+ 
+/* Function to construct segment tree from given array. This
+   function allocates memory for segment tree and calls
+   constructSTUtil() to fill the allocated memory */
+struct node* constructST(vector<ll> &arr, int n)
+{
+    // Allocate memory for segment tree
+ 
+    // Height of segment tree
+    int x = (int)(ceil(log2(n)));
+ 
+    // Maximum size of segment tree
+    int max_size = 2 * (int)pow(2, x) - 1;
+ 
+    struct node* st = new struct node[max_size];
+ 
+    // Fill the allocated memory st
+    constructSTUtil(arr, 0, n - 1, st, 0);
+ 
+    // Return the constructed segment tree
+    return st;
+}
+
+class Trie {
+public:
+    Node *root;
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string &word){
+        Node *node = root;
+        int n = word.size();
+        for(int i = 0; i < n; i++) {
+            if(!node->containsKey(word[i])) {
+                node->put(word[i], new Node());
+            }
+            node = node->get(word[i]);
+            node->incrementCountPrefix();
+        }
+        node->incrementCountEnd();
+    }
+    int countWordsEqualTo(string &word){
+        Node *node = root;
+        int n = word.size();
+        for(int i = 0; i < n; i++) {
+            if(!node->containsKey(word[i])) return 0;
+            node = node->get(word[i]);
+        }
+        return node->getEnd();
+    }
+    int countWordsStartingWith(string &word){
+        Node *node = root;
+        int n = word.size();
+        for(int i = 0; i < n; i++) {
+            if(!node->containsKey(word[i])) return 0;
+            node = node->get(word[i]);
+        }
+        return node->getPrefix();
+    }
+    bool search(string word) {
+        Node *node = root;
+        int n = word.size();
+        for(int i = 0; i < n; i++) {
+            if(!node->containsKey(word[i])) return 0;
+            node = node->get(word[i]);
+        }
+        return node->checkEnd();
+    }
+    void erase(string &word){
+        Node *node = root;
+        int n = word.size();
+        for(int i = 0; i < n; i++) {
+            node = node->get(word[i]);
+            node->decrementCountPrefix();
+            if(node->getPrefix() == 0) {
+                node->setToNULL(word[i]);
+            }
+        }
+        node->decrementCountEnd();
+    }
+    bool startsWith(string prefix) {
+        Node *node = root;
+        int n = prefix.size();
+        for(int i = 0; i < n; i++) {
+            if(!node->containsKey(prefix[i])) return 0;
+            node = node->get(prefix[i]);
+        }
+        return 1;
+    }
+};
+string decimalToBinary(ll n)
+{
+	string binaryNum = "";
+    ll i = 0;
+    while (n > 0) {
+        binaryNum += to_string(n%2);
+        n = n / 2;
+    }
+    // cout<<binaryNum.size()<<endl;
+
+	while(binaryNum.size() < 64) {
+		binaryNum += "0";
+	}
+	reverse(begin(binaryNum),end(binaryNum));
+	return binaryNum;
+}
+ll binaryToDecimal(string n)
+{
+    string num = n;
+    ll dec_value = 0, base = 1, len = num.length();
+    for (ll i = len - 1; i >= 0; i--) {
+        if (num[i] == '1')
+            dec_value += base;
+        base <<= 1;
+
+    }
+    return dec_value;
+}
+void input(vector<ll> &a, ll n) {
+	for(ll i = 0; i < n; i++) {
+		ll x;
+		cin>>x;
+		a.push_back(x);
+	}
+}
+void output(vector<ll> &a) {
+    for(auto &i:a) cout<<i<<" ";
+    cout<<endl;
+}
+ll max(ll a, ll b) {
+	if(a > b) return a;
+	return b;
+}
+ll GCD(ll a, ll b) {
+    if (a == 0) return b;
+    return GCD(b % a, a);
+}
+ll LCM(ll a, ll b) {
+    return (a*b)/GCD(a,b);
+}
+
+//x^y mod p
+ll power(ll x, ll y, ll p = mod) {
+    ll res = 1;
+    x = x % p; 
+    while (y > 0) {
+        if (y & 1)
+            res = (res * x) % p;
+        y = y >> 1;
+        x = (x * x) % p;
+    }
+    return res;
+}
+  
+ll modInverse(ll n, ll p) {
+    return power(n, p - 2, p);
+}
+//   0,2
+ll nCrModP(ll n, ll r) {
+	ll p = mod;
+    if (n < r)
+        return 0;
+    if (r == 0) return 1;
+  
+    ll fac[n + 1];
+    fac[0] = 1;
+    for (ll i = 1; i <= n; i++)
+        fac[i] = (fac[i - 1] * i) % p;
+  
+    return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
+}
+ll nCr(ll n, ll r = 2) {
+    if(n < r) return 0;
+	ll sum = 1;
+    for(ll i = 1; i <= r; i++){
+        sum = sum * (n - r + i) / i;
+    }
+    return sum;
+}
+ll computeXOR(ll n) {
+    if (n % 4 == 0) return n;
+    if (n % 4 == 1) return 1;
+    if (n % 4 == 2) return n + 1;
+    return 0;
+}
+vector<ll> SieveOfEratosthenes(int N)
+{
+    vector<ll> prime(N + 1,1);
+	vector<ll> primes;
+ 
+    for (int p = 2; p * p <= N; p++) {
+        if (prime[p]) {
+            for (int i = p * p; i <= N; i += p) prime[i] = 0;
+        }
+    }
+ 
+    for (int p = 2; p <= N; p++) {
+        if (prime[p]) primes.push_back(p);
+	}
+	return primes;
+    return prime;
+}
+ll countDigit(ll n) {
+    return floor(log10(n) + 1); 
+}
+void findFactors(ll n, unordered_set<ll> &st) {
+    // mpp[1]++;
+    // mpp[n]++;
+    for (ll i = 2; i*i <= n; i++) {
+        if (n%i == 0) {
+            // cout<<i<<endl;
+            // return 0;
+            st.insert(i);
+            st.insert(n/i);
+        }
+    }
+    // return 1;
+}
+
+ll primeFactors(ll n) {
+    ll count = 0;
+    while ((n&1) == 0) {
+        n >>= 1;
+        count++;
+    }
+    while (n%3 == 0) {
+        n /= 3;
+        count++;
+    }
+    ll SqareRoot = sqrt(n);
+
+    for (ll i = 5; i <= SqareRoot; i += 6) {
+        while (n%i == 0) {
+            n /= i;
+            count++;
+        }
+        while(n%(i+2) == 0) {
+            n /= (i+2);
+            count++;
+        }
+    }
+    if (n > 2) count++;
+    return count;
+}
+
+ll subarrayXor(vector<ll>& xorArr, int n, int m) {
+    ll ans = 0; 
+    vector<ll> mp(4*n,0);
+ 
+    for (ll i = 0; i < n; i++) {
+        ll tmp = m ^ xorArr[i];
+        
+        ans = ans + mp[tmp];
+ 
+        if (xorArr[i] == m) ans++;
+        mp[xorArr[i]]++;
+    }
+    return ans;
+}
+
+ll rangeBitwiseAnd(ll left, ll right) {
+    ll ans = 0;
+    for(ll i = 63; i >= 0; i--) {
+        ll l = (left>>i) & 1;
+        ll r = (right>>i) & 1;
+        if(l == r) ans = ans | (l << i);
+        else break;
+    }
+    return ans;
+}
+vector<vector<ll>> createGraph(ll n, ll e) {
+    vector<vector<ll>> graph(n);
+    for (ll i = 0; i < e; i++) {
+        ll u,v;
+        cin>>u>>v;
+        u--; v--;
+        graph[u].push_back(v);
+        // graph[v].push_back(u);
+    }
+    return graph;
+}
+vector<ll> topoSort(vector<vector<ll> >& graph) {
+    ll n = graph.size();
+    vector<ll> indegree(n,0), visited(n,0), ans;
+    for(ll i = 0; i < n; i++) {
+        for(auto &edge:graph[i]) {
+            indegree[edge]++;
+        }
+    }
+    queue<ll> q;
+    
+    for(ll i = 0; i < n; i++) {
+        if(indegree[i] == 0) {
+            q.push(i);
+            visited[i] = 1;
+            ans.push_back(i);
+        }
+    }
+    while(!q.empty()) {
+        ll frontEle = q.front();
+        q.pop();
+        for(auto &edge:graph[frontEle]) {
+            if(!visited[edge]) {
+                if(--indegree[edge] == 0) {
+                    q.push(edge);
+                    visited[edge] = 1;
+                    ans.push_back(edge);
+                } 
+            }
+        }
+    }
+    return ans;
+}
+bool subsetSumToK(ll n, ll k, vector<ll> &arr) {
+    vector<ll> prev(k+1);
+    for(ll target = 0; target <= k; target++) prev[target] = 0;
+    prev[0] = 1;
+    for(ll i = 1; i <= n; i++) {
+        vector<ll> curr(k+1);
+        curr[0] = 1;
+        for(ll target = 0; target <= k; target++) {
+            ll notPick = prev[target];
+            ll pick = 0;
+            if(target >= arr[i-1]) pick = prev[target-arr[i-1]];
+            curr[target] = pick + notPick;
+        }
+        prev = curr;
+    }
+    return prev[k];
+}
+bool isValid(ll i, ll j, ll n, ll m) {
+    if(i < n and j < m and i >= 0 and j >= 0) return 1;
+    return 0;
+}
+ll dijkstra(vector<vector<vector<ll>>>& graph, vector<bool>& taken) {
+    ll n = graph.size(), ans = 0;
+    for (ll start = 1; start < n; start++) {
+        if(!taken[start]) continue;
+        priority_queue<vector<ll>,vector<vector<ll>>,greater<vector<ll>>> pq;
+        pq.push({start,0});
+        vector<ll> time(n+1,1e9);
+        time[start] = 0;
+        time[0] = 0;
+        while(!pq.empty()) {
+            vector<ll> t = pq.top();
+            pq.pop();
+            for(auto &node:graph[t[0]]) {
+                if(taken[node[0]] and time[node[0]] > t[1]+node[1]) {
+                    time[node[0]] = t[1]+node[1];
+                    pq.push({node[0],time[node[0]]});
+                }
+            }
+        }
+        for(auto &i:time) {
+            if(i != 1e9) {
+                ans += i;
+            }
+        }
+
+    }
+    return ans;
+}
+ll countDistinctSubsequence(string& s) {
+    unordered_map<char, ll> last;
+    ll count = 1;
+
+    for (auto ch : s) {
+        ll newCount = 2 * count;
+
+        if (last.find(ch) != last.end())
+            newCount -= last[ch];
+
+        last[ch] = count;
+        count = newCount;
+    }
+    return count;
+}
+bool helper(vector<ll> &a, ll k, ll n) {
+    ll gcd = abs(a[0]-a[k]);
+    for(ll i = 1; i+k < n; i++) {
+        gcd = GCD(abs(a[i]-a[i+k]),gcd);
+    }
+    return (gcd != 1);
+}
+void solve() {
+    ll n,k,x;
+    cin>>n>>k>>x;
+    vector<ll> a(n+1);
+    for(ll i = 1; i <= n; i++) cin>>a[i];
+    sort(a.begin()+1,a.end(),greater<ll>());
+    for(ll i = 1; i <= n; i++) a[i] += a[i-1];
+    ll ans = -1e9;
+    for (ll i = 0; i <= k; i++)
+        ans = max(ans, a[n] - 2 * a[min(i + x, n)] + a[i]);
+    
+    cout<<ans<<"\n";
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+	ll t;
+	t=1;
+    cin>>t;       
+	for(ll test = 0; test < t; test++) {
+        solve();
+    }
+	return 0;
+}
