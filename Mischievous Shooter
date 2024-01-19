@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define f(i,n)  for(int i=1;i<=n;i++)
+#define F(i,m)  for(int i=m;i>=1;i--)
+#define vv(name,n,m)  vector<vector<int>>name(n+5,vector<int>(m+5,0))
+#define rk (R+k+1)
+int main()
+{
+int t;cin>>t;
+f(_,t)
+{
+int n,m,k,a=0;
+cin>>n>>m>>k;
+vv(g,n,m);char p;
+f(i,n)f(j,m)cin>>p,g[i][j]=(p=='#');
+f(x,4)
+{
+vv(d,n,m);vv(r,n,m);
+F(R,n)f(C,m)d[R][C]=d[R+1][C]+g[R][C]-(rk<=n?g[rk][C]:0);
+F(R,n)
+{for(int x=min(R+k,n),y=rk-x;y<=min(m,1+k);)r[R][1]+=g[x--][y++];
+for(int C=2;C<=m;C++)r[R][C]=r[R+1][C-1]+(C+k<=m?g[R][C+k]:0)-(rk<=n and C-1>=1?g[rk][C-1]:0);
+}
+f(R,n)
+{
+int sum=0;
+F(C,m)sum+=d[R][C]-r[R][C+1],a=max(a,sum);
+}
+vv(g2,m,n);
+f(i,n)f(j,m)g2[j][n-i+1]=g[i][j];
+g=g2,swap(n,m);
+}
+cout<<a<<'\n';
+}
+}
