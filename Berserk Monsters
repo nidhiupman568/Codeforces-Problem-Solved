@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N=3e5+2;
+int T,n,m,a[N],d[N],l[N],r[N];
+bool b[N];
+signed main(){
+cin>>T;while(T--){
+cin>>n;
+for(int i=1;i<=n;i++)cin>>a[i];
+for(int i=1;i<=n;i++)cin>>d[i],b[i]=1;
+vector<int>g,v;
+for(int i=1;i<=n;i++)l[i]=i-1,r[i]=i+1,g.push_back(i);
+r[n]=0;
+for(int P=1;P<=n;P++){
+g.resize(unique(g.begin(),g.end())-g.begin());
+for(int i:g)if(a[l[i]]+a[r[i]]>d[i])v.push_back(i),b[i]=0;
+g.clear();
+for(int i:v){
+r[l[i]]=r[i],l[r[i]]=l[i];
+if(b[l[i]])g.push_back(l[i]);
+if(b[r[i]])g.push_back(r[i]);
+}
+cout<<v.size()<<' ',v.clear();
+}cout<<'\n';
+}
+}
