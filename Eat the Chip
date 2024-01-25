@@ -1,0 +1,9 @@
+#include<iostream>
+using namespace std;
+int main(){
+	int t;cin>>t;
+	while(t--){
+		int n,m,a,b,c,d; cin>>n>>m>>a>>b>>c>>d;
+		cout<<(c<=a?"Draw\n":(c-a)%2?abs(b-d)<=1||(d>b?m-b:b-1)<=(c-a+1)/2?"Alice\n":"Draw\n":b==d||(d>b?d-1:m-d)<=(c-a)/2?"Bob\n":"Draw\n");
+	}
+}
