@@ -1,0 +1,13 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a,g,i,j,n,v[1<<18];
+main(){
+ for(cin>>n;cin>>n;cout<<a<<'\n'){
+  for(i=a=0;i<n;i++)
+   cin>>v[i];
+  for(i=1;i<=n;i++,a+=(g!=1),g=1)
+   if(n%i==0)
+    for(g=0,j=i;j<n;j++)
+     g=gcd(g,v[j]-v[j-i]);
+ }
+}
