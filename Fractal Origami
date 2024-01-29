@@ -1,0 +1,3 @@
+#include<iostream>
+#define int long long
+using namespace std;int p=1e9-107,n,m,T,r;int f(int x,int b){r=1;while(b){if(b&1) r=r*x%p;x=x*x%p;b>>=1;}return r;}signed main(){scanf("%lld",&T);while(T--){cin>>n;m=n/2;if(n&1)cout<<(f(2,m)-1)*f(f(2,2*m)+f(2,m+1)-1,p-2)%p<<'\n';else cout<<(f(2,m)-1)*f(f(2,m+1)-f(2,2*m-1)-1+p,p-2)%p<<'\n';}}
