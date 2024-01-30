@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+#define int int64_t
+using namespace std;
+const int mod=1e9+7;
+int n,t,m,k,s,ans,tmp;
+int qpow(int x,int y){
+	int ret=1;
+	while(y){
+		if(y&1)
+			ret=ret*x%mod;
+		x=x*x%mod,y>>=1;
+	}
+	return ret;
+}
+int32_t main(){
+	ios::sync_with_stdio(0),cin.tie(0),cout.tie(0),cin>>t;
+	while(t--){
+		cin>>n>>m>>k,ans=s=0,tmp=qpow((n*(n-1)>>1)%mod,mod-2);
+		for(int i=1,x,y,v;i<=m;i++)
+			cin>>x>>y>>v,s=(s+v)%mod;
+		for(int i=1;i<=k;i++)
+			ans=(ans+s*tmp)%mod,s=(s+m*tmp)%mod;
+		cout<<ans<<'\n';
+	}
+	return 0;
+}
