@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int T;cin>>T;
+	while(T--){
+	int n,k,m;cin>>n>>k>>m;
+	string s,hm="";cin>>s;
+	
+	set<char> st;
+	for(char x:s){
+		st.insert(x);
+		if(st.size()==k) 
+			n--,st.clear(),hm+=x;
+	
+		if(!n) break;
+	}
+	if(n){
+		char u ='a';
+		for(;u<='z';u++)
+			if(st.find(u)==st.end())
+				break;
+		n--; hm+= u;
+		while(n) hm+='a',n--;
+		
+		cout<<"NO\n"<<hm<<"\n";
+	}
+	else cout<<"YES\n";
+	}
+}
