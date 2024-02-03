@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+#define int long long
+#define getmin(x,y)x=min(x,y)
+using namespace std;
+const int N=102;
+int T,n,x,a[N],dp[N][N][N],al[N][N][N];
+signed main(){
+	cin>>T;while(T--){
+		cin>>n>>x;
+		memset(dp,63,sizeof(dp)),memset(al,63,sizeof(al));
+		for(int i=1;i<=n;i++){cin>>a[i];for(int j=1;j<=x;j++)dp[i][i][j]=0,al[i][i][j]=1;dp[i][i][a[i]]=1,al[i][i][a[i]]=0;}
+		for(int k=2;k<=n;k++)for(int l=1,r=l+k-1;r<=n;l++,r++){
+			for(int j=1;j<=x;j++)for(int i=l;i<r;i++)
+				getmin(dp[l][r][j],dp[l][i][j]+dp[i+1][r][j]),getmin(al[l][r][j],al[l][i][j]+al[i+1][r][j]);
+			for(int j=1;j<=x;j++)getmin(al[l][r][j],dp[l][r][j]+1);
+			for(int j=1;j<=x;j++)for(int k=1;k<=x;k++)if(k!=j)getmin(dp[l][r][j],al[l][r][k]);
+			
+		}
+		int ans=N;
+		for(int j=1;j<=n;j++)ans=getmin(ans,al[1][n][j]);
+		cout<<ans<<'\n';
+	}
+}
