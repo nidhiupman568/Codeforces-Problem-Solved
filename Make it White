@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define rall(v) v.rbegin(),v.rend()
+#define all(v) v.begin(),v.end()
+#define rall(s) s.rbegin(),s.rend()
+#define all(s) s.begin(),s.end()
+#define pb push_back
+#define pf push_front
+#define fi first
+#define se second
+#define ll int long long
+#define ld long double
+#define YES cout<<"YES\n"
+#define Yes cout<<"Yes\n"
+#define yes cout<<"yes\n"
+#define NO cout<<"NO\n"
+#define No cout<<"No\n"
+#define no cout<<"no\n"
+#define ios ios::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+ 
+ 
+   void solve()
+{
+        ll t , q ,   x  , y , l , r , i , n , m , j , k , mn = 2e9;
+        cin>>n;
+        string s;
+        cin>>s;
+        ll ans=-1,ans1=-1;
+        for(i=0;i<s.size();i++){
+              if(s[i]=='B'){
+                ans1=i;
+                if(ans==-1){
+                    ans=i;
+                }
+              }
+        }
+        if(ans==-1){
+            cout<<0<<endl;
+            return;
+        }
+        cout<<(ans1-ans)+1<<endl;
+}
+int main (){
+      ll t=1;
+        cin>>t;
+           while(t--){
+             solve();
+           }
+}
