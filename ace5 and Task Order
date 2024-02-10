@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+int t, n;
+mt19937 g(234852);
+vector<int> p, ans;
+int query(int x) {
+	char c;
+	cout << "? " << x << endl, cin >> c;
+	return c == '>' ? 1 : c == '=' ? 0 : -1;
+}
+void f(int l, int r, vector<int> &p, vector<int> &ans) {
+	if(!p.size())
+		return;
+	if(p.size() < 2) {
+		ans[p[0]] = l;
+		return;
+	}
+	int x = p[g() % p.size()];
+	while(query(x));
+	vector<int> a, b;
+	for(int i : p)
+		if(i ^ x)
+			(~query(i) ? b : a).push_back(i), query(x);
+	return ans[x] = l + a.size(), f(l, l + a.size() - 1, a, ans), f(r - b.size() + 1, r, b, ans);
+}
+int main() {
+	cin >> t;
+	while(t--) {
+		cin >> n, ans.clear(), p.clear(), p.resize(n), iota(p.begin(), p.end(), 1), ans.resize(n + 1), f(1, n, p, ans), cout << '!';
+		for(int i = 1; i <= n; i++)
+			cout << ' ' << ans[i];
+		cout << endl;
+	}
+	return 0;
+}
