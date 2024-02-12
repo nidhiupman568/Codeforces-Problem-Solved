@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define MAXN 200010
+int t,n,a[MAXN],k[MAXN],q;
+int main(){
+	cin>>t;
+	while(t--){
+		cin>>n;
+		for(int i=1;i<=n;++i) cin>>a[i];a[n+1]=0;
+		for(int i=n;i>=1;--i) k[i]=(a[i]==a[i+1]?k[i+1]:i+1);
+		cin>>q;int l,r;
+		while(q--){
+			cin>>l>>r;
+			if(k[l]<=r) cout<<l<<" "<<k[l]<<endl;
+			else cout<<-1<<" "<<-1<<endl;
+		}
+	}
+	return 0;
+}
