@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+int T,n,k;
+int ans[200005];
+int main(){
+	scanf("%d",&T);
+	while(T--){
+		scanf("%d%d",&n,&k);
+		int l=1,r=n;
+		for(int i=1;i<=k;i++){
+			for(int j=i;j<=n;j+=k){
+				if(i&1)ans[j]=l++;
+				else ans[j]=r--;
+			}
+		}
+		for(int i=1;i<=n;i++)printf("%d ",ans[i]);
+		putchar('\n');
+	}
+	return 0;
+}
