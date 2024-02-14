@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=2e5+10;
+int fa[maxn],to[maxn];
+vector<int> g[maxn];
+struct edge
+{
+	int u,v,w;
+}e[maxn];
+bool cmp(edge x,edge y)
+{
+	return x.w>y.w;
+}
+int get(int x)
+{
+	if(x==fa[x]) return x;
+	return fa[x]=get(fa[x]);
+}
+void dfs(int u,int f)
+{
+	for(int i=0;i<g[u].size();i++)
+	{
+		int v=g[u][i];
+		if(v==f) continue;
+		to[v]=u;
+		dfs(v,u);
+	}
+}
+signed main()
+{
+	int t;
+	cin>>t;
+	for(int p=1;p<=t;p++)
+	{
+		int n,m;
+		cin>>n>>m;
+		for(int i=1;i<=m;i++)
+		{
+			cin>>e[i].u>>e[i].v>>e[i].w;
+			fa[e[i].u]=e[i].u,fa[e[i].v]=e[i].v;
+			g[e[i].u].clear(),g[e[i].v].clear();
+		}
+		sort(e+1,e+m+1,cmp);
+		int r=0;
+		for(int i=1;i<=m;i++)
+		{
+			int fx=get(e[i].u),fy=get(e[i].v);
+			if(fx!=fy)
+			{
+				g[e[i].u].push_back(e[i].v),g[e[i].v].push_back(e[i].u);
+				fa[fx]=fy;
+			}
+			else r=i;
+		}
+		to[e[r].u]=0;
+		dfs(e[r].u,0);
+		int dep=0;
+		for(int i=e[r].v;i;i=to[i]) dep++;
+		cout<<e[r].w<<' '<<dep<<endl;
+		for(int i=e[r].v;i;i=to[i]) cout<<i<<' ';
+		cout<<endl;
+	}
+}
