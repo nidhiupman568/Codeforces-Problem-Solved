@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+const int N=200010;
+
+int n,m;
+int a[N],in[N];
+vector<int> g[N];
+
+
+void solve(){
+	cin>>n>>m;
+	for(int i=1;i<=n;i++){
+		g[i].clear(),in[i]=0;
+	}
+	for(int i=1;i<=m;i++){
+		for(int j=1;j<=n;j++){
+			scanf("%d",&a[j]);
+			if(j>=3) g[a[j-1]].push_back(a[j]),in[a[j]]++;
+		}
+	}
+	queue<int> q;
+	for(int i=1;i<=n;i++){
+		if(in[i]==0) q.push(i); 
+	}
+	int cnt=0;
+	while(q.size()){
+		int t=q.front();
+		q.pop();
+		cnt++;
+		for(int x: g[t]){
+			in[x]--;
+			if(in[x]==0) q.push(x);
+		}
+	}
+	if(cnt==n) cout<<"Yes"<<endl;
+	else cout<<"No"<<endl;
+}
+
+int main()
+{
+	int t;
+	cin>>t;
+	while(t--){
+		solve();
+	}
+}
