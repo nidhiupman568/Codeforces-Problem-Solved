@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N=1000010;
+int T,n,m,f[N],r[N],cnt[N];
+
+int main()
+{
+	scanf("%d",&T);
+	while (T--)
+	{
+		scanf("%d%d",&n,&m);
+		for (int i=1;i<=n;i++) r[i]=cnt[i]=0;
+		for (int i=1,x,y;i<=m;i++)
+		{
+			scanf("%d%d",&x,&y);
+			r[x]=max(r[x],y);
+			cnt[x]++; cnt[y+1]--;
+		}
+		for (int i=1,j=1;i<=n;i++)
+		{
+			cnt[i]+=cnt[i-1];
+			while (j<i && r[j]<i) j++;
+			f[i]=max(f[i-1],f[j-1]+cnt[i]);
+		}
+		printf("%d\n",f[n]);
+	}
+	return 0;
+}
