@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    int t;
+    cin>>t;
+    while(t--){
+      int n; 
+	  string a,b; 
+      cin>>n;
+      cin>>a>>b;
+		string an = a[0]+b;
+		int c= 1;
+		for(int i=1; i<n; i++)
+		{
+			if( a[i] == an[i] ) c++;
+			else if( an[i] == '0' ) break;
+			else an[i]='0',c=1;
+		}
+		cout<<an<<endl;
+        cout<<c<<endl;
+    }
+    return 0;
+}
