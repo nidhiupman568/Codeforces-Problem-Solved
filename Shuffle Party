@@ -1,0 +1,953 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define fo(i, p, n) for (ll i = p; i < n; i++)
+const ll MAXN = 1e5+1;
+const ll M = 1e9 + 7;
+
+// long long binpow1(long long a, long long b, long long m) {
+//     a %= m;
+//     long long res = 1;
+//     while (b > 0) {
+//         if (b & 1)
+//             res = res * a % m;
+//         a = a * a % m;
+//         b >>= 1;
+//     }
+//     return res;
+// }
+
+class DisjointSet {
+    vector<int> rank, parent, size;
+public:
+    DisjointSet(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+
+
+
+
+ ll binpow(long long int a, long long int b)
+{
+
+	 long long int res = (ll)1;
+	while (b > (ll)0)
+	{
+		if (b & (ll)1)
+			res = res * a;
+		a = a * a;
+		b >>= (ll)1; 
+	}
+	return res;
+}
+
+unsigned long long power(unsigned long long x,
+						 ll y, ll p)
+{
+	unsigned long long res = 1; // Initialize result
+
+	x = x % p; // Update x if it is more than or
+	// equal to p
+
+	while (y > 0)
+	{
+
+		// If y is odd, multiply x with result
+		if (y & 1)
+			res = (res * x) % p;
+
+		// y must be even now
+		y = y >> 1; // y = y/2
+		x = (x * x) % p;
+	}
+	return res % p;
+}
+unsigned long long modInverse(unsigned long long n,
+							  ll p)
+{
+	return power(n, p - 2, p);
+}
+
+unsigned long long nCrModPFermat(unsigned long long n,
+								 ll r, ll p)
+{
+	// If n<r, then nCr should return 0
+	if (n < r)
+		return 0;
+	// Base case
+	if (r == 0)
+		return 1;
+
+	// Fill factorial array so that we
+	// can find all factorial of r, n
+	// and n-r
+	unsigned long long fac[n + 1];
+	fac[0] = 1;
+	for (ll i = 1; i <= n; i++)
+		fac[i] = (fac[i - 1] * i) % p;
+
+	return (fac[n] * modInverse(fac[r], p) % p * modInverse(fac[n - r], p) % p) % p;
+}
+
+// bool prime[1000100];
+// void isprime()
+// {
+//     memset(prime, true, sizeof(prime));
+
+//     for (ll p = 2; p * p < 1000100; p++)
+//     {
+//         if (prime[p] == true)
+//         {
+//             for (ll i = p * p; i < 1000100; i += p)
+//                 prime[i] = false;
+//         }
+//     }
+// }
+
+ll fact(ll k)
+{
+	if (k == 0)
+		return 1;
+	if (k == 1)
+		return 1;
+	// return k*fact(k-1);
+	return ((k % M) * (fact(k - 1) % M)) % M;
+}
+
+// void primefactor(ll n, vector<ll> &p)
+// {
+//     // Print the number of 2s that divide n
+//     while (n % 2 == 0)
+//     {
+//         p.push_back(2);
+//         n = n / 2;
+//     }
+
+//     // n must be odd at this point. So we can skip
+//     // one element (Note i = i +2)
+//     for (ll i = 3; i <= sqrt(n); i = i + 2)
+//     {
+//         // While i divides n, print i and divide n
+//         while (n % i == 0)
+//         {
+//             p.push_back(i);
+//             n = n / i;
+//         }
+//     }
+
+//     // This condition is to handle the case when n
+//     // is a prime number greater than 2
+//     if (n > 2)
+//         p.push_back(n);
+// }
+
+// ll smallestDivisor(ll n)
+// {
+//     // if divisible by 2
+//     if (n % 2 == 0)
+//         return 2;
+
+//     // iterate from 3 to sqrt(n)
+//     for (ll i = 3; i * i <= n; i += 2)
+//     {
+//         if (n % i == 0)
+//             return i;
+//     }
+
+//     return n;
+// }
+// vector< pair<ll, ll> > findSubArrays(ll arr[], ll n)
+// {
+//     // create an empty map
+//     unordered_map<ll, vector<ll> > map;
+
+//     // create an empty vector of pairs to store
+//     // subarray starting and ending index
+//     vector <pair<ll, ll>> out;
+
+//     // Maintains sum of elements so far
+//     ll sum = 0;
+
+//     for (ll i = 0; i < n; i++)
+//     {
+//         // add current element to sum
+//         sum += arr[i];
+
+//         // if sum is 0, we found a subarray starting
+//         // from index 0 and ending at index i
+//         if (sum == 0)
+//             out.push_back(make_pair(0, i));
+
+//         // If sum already exists in the map there exists
+//         // at-least one subarray ending at index i with
+//         // 0 sum
+//         if (map.find(sum) != map.end())
+//         {
+//             // map[sum] stores starting index of all subarrays
+//             vector<ll> vc = map[sum];
+//             for (auto it = vc.begin(); it != vc.end(); it++)
+//                 out.push_back(make_pair(*it + 1, i));
+//         }
+
+//         // Important - no else
+//         map[sum].push_back(i);
+//     }
+
+//     // return output vector
+//     return out;
+// }
+
+// // Utility function to print all subarrays with sum 0
+// // ll print(vector<pair<ll, ll>> out)
+// // {ll dp=1; ll pr=out.begin()->second;
+// //     for (auto it = out.begin()+1; it != out.end(); it++)
+// //         if(it->second>pr){dp++; pr=it->second;}
+// //         return dp;
+// // }
+// #define MAXN   (ll)1e7+1
+
+// // stores smallest prime factor for every number
+
+// C++ Program to count all subarrays having
+// XOR of elements as given value m with
+// O(n) time complexity.
+
+// Returns count of subarrays of arr with XOR
+// value equals to m
+long long subarrayXor(ll arr[], ll n, ll m)
+{
+	long long ans = 0; // Initialize answer to be returned
+
+	// Create a prefix xor-sum array such that
+	// xorArr[i] has value equal to XOR
+	// of all elements in arr[0 ..... i]
+	// vector<ll>xorArr(n);
+
+	// Create map that stores number of prefix array
+	// elements corresponding to a XOR value
+	unordered_map<ll, ll> mp;
+
+	// Initialize first element of prefix array
+	// xorArr[0] = arr[0];
+	ll cx = arr[0];
+	ll px = cx;
+
+	// Computing the prefix array.
+	// for (ll i = 1; i < n; i++)
+	// 	xorArr[i] = xorArr[i - 1] ^ arr[i];
+
+	// Calculate the answer
+	for (ll i = 0; i < n; i++)
+	{
+		px = cx;
+		if (i != 0)
+			cx = px ^ arr[i];
+		// Find XOR of current prefix with m.
+		// ll tmp = m ^ xorArr[i];
+		ll tmp = m ^ cx;
+
+		// If above XOR exists in map, then there
+		// is another previous prefix with same
+		// XOR, i.e., there is a subarray ending
+		// at i with XOR equal to m.
+		ans = ans + ((long long)mp[tmp]);
+
+		// If this subarray has XOR equal to m itself.
+		if (cx == m)
+			ans++;
+
+		// Add the XOR of this subarray to the map
+		mp[cx]++;
+	}
+
+	// Return total count of subarrays having XOR of
+	// elements as given value m
+	return ans;
+}
+
+// Driver program to test above function
+
+// C++ Program to print prime factors and their
+// powers using Sieve Of Eratosthenes
+
+// Using SieveOfEratosthenes to find smallest prime
+// factor of all the numbers.
+// For example, if N is 10,
+// s[2] = s[4] = s[6] = s[10] = 2
+// s[3] = s[9] = 3
+// s[5] = 5
+// s[7] = 7
+void sieveOfEratosthenes(ll N, ll s[])
+{
+	// Create a boolean array "prime[0..n]" and
+	// initialize all entries in it as false.
+	vector<bool> prime(N + 1, false);
+
+	// Initializing smallest factor equal to 2
+	// for all the even numbers
+	for (ll i = 2; i <= N; i += 2)
+		s[i] = 2;
+
+	// For odd numbers less than equal to n
+	for (ll i = 3; i <= N; i += 2)
+	{
+		if (prime[i] == false)
+		{
+			// s(i) for a prime is the number itself
+			s[i] = i;
+
+			// For all multiples of current prime number
+			for (ll j = i; j * i <= N; j += 2)
+			{
+				if (prime[i * j] == false)
+				{
+					prime[i * j] = true;
+
+					// i is the smallest prime factor for
+					// number "i*j".
+					s[i * j] = i;
+				}
+			}
+		}
+	}
+}
+
+// Function to generate prime factors and its power
+map<ll, ll> generatePrimeFactors(ll N)
+{
+	map<ll, ll> mp;
+	// s[i] is going to store smallest prime factor
+	// of i.
+	ll s[N + 1];
+
+	// Filling values in s[] using sieve
+	sieveOfEratosthenes(N, s);
+
+	// printf("Factor Power\n");
+
+	ll curr = s[N]; // Current prime factor of N
+	ll dp = 1;		// Power of current prime factor
+
+	// Printing prime factors and their powers
+	while (N > 1)
+	{
+		N /= s[N];
+
+		// N is now N/s[N]. If new N als has smallest
+		// prime factor as curr, increment power
+		if (curr == s[N])
+		{
+			dp++;
+			continue;
+		}
+
+		// printf("%d\t%d\n", curr, dp);
+		mp[curr] = dp;
+		// Update current prime factor as s[N] and
+		// initializing count as 1.
+		curr = s[N];
+		dp = 1;
+	}
+	return mp;
+}
+
+bool isKthBitSet(ll n, ll k)
+{
+	if (n & (1 << k))
+		return true;
+	else
+		return false;
+}
+
+ll getMid(ll s, ll e)
+{
+	return s + (e - s) / 2;
+}
+
+/*  A recursive function to get the sum of
+	values in given range of the array.
+	The following are parameters for this
+	function.
+
+	st       -> Pointer to segment tree
+	node     -> Index of current node in
+				the segment tree .
+	ss & se  -> Starting and ending indexes
+				of the segment represented
+				by current node, i.e., st[node]
+	l & r    -> Starting and ending indexes
+				of range query */
+ll MaxUtil(ll *st, ll ss, ll se, ll l,
+		   ll r, ll node)
+{
+	// If segment of this node is completely
+	// part of given range, then return
+	// the max of segment
+	if (l <= ss && r >= se)
+		return st[node];
+
+	// If segment of this node does not
+	// belong to given range
+	if (se < l || ss > r)
+		return -1;
+
+	// If segment of this node is partially
+	// the part of given range
+	ll mid = getMid(ss, se);
+
+	return max(MaxUtil(st, ss, mid, l, r,
+					   2 * node + 1),
+			   MaxUtil(st, mid + 1, se, l,
+					   r, 2 * node + 2));
+}
+
+/* A recursive function to update the nodes
+   which have the given index in their range.
+   The following are parameters st, ss and
+   se are same as defined
+   above index -> index of the element
+   to be updated.*/
+void updateValue(ll arr[], ll *st, ll ss, ll se,
+				 ll index, ll value, ll node)
+{
+	if (index < ss || index > se)
+	{
+		cout<< "Invalid Input"<< endl;
+		return;
+	}
+
+	if (ss == se)
+	{
+		// update value in array and in segment tree
+		arr[index] = value;
+		st[node] = value;
+	}
+	else
+	{
+		ll mid = getMid(ss, se);
+
+		if (index >= ss && index <= mid)
+			updateValue(arr, st,
+						ss, mid, index,
+						value, 2 * node + 1);
+		else
+			updateValue(arr,
+						st, mid + 1, se,
+						index,
+						value, 2 * node + 2);
+
+		st[node] = max(st[2 * node + 1],
+					   st[2 * node + 2]);
+	}
+	return;
+}
+
+// Return max of elements in range from
+// index l (query start) to r (query end).
+ll getMax(ll *st, ll n, ll l, ll r)
+{
+	// Check for erroneous input values
+	if (l < 0 || r > n - 1 || l > r)
+	{
+		printf("Invalid Input");
+		return -1;
+	}
+
+	return MaxUtil(st, 0, n - 1, l, r, 0);
+}
+
+// A recursive function that constructs Segment
+// Tree for array[ss..se]. si is index of
+// current node in segment tree st
+ll constructSTUtil(ll arr[], ll ss, ll se,
+				   ll *st, ll si)
+{
+	// If there is one element in array, store
+	// it in current node of
+	// segment tree and return
+	if (ss == se)
+	{
+		st[si] = arr[ss];
+		return arr[ss];
+	}
+
+	// If there are more than one elements, then
+	// recur for left and right subtrees and
+	// store the max of values in this node
+	ll mid = getMid(ss, se);
+
+	st[si] = max(constructSTUtil(arr, ss, mid, st,
+								 si * 2 + 1),
+				 constructSTUtil(arr, mid + 1, se,
+								 st, si * 2 + 2));
+
+	return st[si];
+}
+
+/* Function to construct segment tree
+   from given array.
+   This function allocates memory for
+   segment tree.*/
+ll *constructST(ll arr[], ll n)
+{
+	// Height of segment tree
+	ll x = (ll)(ceil(log2(n)));
+
+	// Maximum size of segment tree
+	ll max_size = 2 * (ll)pow(2, x) - 1;
+
+	// Allocate memory
+	ll *st = new ll[max_size];
+
+	// Fill the allocated memory st
+	constructSTUtil(arr, 0, n - 1, st, 0);
+
+	// Return the constructed segment tree
+	return st;
+}
+
+bool isPrime(ll n)
+{
+	// Since 0 and 1 is not prime
+	// return false.
+	if (n == 1 || n == 0)
+		return false;
+
+	// Run a loop from 2 to
+	// square root of n.
+	for (ll i = 2; i * i <= n; i++)
+	{
+		// If the number is divisible by i,
+		// then n is not a prime number.
+		if (n % i == 0)
+			return false;
+	}
+
+	// Otherwise n is a prime number.
+	return true;
+}
+
+ll longest_increasing_subsequence(vector<ll> &arr)
+{
+	vector<ll> ans;
+	ll n = arr.size();
+	for (ll i = 0; i < n; i++)
+	{
+		auto it = upper_bound(ans.begin(), ans.end(), arr[i]);
+		if (it == ans.end())
+		{
+			ans.push_back(arr[i]);
+		}
+		else
+		{
+			*it = arr[i];
+		}
+	}
+	return ans.size();
+}
+
+ll gcdExtended(ll a, ll b, ll *x, ll *y);
+
+// Function to find modulo inverse of b. It returns
+// -1 when inverse doesn't
+// ll modInverse(ll b, ll m)
+// {
+// 	ll x, y; // used in extended GCD algorithm
+// 	ll g = gcdExtended(b, m, &x, &y);
+
+// 	// Return -1 if b and m are not co-prime
+// 	if (g != 1)
+// 		return -1;
+
+// 	// m is added to handle negative x
+// 	return (x % m + m) % m;
+// }
+
+// Function to compute a/b under modulo m
+ll modDivide(ll a, ll b, ll m)
+{
+	a = a % m;
+	ll inv = modInverse(b, m);
+	if (inv == -1)
+		printf("Division not defined");
+	else
+	{
+		ll c = (inv * a) % m;
+		// printf ("Result of division is %d", c) ;
+		return c;
+	}
+}
+
+// C function for extended Euclidean Algorithm (used to
+// find modular inverse.
+ll gcdExtended(ll a, ll b, ll *x, ll *y)
+{
+	// Base Case
+	if (a == 0)
+	{
+		*x = 0, *y = 1;
+		return b;
+	}
+
+	ll x1, y1; // To store results of recursive call
+	ll gcd = gcdExtended(b % a, a, &x1, &y1);
+
+	// Update x and y using results of recursive
+	// call
+	*x = y1 - (b / a) * x1;
+	*y = x1;
+
+	return gcd;
+}
+
+ll gm(ll n, ll b, ll m)
+{
+	ll T = 1;
+	ll e = b % m;
+	ll total = 0;
+	while (n > 0)
+	{
+		if (n & 1 == 1)
+		{
+			total = (e * total + T) % m;
+		}
+		T = ((e + 1) * T) % m;
+		e = (e * e) % m;
+		n = n / 2;
+		// print '{} {} {}'.format(total,T,e)
+	}
+	return total;
+}
+
+bool sortbyCond(const pair<ll, ll> &a,
+				const pair<ll, ll> &b)
+{
+	if (a.first != b.first)
+		return (a.first < b.first);
+	else
+		return (a.second > b.second);
+}
+
+ll query(vector<ll> &tree, ll l, ll r)
+{
+	ll res = 0, n = tree.size() / 2;
+	for (l += n, r += n; l < r; l /= 2, r /= 2)
+	{
+		if (l & 1)
+			res = max(res, tree[l++]);
+		if (r & 1)
+			res = max(res, tree[--r]);
+	}
+	return res;
+}
+
+vector<ll> build(vector<ll> &arr)
+{
+	ll n = arr.size();
+	vector<ll> tree(2 * n);
+	for (ll i = 0; i < n; i++)
+		tree[n + i] = arr[i];
+	for (ll i = n - 1; i > 0; i--)
+		tree[i] = max(tree[i * 2], tree[i * 2 + 1]);
+	return tree;
+}
+
+ll findMaxGCD(ll arr[], ll n, ll k)
+{
+	// Computing highest element
+	ll high = *max_element(arr, arr + n);
+
+	// Array to store the count of divisors
+	// i.e. Potential GCDs
+	ll divisors[high + 1] = {0};
+
+	// Iterating over every element
+	for (ll i = 0; i < n; i++)
+	{
+
+		// Calculating all the divisors
+		for (ll j = 1; j <= sqrt(arr[i]); j++)
+		{
+
+			// Divisor found
+			if (arr[i] % j == 0)
+			{
+
+				// Incrementing count for divisor
+				divisors[j]++;
+
+				// Element/divisor is also a divisor
+				// Checking if both divisors are
+				// not same
+				if (j != arr[i] / j)
+					divisors[arr[i] / j]++;
+			}
+		}
+	}
+
+	// Checking the highest potential GCD
+	for (ll i = high; i >= 1; i--)
+
+		// If this divisor can divide at least k
+		// numbers, it is a GCD of at least one
+		// sub sequence of size k
+		if (divisors[i] >= k)
+			return i;
+}
+
+
+ll turnOffK(ll n, ll k)
+{
+    // k must be greater than 0
+    if (k <= 0) return n;
+ 
+    // Do & of n with a number with all set bits except
+    // the k'th bit
+    return (n & ~(1 << (k - 1)));
+}
+
+ll factorial[MAXN];
+
+
+unsigned long long nCrModPFermat2(unsigned long long n,
+								 ll r, ll p)
+{
+	// If n<r, then nCr should return 0
+	if (n < r)
+		return 0;
+	// Base case
+	if (r == 0)
+		return 1;
+
+	// Fill factorial array so that we
+	// can find all factorial of r, n
+	// and n-r
+	
+
+	return (factorial[n] * modInverse(factorial[r], p) % p * modInverse(factorial[n - r], p) % p) % p;
+}
+ll printKthBit(unsigned ll n, unsigned ll k)
+{
+    return ((n >> (k-1)) % 2);
+}
+
+ll _mergeSort(ll arr[], ll temp[], 
+               ll left, ll right);
+ll merge(ll arr[], ll temp[], 
+          ll left, ll mid, ll right);
+  
+/* This function sorts the input 
+   array and returns the number 
+   of inversions in the array */
+ll mergeSort(ll arr[], ll array_size)
+{
+    ll temp[array_size];
+    return _mergeSort(arr, temp, 0, 
+                      array_size - 1);
+}
+  
+/* An auxiliary recursive function that 
+   sorts the input array and returns the 
+   number of inversions in the array. */
+ll _mergeSort(ll arr[], ll temp[], 
+               ll left, ll right)
+{
+    ll mid, inv_count = 0;
+    if (right > left) 
+    {
+        /* Divide the array into two parts and 
+           call _mergeSortAndCountInv() for 
+           each of the parts */
+        mid = (right + left) / 2;
+  
+        /* Inversion count will be sum of inversions 
+           in left-part, right-part and number of 
+           inversions in merging */
+        inv_count += _mergeSort(arr, temp, 
+                                left, mid);
+        inv_count += _mergeSort(arr, temp, 
+                                mid + 1, right);
+  
+        // Merge the two parts
+        inv_count += merge(arr, temp, 
+                           left, mid + 1, right);
+    }
+    return inv_count;
+}
+  
+/* This funt merges two sorted arrays and 
+   returns inversion count in the arrays.*/
+ll merge(ll arr[], ll temp[], 
+          ll left, ll mid, ll right)
+{
+    ll i, j, k;
+    ll inv_count = 0;
+  
+    // i is index for left subarray
+    i = left;
+  
+    // j is index for right subarray 
+    j = mid; 
+  
+    // k is index for resultant merged 
+    // subarray
+    k = left; 
+  
+    while ((i <= mid - 1) && 
+           (j <= right)) 
+    {
+        if (arr[i] <= arr[j]) 
+        {
+            temp[k++] = arr[i++];
+        }
+        else 
+        {
+            temp[k++] = arr[j++];
+  
+            /* This is tricky -- see above 
+               explanation/diagram for merge()*/
+            inv_count = inv_count + (mid - i);
+        }
+    }
+  
+    /* Copy the remaining elements of left 
+       subarray (if there are any) to temp*/
+    while (i <= mid - 1)
+        temp[k++] = arr[i++];
+  
+    /* Copy the remaining elements of right 
+       subarray (if there are any) to temp*/
+    while (j <= right)
+        temp[k++] = arr[j++];
+  
+    /* Copy back the merged elements to 
+       original array*/
+    for (i = left; i <= right; i++)
+        arr[i] = temp[i];
+  
+    return inv_count;
+}
+
+///////////////////////////
+ll spf[MAXN];
+ 
+// Calculating SPF (Smallest Prime Factor) for every
+// number till MAXN.
+// Time Complexity : O(nloglogn)
+void sieve2()
+{
+    spf[1] = 1;
+    for (ll i=2; i<MAXN; i++)
+ 
+        // marking smallest prime factor for every
+        // number to be itself.
+        spf[i] = i;
+ 
+    // separately marking spf for every even
+    // number as 2
+    for (ll i=4; i<MAXN; i+=2)
+        spf[i] = 2;
+ 
+    for (ll i=3; i*i<MAXN; i++)
+    {
+        // checking if i is prime
+        if (spf[i] == i)
+        {
+            // marking SPF for all numbers divisible by i
+            for (ll j=i*i; j<MAXN; j+=i)
+ 
+                // marking spf[j] if it is not 
+                // previously marked
+                if (spf[j]==j)
+                    spf[j] = i;
+        }
+    }
+}
+ 
+// A O(log n) function returning primefactorization
+// by dividing by smallest prime factor at every step
+vector<ll> getFactorization(ll x)
+{
+    vector<ll> ret;
+    while (x != 1)
+    {
+        ret.push_back(spf[x]);
+        x = x / spf[x];
+    }
+    return ret;
+}
+
+
+
+
+void solve() {
+	ll n; cin>>n;
+	ll d=log2l(n);
+	cout<<binpow(2,d)<<"\n";
+
+}
+
+
+int main()
+{ // {freopen("input.txt", "r", stdin);
+		//freopen("output.txt", "w", stdout);
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int t = 1;
+	
+	cin >> t;
+	
+	while (t--)
+	
+		 solve();
+
+}
+
+
+
