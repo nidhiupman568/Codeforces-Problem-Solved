@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long 
+const int N=1e6+10,INF=0x3f3f3f3f;
+
+vector<int> g[N];
+char s[N];
+int dp[N][2];
+
+void dfs(int u){
+	dp[u][0]=dp[u][1]=0;
+	if(s[u]=='P') dp[u][0]=INF;
+	if(s[u]=='S') dp[u][1]=INF;
+	for(auto v:g[u]){
+		dfs(v);
+		dp[u][0]+=min(dp[v][0],dp[v][1]+1);
+		dp[u][1]+=min(dp[v][1],dp[v][0]+1); 
+	}
+}
+
+signed main(){
+	int t;
+	cin>>t;
+	while(t--){
+		int n;
+		cin>>n;
+		for(int i=1;i<=n;i++) g[i].clear();
+		for(int i=2;i<=n;i++){
+			int x;
+			cin>>x;
+			g[x].push_back(i);
+		}
+		scanf("%s",s+1);
+		dfs(1);
+		cout<<min(dp[1][0],dp[1][1])<<endl;
+	}
+	return 0;
+}
