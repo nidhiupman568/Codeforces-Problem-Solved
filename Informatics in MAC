@@ -1,0 +1,38 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int n,m,k,l,t,a[100010],p1,p2,bd;
+bool v[100010];
+void solve()
+{
+	scanf("%d",&n);
+	for(int i=0;i<=n;++i) v[i]=0;
+	p1=0;
+	bd=0;
+	for(int i=0;i<n;++i)
+	{
+		scanf("%d",&a[i]);
+		if(a[i]<n) v[a[i]]=1;
+		while(v[p1])
+		{
+			++p1;
+			bd=i;
+		}
+	}
+	for(int i=0;i<=n;++i) v[i]=0;
+	p2=0;
+	for(int i=n-1;i>bd;--i)
+	{
+		if(a[i]<n) v[a[i]]=1;
+		while(v[p2]) ++p2;
+	}
+	if(p1==p2) printf("2\n1 %d\n%d %d\n",bd+1,bd+2,n);
+	else printf("-1\n");
+}
+int main()
+{
+	scanf("%d",&t);
+	while(t--) solve();
+	return 0;
+}
