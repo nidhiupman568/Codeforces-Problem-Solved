@@ -1,0 +1,31 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+void tc() {
+	int n; cin >> n;
+	string s; cin >> s;
+	vector<ll> pleft(1), pright(1);
+	for(int i = 0; i < n; i++) {
+		if(s[i] == '<') pleft.push_back(pleft.back() + i);
+		if(s[i] == '>') pright.push_back(pright.back() + i);
+	}
+	int l = 0;
+	int r = 0;
+	for(int i = 0; i < n; i++) {
+		if(s[i] == '<') l++;
+		else r++;
+		if(r <= pleft.size() - 1 - l) {
+			cout << 2 * (pleft[l + r] - pleft[l] - pright[r]) + i + 1 << " ";
+		} else {
+			cout << 2 * ((pleft.back() - pleft[l]) - (pright[r] - pright[r - (pleft.size() - 1 - l) - 1])) + n + i << " ";
+		}
+	}
+	cout << endl;
+}
+
+int main() {
+	ios::sync_with_stdio(false), cin.tie(nullptr);
+	int t; cin >> t;
+	while(t--) tc();
+}
