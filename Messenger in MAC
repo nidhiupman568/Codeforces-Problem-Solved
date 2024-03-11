@@ -1,0 +1,35 @@
+// LUOGU_RID: 149512447
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cassert>
+using namespace std;
+long long dp[2020];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	int T;cin>>T;
+	for(;T--;)
+	{
+		int N,L;
+		cin>>N>>L;
+		vector<pair<int,int> >BA(N);
+		for(int i=0;i<N;i++)cin>>BA[i].second>>BA[i].first;
+		sort(BA.begin(),BA.end());
+		for(int i=0;i<=N;i++)dp[i]=1e18;
+		dp[0]=0;
+		int ans=0;
+		for(auto[b,a]:BA)
+		{
+			for(int i=N-1;i>=0;i--)
+			{
+				long long v=dp[i]+a;
+				if(i==0)v-=b;
+				dp[i+1]=min(dp[i+1],v);
+				if(v+b<=L)ans=max(ans,i+1);
+			}
+		}
+		cout<<ans<<"\n";
+	}
+}
