@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+constexpr int M=2e5+5;
+int n,m,k,d,q[M];ll ans,s[M],dp[M];
+void solve(){
+	cin>>n>>m>>k>>d;ans=1e18;
+	for (int i=1;i<=n;i++){
+		for (int j=1,head=1,tail=0;j<=m;j++){
+			int x;cin>>x;
+			while (head<=tail&&j-q[head]-1>d) head++;
+			dp[j]=j>1?dp[q[head]]+x+1:1;
+			while (head<=tail&&dp[q[tail]]>=dp[j]) tail--;
+			q[++tail]=j;
+		}
+		s[i]=s[i-1]+dp[m];
+		if (i>=k) ans=min(ans,s[i]-s[i-k]);	
+	}
+	printf("%lld\n",ans);
+}
+int main(){
+	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	int T;cin>>T;while (T--) solve();return 0;
+}
