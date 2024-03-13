@@ -1,0 +1,23 @@
+#include<cstdio>
+int T;
+long long n,m,t,p;
+int main(){
+	scanf("%d",&T);
+	while(T--){
+		scanf("%lld%lld",&n,&m);
+		if((n^m)<n)
+			printf("1\n%lld %lld\n",n,m);
+		else{
+			t=1;
+			while(t*2<=n)
+				t*=2;
+			p=1;
+			while(p*2<=n-t)
+				p*=2;
+			if(p<=n-t&&2*p-1>=m)
+				printf("2\n%lld %lld %lld\n",n,p*2-1,m);
+			else
+				printf("-1\n");	
+		}
+	}
+}
