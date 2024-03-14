@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void run() {
+	int n, m, x; cin >> n >> m >> x; x--;
+	set<int> a {x};
+
+	while (m--) {
+		int r; char c; cin >> r >> c;
+		set<int> b;
+		if (c != '1') {
+			for (int i : a) {
+				b.emplace((i + r) % n);
+			}
+		}
+		if (c != '0') {
+			for (int i : a) {
+				b.emplace((i - r + n) % n);
+			}
+		}
+		a = b;
+	}
+	cout << a.size() << '\n';
+	for (int i : a) cout << i+1 << ' ';
+	cout << '\n';
+}
+
+int main() {
+	cin.tie(0)->sync_with_stdio(0);
+	int t; cin >> t; while (t--) run();
+}
