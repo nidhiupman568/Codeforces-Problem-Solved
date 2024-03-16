@@ -1,0 +1,717 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+ll mod = 1e9 + 7;
+ll INF = 1ll << 60;
+
+#define int long long
+#define endl '\n'
+#define all(x) (x).begin(), (x).end()
+
+// return ceil(a, b).
+int ceiling(int a, int b)
+{
+    int val = (a / b) + ((a % b) != 0);
+    return val;
+}
+
+void buildSieve(vector<bool> &sieve, vector<int> &spf)
+{
+    // sieve should be init to true
+    int n = (int)sieve.size() - 1;
+    spf[1] = spf[0] = 1;
+    for (int x = 2; x <= n; x++)
+    {
+        if (!sieve[x])
+        {
+            continue;
+        }
+        spf[x] = x;
+        for (int u = 2 * x; u <= n; u += x)
+        {
+            spf[u] = x;
+            sieve[u] = false;
+        }
+    }
+}
+
+map<int, int> getPNDFromSpf(int x, vector<int> &spf)
+{
+    map<int, int> pnd;
+    while (x > 1)
+    {
+        pnd[spf[x]]++;
+        x /= spf[x];
+    }
+
+    return pnd;
+}
+
+map<int, int> pnd(int x)
+{
+    map<int, int> res;
+    while (x % 2 == 0)
+    {
+        x /= 2;
+        res[2]++;
+    }
+    for (int i = 3; i * i <= x; i++)
+    {
+        while (x % i == 0)
+        {
+            x /= i;
+            res[i]++;
+        }
+    }
+    if (x > 2)
+    {
+        res[x]++;
+    }
+    return res;
+}
+
+void printBin(int n)
+{
+    std::bitset<32> y(n);
+    cout << y << endl;
+}
+
+ll power(ll x, ll y)
+{
+    ll res = 1;
+    while (y > 0)
+    {
+        if (y & 1)
+        {
+            res = res * x;
+            res %= mod;
+        }
+        y = y >> 1;
+        x = (x * x) % mod;
+    }
+    return res % mod;
+}
+
+int modInverse(int x)
+{
+    return power(x, mod - 2);
+}
+
+// returns sum of elmts in vec.
+template <typename T>
+T SumVector(vector<T> &v)
+{
+    int ans = 0;
+    for (auto &it : v)
+    {
+        ans += it;
+    }
+    return ans;
+}
+
+template <typename T>
+T minimum(vector<T> &v)
+{
+    int ans = 1e18;
+    for (auto &it : v)
+    {
+        ans = min(ans, it);
+    }
+    return ans;
+}
+
+template <typename T>
+T maximum(vector<T> &v)
+{
+    int ans = -1e18;
+    for (auto &it : v)
+    {
+        ans = max(ans, it);
+    }
+    return ans;
+}
+
+// returns prefSum of vec.
+template <typename T>
+vector<T> PrefixSum(vector<T> &v)
+{
+    int n = (int)v.size();
+    vector<T> p(n);
+    p[0] = v[0];
+    for (int i = 1; i < n; i++)
+    {
+        p[i] = p[i - 1] + v[i];
+    }
+    return p;
+}
+
+template <typename T>
+void removeDuplicates(vector<T> &v)
+{
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+}
+
+int stringToInt(string s)
+{
+    int n = (int)s.size();
+    reverse(s.begin(), s.end());
+    int ans = 0;
+    for (int i = 0; i < n; i++)
+    {
+        ans = ans + (s[i] - '0') * pow(10, i);
+    }
+    return ans;
+}
+
+vector<int> SuffixMexes(vector<int> &v)
+{
+    int n = (int)v.size();
+    vector<int> suffix(n);
+    vector<int> vis(n + 1);
+    for (int i = n - 1, x = 0; i >= 0; i--)
+    {
+        vis[v[i]] = 1;
+        while (vis[x])
+        {
+            x++;
+        }
+        suffix[i] = x;
+    }
+    return suffix;
+}
+
+template <typename T1, typename T2>
+ostream &operator<<(ostream &os, const map<T1, T2> m)
+{
+    for (auto it = m.begin(); it != m.end(); it++)
+    {
+        os << "{" << it->first << "," << it->second << "} ";
+    }
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const vector<T> vec)
+{
+    int n = vec.size();
+    if (n == 0)
+    {
+        os << "[]" << endl;
+        return os;
+    }
+    os << "[";
+    for (int i = 0; i < n - 1; i++)
+    {
+        os << vec[i] << ", ";
+    }
+    os << vec[n - 1] << "]" << endl;
+    return os;
+}
+
+template <typename T1, typename T2>
+ostream &operator<<(ostream &os, const vector<pair<T1, T2>> vec)
+{
+    int n = vec.size();
+    os << "[";
+    for (int i = 0; i < n - 1; i++)
+    {
+        os << "{" << vec[i].first << ", " << vec[i].second << "} ,";
+    }
+    os << "{" << vec[n - 1].first << ", " << vec[n - 1].second << "}]";
+    return os;
+}
+
+template <typename T1, typename T2>
+ostream &operator<<(ostream &os, const pair<T1, T2> p)
+{
+    os << p.first << " " << p.second;
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const set<T> s)
+{
+    for (auto it : s)
+    {
+        cout << it << " ";
+    }
+    cout << endl;
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const multiset<T> s)
+{
+    for (auto it : s)
+    {
+        cout << it << " ";
+    }
+    cout << endl;
+    return os;
+}
+
+template <typename T>
+istream &operator>>(istream &istream, vector<T> &v)
+{
+    for (auto &it : v)
+    {
+        cin >> it;
+    }
+    return istream;
+}
+
+template <typename T1, typename T2>
+istream &operator>>(istream &istream, vector<pair<T1, T2>> &v)
+{
+    for (auto &it : v)
+    {
+        cin >> it.first >> it.second;
+    }
+    return istream;
+}
+
+int getMSB(int n)
+{
+    return __builtin_clz(n);
+}
+
+int gcd(int a, int b)
+{
+    return (b ? gcd(b, a % b) : a);
+}
+
+void print(vector<int> &v)
+{
+    for (int i : v)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+}
+
+long long squareRoot(long long a)
+{
+    long long l = 0, r = 1e18; // pay attention
+    while (r - l > 1)
+    {
+        long long mid = (l + r) / 2;
+        if (1ll * mid * mid <= a)
+        {
+            l = mid;
+        }
+        else
+        {
+            r = mid;
+        }
+    }
+    return l;
+}
+
+int getNumOnesBinaryRepresentation(int n)
+{
+    return __builtin_popcount(n);
+}
+
+bool isPowerOf2(int x)
+{
+    return getNumOnesBinaryRepresentation(x) == 1;
+}
+
+bool isPowerOfN(int x, int n)
+{
+    map<int, int> fact = pnd(x);
+
+    for (auto it : fact)
+    {
+        if (it.second % n != 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isSubstr(string s, string t)
+{
+    return s.find(t) != string::npos;
+}
+
+bool isBitOn(int x, int bit)
+{
+    return (x & (1 << bit)) != 0;
+}
+//'b'-'a' --> which number in alphabet
+//'4'-'0' --> get int representation
+// i+'0' -> convert int to char
+
+
+struct RMQ_index_Max
+{
+    vector<vector<int>> sparse_table;
+    vector<int> logb2;
+    vector<int> v;
+
+    RMQ_index_Max(vector<int> &B, int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            v.push_back(B[i]);
+        }
+        logb2.resize(n + 1);
+        for (int i = 0; (1 << i) <= n; i++)
+        {
+            logb2[1 << i] = i;
+        }
+        for (int i = 1; i <= n; i++)
+        {
+            logb2[i] = max(logb2[i], logb2[i - 1]);
+        }
+        sparse_table.resize(n + 1, vector<int>(logb2[n] + 1, 1e9 + 7));
+        for (int i = 0; i < n; i++)
+        {
+            sparse_table[i][0] = i;
+        }
+
+        for (int j = 1; j <= logb2[n]; j++)
+        {
+            for (int i = 0; i + (1 << j) - 1 < n; i++)
+            {
+
+                int x = v[sparse_table[i][j - 1]];
+                int y = v[sparse_table[i + (1 << (j - 1))][j - 1]];
+                sparse_table[i][j] = (x > y ? sparse_table[i][j - 1] : sparse_table[i + (1 << (j - 1))][j - 1]);
+            }
+        }
+    }
+    // return idx of min(v[i...j])
+    int query(int i, int j)
+    {
+        if (i > j)
+        {
+            swap(i, j);
+        }
+        int size = j - i + 1;
+        int k = logb2[size];
+        int x = v[sparse_table[i][k]];
+        int y = v[sparse_table[j - (1 << k) + 1][k]];
+        return x > y ? sparse_table[i][k] : sparse_table[j - (1 << k) + 1][k];
+    }
+};
+
+
+struct RMQ_index_Min
+{
+    vector<vector<int>> sparse_table;
+    vector<int> logb2;
+    vector<int> v;
+
+    RMQ_index_Min(vector<int> &B, int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            v.push_back(B[i]);
+        }
+        logb2.resize(n + 1);
+        for (int i = 0; (1 << i) <= n; i++)
+        {
+            logb2[1 << i] = i;
+        }
+        for (int i = 1; i <= n; i++)
+        {
+            logb2[i] = max(logb2[i], logb2[i - 1]);
+        }
+        sparse_table.resize(n + 1, vector<int>(logb2[n] + 1, 1e9 + 7));
+        for (int i = 0; i < n; i++)
+        {
+            sparse_table[i][0] = i;
+        }
+
+        for (int j = 1; j <= logb2[n]; j++)
+        {
+            for (int i = 0; i + (1 << j) - 1 < n; i++)
+            {
+
+                int x = v[sparse_table[i][j - 1]];
+                int y = v[sparse_table[i + (1 << (j - 1))][j - 1]];
+                sparse_table[i][j] = (x < y ? sparse_table[i][j - 1] : sparse_table[i + (1 << (j - 1))][j - 1]);
+            }
+        }
+    }
+    // return idx of min(v[i...j])
+    int query(int i, int j)
+    {
+        if (i > j)
+        {
+            swap(i, j);
+        }
+        int size = j - i + 1;
+        int k = logb2[size];
+        int x = v[sparse_table[i][k]];
+        int y = v[sparse_table[j - (1 << k) + 1][k]];
+        return x < y ? sparse_table[i][k] : sparse_table[j - (1 << k) + 1][k];
+    }
+};
+
+struct Edge {
+	int u, v, w;
+	Edge() : u(0), v(0), w(0) {}
+	Edge(int _u, int _v, int _w) :
+		u(_u), v(_v), w(_w) {}
+		
+	Edge& operator=(const Edge& other) {
+        if (this != &other) { // Check for self-assignment
+            u = other.u;
+            v = other.v;
+            w = other.w;
+        }
+        return *this;
+    }
+    
+    bool operator<(const Edge& other) const {
+        if (u != other.u) return u < other.u;
+        if (v != other.v) return v < other.v;
+        return w < other.w;
+    }
+};
+
+struct Graph {
+	vector<vector<int>> nodes; int n;
+	vector<vector<Edge> > adj;
+	vector<Edge> edges; int m = 0;
+	Graph(int _n) : n(_n), nodes(_n), adj(_n) {}
+
+	void addEdge(int u, int v, int w = 0) {
+		nodes[u].emplace_back(m++);
+		nodes[v].emplace_back(m++);
+		adj[u].emplace_back(u,v,w);
+		adj[v].emplace_back(v,u,w);
+		edges.emplace_back(u, v, w);
+		edges.emplace_back(v, u, w);
+	}
+	
+	//tin[u] = discovery time of u
+	//low[u] = lowest discovery time of a reachable node
+	void bridgeDFS(int cur, int p, vector<bool> &vis, vector<int> &low, vector<int> &tin, int &timer, vector<Edge>& ok) {
+		vis[cur] = true; tin[cur] = low[cur] = timer++;
+		for (auto &x : nodes[cur]) {
+			Edge &e = edges[x];	if (e.v == p) { continue; }
+			if (vis[e.v]) { low[cur] = min(low[cur], tin[e.v]); continue; }
+
+			bridgeDFS(e.v, cur, vis, low, tin, timer,ok);
+			low[cur] = min(low[cur], low[e.v]);
+			if (low[e.v] > tin[cur]){
+			    ok.push_back(e);
+			} //isBridge(x);
+		}
+	}
+
+	void artPointDFS(int cur, int p, vector<bool> &vis, vector<int> &low, vector<int> &tin, int &timer) {
+		vis[cur] = true; tin[cur] = low[cur] = timer++; int c = 0;
+		for (auto &x : nodes[cur]) {
+			Edge &e = edges[x];	if (e.v == p) { continue; }
+			if (vis[e.v]) { low[cur] = min(low[cur], tin[e.v]); continue; }
+
+			artPointDFS(e.v, cur, vis, low, tin, timer);
+			low[cur] = min(low[cur], low[e.v]); c++;
+			if (p != -1 && low[e.v] >= tin[cur]); //isArtPoint(cur);		Might run this for node cur multiple times (once for each child)
+		}
+		if (p == -1 && c > 1); //isArtPoint(cur);
+	}
+
+	void findBridges(vector<Edge>& ok) {
+		int timer = 0; vector<bool> vis(n, false);
+		vector<int> low(n, -1), tin(n, -1);
+		for (int i = 0; i < n; i++)	if (!vis[i])
+			bridgeDFS(i, -1, vis, low, tin, timer, ok);
+	}
+	void findArtPoints() {
+		int timer = 0; vector<bool> vis(n, false);
+		vector<int> low(n, -1), tin(n, -1);
+		for (int i = 0; i < n; i++)	if (!vis[i])
+			artPointDFS(i, -1, vis, low, tin, timer);
+	}
+	
+	void findCycle(int S, int SS, int u, vector<bool>& visited, vector<int> & parent){
+	    visited[u] = true;
+	    if(u == S){
+	        return;
+	    }
+	    for(auto& e : adj[u]){
+	        if(u == SS && e.v == S) continue;
+	        
+	        if(!visited[e.v]){
+	            parent[e.v] = u;
+	            findCycle(S,SS,e.v,visited,parent);
+	        }
+	    }
+	}
+	
+	void solve(){
+	    vector<Edge> ok;
+	    findBridges(ok);
+	    map<Edge,bool> is;
+	    for(auto& e : ok){
+	        is[e] = true;
+	        Edge ee(e.v,e.u,e.w);
+	        is[ee]=true;
+	    }
+	    vector<Edge> good;
+	    for(auto& e : edges){
+	        if(!is[e]){
+	            good.push_back(e);
+	        }
+	    }
+	    Edge best;
+	    int miniW = 1e9;
+	    for(auto e: good){
+	        if(e.w < miniW){
+	            miniW = e.w;
+	            best = e;
+	        }
+	    }
+	    vector<int> parent(n,-1);
+	    parent[best.v] = best.u;
+	    vector<bool> visited(n);
+	    
+	    findCycle(best.u,best.v,best.v,visited,parent);
+	    
+	    vector<int> cycle;
+	    int cur = best.u;
+	    while(parent[cur] != best.u){
+	        cycle.push_back(cur);
+	        cur = parent[cur];
+	    }
+	    cycle.push_back(cur);
+	    cout << miniW << " " << cycle.size() << endl;
+	    for(int v : cycle){
+	        cout << v+1 << " ";
+	    }
+	    cout << endl;
+	    
+	}
+};
+
+vector<int> getDivisors(int x){
+    vector<int> divdo;
+    for(int i = 1; i * i <= x; i++){
+        if(x % i == 0){
+            divdo.push_back(i);
+            if(x/i == i) continue;
+            divdo.push_back(x/i);
+        }
+    }
+    sort(all(divdo));
+    return divdo;
+}
+
+int numMultiplesOfIInrange(int N, int M, int i)
+{
+    return M / i - ceiling(N, i) + 1;
+}
+
+struct Fenwick
+{
+    vector<int> v;
+    vector<int> B;
+    int n;
+
+    Fenwick(vector<int> &p)
+    {
+        int m = (int)p.size();
+        n = m;
+        v.resize(m + 1);
+        for (int i = 1; i <= n; i++)
+        {
+            v[i] = p[i - 1];
+        }
+        B.resize(n + 1, 0);
+        for (int i = 1; i <= n; i++)
+        {
+            init(i, v[i]);
+        }
+    }
+
+    // initialize B. Add val to all ranges covering index i in B.
+    void init(int i, int val)
+    {
+        i++;
+
+        for (; i <= n; i += (i & (-i)))
+        {
+            B[i] += val;
+        }
+    }
+
+    // changes value at index i to val. (v[i] = val)
+    void update(int i, int val)
+
+    {
+        i++;
+        int prev = 0;
+        v[i] += val;
+        for (; i <= n; i += (i & (-i)))
+        {
+            B[i] += (val - prev);
+        }
+    }
+
+    // return v[1] + ... + v[x]
+    int query(int x)
+    {
+        x++;
+        int sum = 0;
+        for (; x > 0; x -= (x & (-x)))
+        {
+            sum += B[x];
+        }
+        return sum;
+    }
+
+    // returns v[i] + ... + v[j]
+    int query(int i, int j)
+    {
+        return query(j) - query(i - 1);
+    }
+};
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    
+    
+    int t;
+    cin>>t;
+    
+    
+    
+    while(t--){
+        int n;
+        cin>>n;
+        
+        if(n & 1){
+            cout<<"NO"<<endl;
+            continue;
+        }
+        cout<<"YES"<<endl;
+        bool toz = false;
+        for(int i = 0; i < n; i+=2){
+            if(toz){
+                cout<<"BB";
+            }
+            else{
+                cout<<"AA";
+            }
+            toz=!toz;
+        }
+        cout<<endl;
+        
+    }
+    
+    
+    
+
+    return 0;
+}
