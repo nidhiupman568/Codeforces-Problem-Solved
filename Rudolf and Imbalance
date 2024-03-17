@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll _=2e5+5;
+ll N,n,m,k,x,y,z,u,v,s,a[_],b[_],i;
+void P(){
+	cin>>k>>n>>m>>v;x=y=z=0;
+	while(--k)cin>>u,u-=v,(u>y?u>x?y=x,x=u,z=v:y=u:0),v+=u;
+	for(i=0;i<n;i++)cin>>a[i];
+	sort(a,a+n);s=x;
+	while(m--){
+		cin>>u;v=upper_bound(a,a+n,z+x/2-u)-a;
+		if(v<n)s=min(s,max(z+x-(u+a[v]),u+a[v]-z));
+		if(v--)s=min(s,max(z+x-(u+a[v]),u+a[v]-z));
+	}
+	cout<<max(s,y)<<'\n';
+}
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	cin>>N;while(N--)P();
+}
