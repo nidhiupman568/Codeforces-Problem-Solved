@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	int T;
+	cin>>T;
+	while(T--){
+		string s;
+		cin>>s;
+		int n=s.size();
+		for(int i=n/2;i>=0;i--){
+			int t=0,res=0;
+			for(int j=0;j+i<n;j++){
+				if(s[j]=='?'||s[j+i]=='?'||s[j]==s[i+j]) t++;
+				else{
+					res=max(res,t);
+					t=0;
+				}
+			}
+			res=max(res,t);
+			if(res>=i){
+				cout<<i*2<<endl;
+				break;
+			}
+		}
+	}
+	return 0;
+}
