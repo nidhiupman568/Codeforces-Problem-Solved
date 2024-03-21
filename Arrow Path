@@ -1,0 +1,17 @@
+#include<iostream>
+using namespace std;
+void work(){
+    int n;
+    cin>>n;
+    string c1,c2;
+    cin>>c1>>c2;
+    for(int i=2;i<n-1;i+=2)
+    if(c2[i]=='<'&&(c1[i-1]=='<'||c1[i+1]=='<')){cout<<"NO\n";return;}
+    cout<<"YES\n";
+}
+int main(){
+    int n;
+ cin>>n;
+ while(n--)
+ work();  
+}
