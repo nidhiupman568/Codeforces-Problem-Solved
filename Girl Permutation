@@ -1,0 +1,35 @@
+#include <iostream>
+#define MAXN 200000
+#define PRIME ((long long)(1e9+7))
+using namespace std;
+long long Pow(long long b, long long e){
+    long long ret = 1;
+    for(; e; e/=2, b=b*b%PRIME)
+        if(e&1)
+            ret = ret * b % PRIME;
+    return ret;
+}
+long long inv(long long n){
+    return Pow(n, PRIME-2);
+}
+int main(){
+    int T, N, m[2], arr[2][MAXN];
+    for(cin >> T; T; T--){
+        cin >> N >> m[0] >> m[1];
+        for(int i=0; i<2; i++)
+            for(int j=0; j<m[i]; j++)
+                cin >> arr[i][j];
+        if(arr[0][0] != 1 || arr[1][m[1]-1] != N || arr[0][m[0]-1] != arr[1][0]){
+            cout << 0 << endl;
+            continue;
+        }
+        long long ans = 1;
+        for(int i=1; i<N; i++)
+            ans = ans * i % PRIME;
+        for(int i=1; i<m[0]; i++)
+            ans = ans * inv(arr[0][i]-1) % PRIME;
+        for(int i=0; i<m[1]-1; i++)
+            ans = ans * inv(N - arr[1][i]) % PRIME;
+        cout << ans << endl;
+    }
+}
