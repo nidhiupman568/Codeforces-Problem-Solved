@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+#define eb emplace_back
+using namespace std;
+typedef long long ll;
+const ll _=4e5+5;
+ll N,n,m,st,ed,x,y,z,a[_],i;vector<ll>v,E[_];
+void P(){
+	cin>>n>>m;queue<ll>q;
+	for(i=0;i<m;i++){
+		cin>>x>>y>>z;v.eb(n+z);
+		E[x].eb(n+z);E[n+z].eb(x);
+		E[y].eb(n+z);E[n+z].eb(y);
+	}
+	cin>>st>>ed;
+	a[st]=0;q.push(st);
+	while(q.size()){
+		x=q.front();q.pop();z=a[x];
+		if(x==ed){cout<<a[x]/2<<'\n';break;}
+		for(auto y:E[x])if(a[y]<0)a[y]=a[x]+1,q.push(y);
+	}
+	for(i=1;i<=n;i++)E[i].clear(),a[i]=-1;
+	for(auto it:v)E[it].clear(),a[it]=-1;
+}
+int main(){
+	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	memset(a,-1,sizeof(a));
+	cin>>N;while(N--)P();
+}
