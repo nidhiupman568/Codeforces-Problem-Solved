@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+#define babizhansturbo ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define fi first
+#define se second
+#define ll long long
+#define int long long
+using namespace std;
+#define all(v) v.begin , v.end
+bool check(ll h){
+    ll k = sqrt(h);
+    return k * k == h;
+}
+ll lcm(ll a , ll b){
+    return a * b / __gcd(a , b);
+}
+ll binpow (ll a , ll n) {
+	if (n == 0)
+		return 1;
+	if (n % 2 == 1)
+		return binpow (a , n - 1) * a;
+	else{
+		ll b = binpow (a , n / 2);
+		return b * b;
+	}
+}
+void solution(){
+    string s;
+    cin >> s;
+    int a = s[0] - '0';
+    int b = s[1] - '0';
+    int c = s[3] - '0';
+    int d = s[4] - '0';
+    int h = a * 10 + b;
+    int m = c*  10 + d;
+    string which = "AM";
+    if(h > 11){
+        which = "PM";
+    }
+    if(h == 0 || h == 12){
+        cout << 12 << ':';
+        if(m < 10){
+            cout << 0 << m << " ";
+        }
+        else{
+            cout << m << " ";
+        }
+        cout << which;
+        return;
+    }
+    if(h % 12 < 10){
+        cout << 0 << h % 12 << ':';
+        if(m < 10){
+            cout << 0 << m << " ";
+        }
+        else{
+            cout << m << " ";
+        }
+        cout << which;
+    }
+    else{
+        cout << h % 12 << ':';
+        if(m < 10){
+            cout << 0 << m << " ";
+        }
+        else{
+            cout << m << " ";
+        }
+        cout << which;
+    }
+}
+signed main(){
+    babizhansturbo
+    int t;
+    cin >> t;
+	while(t--){
+		solution();
+		cout << '\n';
+	}
+}
