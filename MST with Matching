@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n,m,c,fa[21],ans=2e9;
+struct E_{int u,v,w;}e[400];
+int fr(int u){return fa[u]?fa[u]=fr(fa[u]):u;}
+int main(){
+   cin>>n>>c;
+   for(int i=1,w;i<=n;i++)for(int j=1;j<=n;j++)
+   scanf("%d",&w),i<j&&w&&(e[++m]={i,j,w},0);
+   sort(e+1,e+m+1,[](auto x,auto y){
+      return x.w<y.w;
+   });
+   for(int s=0;s<(1<<n);s++){
+      memset(fa,0,sizeof(fa));
+      int val=c*__builtin_popcount(s);
+      for(int i=1,x,y;i<=m;i++)if(s>>e[i].u-1&1||s>>e[i].v-1&1)
+      if((x=fr(e[i].u))!=(y=fr(e[i].v)))fa[x]=y,val+=e[i].w;
+      if(count(fa+1,fa+n+1,0)==1)ans=min(ans,val);
+   }
+   cout<<ans;
+   return 0;
+}
