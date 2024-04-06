@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+
+string s[20],t[20];
+int f[70000][16],g[20][20];
+void solve(){
+  int n,ans=0;cin>>n;
+  for(int i=0;i<n;++i)cin>>s[i]>>t[i];
+  for(int i=0;i<n;++i)for(int j=0;j<n;++j)if(s[i]==s[j]||t[i]==t[j])g[i][j]=1;else g[i][j]=0;
+  memset(f,0,sizeof(f));
+  for(int i=0;i<n;++i)f[1<<i][i]=1;
+  for(int i=0;i<(1<<n);++i)for(int j=0;j<n;++j)if((i&(1<<j))&&f[i][j]){
+    ans=max(ans,1ll*__builtin_popcountll(i));
+    for(int k=0;k<n;++k)if(!(i&(1<<k))&&g[k][j])f[i|(1<<k)][k]=1;
+  }
+  cout<<n-ans<<'\n';
+}
+signed main(){
+  int t;cin>>t;
+  while(t--)solve();
+  return 0;
+}
