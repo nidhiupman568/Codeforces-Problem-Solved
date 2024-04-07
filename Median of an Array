@@ -1,0 +1,718 @@
+#include<iostream>
+#include<algorithm>
+#include <string>
+#include<iomanip>
+#include <map>
+#include<vector>
+#include <cmath>
+#include <fstream>
+#include<set>
+#include<stack>
+#include<queue>
+#include <list>
+#include<cstring>
+#include<unordered_set>
+#include<unordered_map>
+#include<utility>
+#include<memory>
+
+typedef long long ll;
+#define MP make_pair
+#define FR(i,b) for(int i=0;i<b;i++)
+#define pb push_back
+#define int long long
+#define fors(n) for(int i=0;i<n;i++)
+using namespace std;
+const ll m1=1E9+7;
+#define INT_SIZE 30
+#define pi 3.14159265358979323846264338327950
+#define double long double
+
+using namespace std;
+const int m2=998244353;
+// // // // int binarySearch(int arr[], int l, int r, int x)
+// // // // {
+// // // //     while (l <= r) {
+// // // //         int m = l + (r - l) / 2;
+ 
+// // // //         // Check if x is present at mid
+// // // //         if (arr[m] == x)
+// // // //             return m+1;
+ 
+// // // //         // If x greater, ignore left half
+// // // //         if (arr[m] < x)
+// // // //             l = m + 1;
+ 
+// // // //         // If x is smaller, ignore right half
+// // // //         else
+// // // //             r = m - 1;
+// // // //     }
+ 
+// // // //     // If we reach here, then element was not present
+// // // //     return 0;
+// // // // }
+
+// // int binpow(int a, int b) {
+// //     int res = 1;
+// //     while (b > 0) {
+// //         if (b & 1){
+// //             res = (res * a);
+// //         }
+// //         a = a * a;
+// //         b >>= 1;
+// //     }
+// //     return res;
+// // }
+// // ll ma(ll a, ll b){
+// //     if(a>b){
+// //         return a;
+// //     }
+// //     return b;
+// // }
+vector<int> ar[400005];
+// vector<int> cnt(200001);
+int vis[200001],dis[200001],in[200001],out[2000001];
+void bfs(int v){
+    queue<int> q;
+    q.push(v);
+    vis[v]=1;
+    while(!q.empty()){
+        int p=q.front();
+        vis[p]=1;
+        q.pop();
+        for(auto it:ar[p]){
+            if(vis[it]==0){
+                dis[it]=dis[p]+1;
+                q.push(it);
+            }
+        }
+    }
+}
+vector<int> temp;
+vector<int> colour(200000);
+int cnt=0;
+int timer=1;
+vector<int> ans(2e5+10);
+vector<set<int>> dp(2e5+10);
+void dfs(int v){
+    vis[v]=1;
+    for(int child:ar[v]){
+        if(vis[child]==0){
+            vis[child]=1;
+            dfs(child);
+        }
+    }
+}
+// int ans=0;
+// void dfs1(int v){
+//     vis[v]=1;
+//     //temp.push_back(v);
+//     int c=0;
+//     for(int child:ar[v]){
+//         //cout<<child<<" ";
+//         if(vis[child]==0){
+//             //vis[child]=1;
+//             //dp[child][0]=dp[v][1];
+//             //dp[child][1]=dp[v][0]+dp[v][1];
+//             dfs1(child);
+//         }
+//         else{
+//             c++;
+//         }
+//         cout<<c<<" ";
+//         if(c==ar[v].size()){
+//             ans+=(dp[v][0]+dp[v][1]);
+//         }
+//     }
+//     //return false;
+// }
+// // // // int max(int a,int b){
+// // // //     if(a>b){
+// // // //         return a;
+// // // //     }
+// // // //     return b;
+// // // // }
+// // // vector<int> vimp;
+// int fcnt=0;
+// bool q55=false;
+// vector<int> vans;
+// bool dfs(int v,int par){
+//     vis[v]=1;
+//     //int p=0;
+//         for(auto child:ar[v]){
+//             if(!q55 && vis[child.first]==0){
+//                 vans.pb(child.first);
+//                 //dis[child]=dis[v]+1;
+//                 vis[child.first]=1;
+//                 dfs(child.first,v);
+//             }
+//             else{
+//                 if( child.first!=par){
+//                     vans.pb(child.first);
+//                     //break;
+//                     return true;
+//                     // break;
+//                 }
+//             }
+//         }
+//     return q55;
+// }
+
+
+// // // int dis1[200000+1],dis2[200001];
+// // // void dfs5 (int v){
+// // //     vis[v]=1;
+// // //     for(int child:ar[v]){
+// // //         if(vis[child]==0){
+// // //             dis1[child]=dis1[v]+1;
+// // //             dfs5(child);
+// // //         }
+// // //     }
+// // // }
+// // // void dfs6 (int v){
+// // //     vis[v]=1;
+// // //     for(int child:ar[v]){
+// // //         if(vis[child]==0){
+// // //             dis2[child]=dis2[v]+1;
+// // //             dfs6(child);
+// // //         }
+// // //     }
+// // // }
+// // // bool isprime(int n){
+// // //     for(int i=2;i*i<=n;i++){
+// // //         if(n%i==0){
+// // //             return false;
+// // //         }
+// // //     }
+// // //     return true;
+// // // }
+ 
+
+// // bool prime[100000];
+// // map<int,int> mp;
+// // map<int,int> mp1;
+// // void SieveOfEratosthenes(int n)
+// // {
+// //     for(int i=2;i<=n;i++){
+// //         if(prime[i]==0){
+// //             for(int j=2*i;j<=n;j+=i){
+// //                 prime[j]=1;
+// //             }
+// //         }
+// //     }
+// // }
+// // // __int128 nCr(__int128 n, __int128 r)
+// // // {
+// // //     // Optimization for the cases when r is large
+// // //     if (r > n - r)
+// // //         r = n - r;
+ 
+// // //     // The array C is going to store last row of
+// // //     // pascal triangle at the end. And last entry
+// // //     // of last row is nCr
+// // //     __int128 C[r + 1];
+// // //     memset(C, 0, sizeof(C));
+ 
+// // //     C[0] = 1; // Top row of Pascal Triangle
+ 
+// // //     // One by constructs remaining rows of Pascal
+// // //     // Triangle from top to bottom
+// // //     for (int i = 1; i <= n; i++) {
+ 
+// // //         // Fill entries of current row using previous
+// // //         // row values
+// // //         for (int j = min(i, r); j > 0; j--)
+ 
+// // //             // nCj = (n-1)Cj + (n-1)C(j-1);
+// // //             C[j] = (C[j] + C[j - 1]);
+// // //     }
+// // //     return C[r];
+// // // }
+// // // int gcd(int a, int b)
+// // // {
+// // //     while (a > 0 && b > 0) {
+// // //         if (a > b) {
+// // //             a = a % b;
+// // //         }
+// // //         else {
+// // //             b = b % a;
+// // //         }
+// // //     }
+// // //     if (a == 0) {
+// // //         return b;
+// // //     }
+// // //     return a;
+// // // }
+// // // const int m1=1e9+7;
+// // // template <typename T>
+// // // pair<T, bool> get_nth_element(set<T>& set_name, int index)
+// // // {
+// // //     pair<T, bool> val;
+// // //     if (set_name.size() > index) {
+// // //         auto it = next(set_name.begin(), index);
+// // //         val.first = *it;
+// // //         val.second = true;
+// // //     }
+// // //     else
+// // //         val.second = false;
+// // //     return val;
+// // // }
+
+// // // // Comparator function to sort pairs
+// // // // according to second value
+// // // bool cmp(pair<int, int>& a,
+// // //         pair<int, int>& b)
+// // // {
+// // //     return a.second < b.second;
+// // // }
+ 
+// // // // Function to sort the map according
+// // // // to value in a (key-value) pairs
+// // // void sorti(map<int, int>& M)
+// // // {
+ 
+// // //     // Declare vector of pairs
+// // //     vector<pair<int, int> > A;
+ 
+// // //     // Copy key-value pair from Map
+// // //     // to vector of pairs
+// // //     for (auto& it : M) {
+// // //         A.push_back(it);
+// // //     }
+ 
+// // //     // Sort using comparator function
+// // //     sort(A.begin(), A.end(), cmp);
+ 
+// // //     // Print the sorted value
+// // //     for (auto& it : A) {
+// // //         cout<<it.first<<" ";
+// // //     }
+// // // }
+// // // int vis2[1001][1001];
+// // // int dx[]={-1,0,1,0};
+// // // int dy[]={0,-1,0,1};
+// // // int n,m;
+// // // bool isvalid(int x,int y ){
+// // //     if(x<1 || x>n || y<1 || y>m){
+// // //         return false;
+// // //     }
+// // //     if(vis2[x][y]==1){
+// // //         return false;
+// // //     }
+// // //     if(arr[x][y]==0){
+// // //         return false;
+// // //     }
+// // //     return true;
+// // // }
+// // // void dfs2(int x,int y){
+// // //     vis2[x][y]=1;
+// // //     for(int i=0;i<4;i++){
+// // //         if(isvalid(x+dx[i],y+dy[i])){
+// // //             dfs2(x+dx[i],y+dy[i]);
+// // //         }
+// // //     }
+// // // }
+// // // int dp[1001][100001];
+// // // int binexp(int a, int b, int m) {
+// // //     a %= m;
+// // //     int res = 1;
+// // //     while (b > 0) {
+// // //         if (b & 1)
+// // //             res = res * a % m;
+// // //         a = a * a % m;
+// // //         b >>= 1;
+// // //     }
+// // //     return res;
+// // // }
+// // // const long long INF=9999999999999999;
+// // // void dijkstra(int s, vector<int> & d, vector<int> & p,int n1) {
+// // //     int n = n1+1;
+// // //     d.assign(n, INF);
+// // //     p.assign(n, -1);
+// // //     d[s] = 0;
+// // //     set<pair<int, int>> q;
+// // //     q.insert({0, s});
+// // //     while (!q.empty()) {
+// // //         int v = q.begin()->second;
+// // //         q.erase(q.begin());
+// // //         for (auto edge : ar[v]) {
+// // //             int to = edge.first;
+// // //             int len = edge.second;
+
+// // //             if (d[v] + len < d[to]) {
+// // //                 q.erase({d[to], to});
+// // //                 d[to] = d[v] + len;
+// // //                 p[to] = v;
+// // //                 q.insert({d[to], to});
+// // //             }
+// // //         }
+// // //     }
+// // // }
+// // // vector<int> restore_path(int s, int t, vector<int> const& p) {
+// // //     vector<int> path;
+// // //     for (int v = t; v != s; v = p[v])
+// // //         path.push_back(v);
+// // //     path.push_back(s);
+
+// // //     reverse(path.begin(), path.end());
+// // //     return path;
+// // // }
+// // int gcd(int a, int b)
+// // {
+// //     return b == 0 ? a : gcd(b, a % b);   
+// // }
+
+// // vector<vector<int>> vres;
+// // int in[200001];
+// // void kahn (int n){
+// //     priority_queue<int,vector<int>,greater<int> > q;
+// //     vector<int> v;
+// //     for(int i=1;i<=n;i++){
+// //         if(in[i]==0){
+// //             q.push(i);
+// //             v.push_back(i);
+// //         }
+// //     }
+// //     vres.pb(v);
+// //     while(!q.empty()){
+// //         int curr=q.top();
+// //         vector<int> v;
+// //         q.pop();
+// //         for(int node:ar[curr]){
+// //             in[node]--;
+// //             if(in[node]==0){
+// //                 v.push_back(node);
+// //                 q.push(node);
+// //             }
+// //         }
+// //         if(v.size()>0) vres.pb(v);
+// //     }
+// // }
+
+// // int countSubsequencesWithSumDivisibleByK(vector<int>& arr, int k) {
+// //     int n = arr.size();
+    
+// //     // Initialize a map to store the count of remainders
+// //     unordered_map<int, int> remainderCount;
+    
+// //     int sum = 0; // Initialize the current sum
+// //     int result = 0; // Initialize the result
+    
+// //     for (int i = 0; i < n; i++) {
+// //         sum += arr[i];
+        
+// //         // Calculate the remainder when the sum is divided by k
+// //         int remainder = ((sum % k) + k) % k;
+        
+// //         // If remainder is 0, it's divisible by k
+// //         if (remainder == 0) 
+// //             result++;
+        
+// //         // If there is a previous remainder in the map, add its count to the result
+// //         if (remainderCount.find(remainder) != remainderCount.end())
+// //             result += remainderCount[remainder];
+        
+// //         // Update the count of the current remainder
+// //         remainderCount[remainder]++;
+// //     }
+// //     return result;
+// // }
+// // bool isprime(int n){
+// //     for(int i=2;i*i<=n;i++){
+// //         if(n%i==0){
+// //             return false;
+// //         }
+// //     }
+// //     return true;
+// // }
+unsigned long long power(unsigned long long x,
+                                  int y )
+{
+    unsigned long long res = 1; // Initialize result
+    x = x ; // Update x if it is more than or
+    // equal to p
+ 
+    while (y > 0)
+    {
+        // If y is odd, multiply x with result
+        if (y & 1){
+            res = (res * x);
+        }
+        // y must be even now
+        y = y >> 1; // y = y/2
+        x = (x * x) ;
+        //x%=m1;
+    }
+    return res;
+}
+const int N=1000005;
+int factorialNumInverse[N + 1];
+int naturalNumInverse[N + 1];
+int fact[N + 1];
+void InverseofNumber(int p)
+{
+    naturalNumInverse[0] = naturalNumInverse[1] = 1;
+    for (int i = 2; i <= N; i++)
+        naturalNumInverse[i]=naturalNumInverse[p % i] * (p - p / i) % p;
+}
+void InverseofFactorial(int p)
+{
+    factorialNumInverse[0] = 1;
+    factorialNumInverse[1] = 1;
+    for (int i = 2; i <= N; i++)
+        factorialNumInverse[i] = (naturalNumInverse[i]%p * factorialNumInverse[i - 1]%p) % p;
+}
+void factorial(int p)
+{
+    fact[0] = 1;
+    for (int i = 1; i <= N; i++) {
+        fact[i] = (fact[i - 1] * i) % p;
+        fact[i]%=p;
+    }
+}
+int Binomial(int N, int R, int p)
+{
+    ll ans = ((fact[N]%p * factorialNumInverse[R]%p)% p * factorialNumInverse[N - R]%p)% p;
+    return ans%p;
+}
+int gcd(int a, int b)
+{
+    return b == 0 ? a : gcd(b, a % b);    
+}
+
+// ////SEGTREE START
+// //// TAKE CARE OF MERGE FUNCTION AND DEFAULT VALUE
+// int left(int index){
+//     return (2*index);
+// }
+// int right(int index){
+//     return (2*index+1);
+// }
+// int merge(int left,int right){
+//     return min(left,right);
+// }
+// int mer(int left,int right){
+//     return left+right;
+// }
+// int default_value(){
+//     return 1e9;
+// }
+// //O(n)
+// void build(int start,int end,int index,vector<int>& sgt,vector<int> & arr){
+//     if(start==end){
+//         sgt[index]=arr[start];
+//         //cout<<sgt[index]<<'\n';
+//         return;
+//     }
+//     int mid=(start+end)/2;
+//     build(start,mid,left(index),sgt,arr);// build left part
+//     build(mid+1,end,right(index),sgt,arr);// build right part
+//     sgt[index]=merge(sgt[left(index)],sgt[right(index)]);//left and right part's answers
+//     //cout<<sgt[index]<<'\n';
+// }
+// //O(logn)
+// void point_update(int start,int end,int index,vector<int>& sgt,int pos){
+//     if(start==end){//reached your position
+//         sgt[index]=(1^sgt[index]);
+//         return;
+//     }
+//     int mid=(start+end)/2;
+//     if(pos<=mid){
+//         point_update(start,mid,left(index),sgt,pos);//update left side
+//     }
+//     else{
+//         point_update(mid+1,end,right(index),sgt,pos);//update right side;
+//     }
+//     sgt[index]=merge(sgt[left(index)],sgt[right(index)]);// update my current node after my children are updated
+// }
+// void apply(int start,int end,int index,vector<int>& sgt,vector<int> & lazy,int x){
+//     sgt[index]+=x;
+//     lazy[index]+=x;
+// }
+// void pushdown(int start,int end,int index,vector<int>& sgt,vector<int>& lazy){
+//     if(start!=end){
+//         int mid=(start+end)/2;
+//         apply(start,mid,left(index),sgt,lazy,lazy[index]);
+//         apply(mid+1,end,right(index),sgt,lazy,lazy[index]);
+//     }
+//     lazy[index]=0;
+// }
+// //O(logn)
+// void range_update(int start,int end,int index,vector<int>& sgt,vector<int> & lazy,int l,int r,int x){
+//     if(lazy[index]!=0){
+//         pushdown(start,end,index,sgt,lazy);
+//     }
+//     //disjoint case
+//     if(start>r || end<l){
+//         return;
+//     }
+
+//     // complete overlap
+//     if(l<=start && end<=r){
+//         apply(start,end,index,sgt,lazy,x);
+//         return;
+//     }
+
+//     // partial overlap
+//     int mid=(start+end)/2;
+//     range_update(start,mid,left(index),sgt,lazy,l,r,x);
+//     range_update(mid+1,end,right(index),sgt,lazy,l,r,x);
+//     sgt[index]=merge(sgt[left(index)],sgt[right(index)]);
+// }
+// //O(logn)
+// int maximum(int a,int b){
+//     if(a>b){
+//         return a;
+//     }
+//     return b;
+// }
+// int query(int start,int end,int index,vector<int>& sgt,int val,int ma){
+//     //complete overlap (l....start....end....r)
+//     // if(l<=start && r>=end){
+//     //     return sgt[index];
+//     // }
+//     // //disjoint (start...end...l....r) (l....r... start...end)
+//     // if(end<l ||r<start){
+//     //     return default_value();
+//     // }
+//     // //partial overlap
+//     // int mid=(start+end)/2;
+//     // int leftAns=query(start,mid,left(index),sgt,l,r);
+//     // int rightAns=query(mid+1,end,right(index),sgt,l,r);
+//     // return merge(leftAns,rightAns);
+//     // cout<<start<<" "<<ma<<" "<<val;
+//     if(start==end && start<=ma){
+//         if(sgt[index]>val){
+//             return 1;
+//         }
+//         else{
+//             return 0;
+//         }
+//     }
+//     else if(start==end){
+//         return 0;
+//     }
+//     if(start>val || end<0){
+//         return 0;
+//     }
+//     if(sgt[index]>val){
+//         return maximum(0,(ma-start+1));
+//     }
+//     else{
+//         int mid=(start+end)/2;
+//         //cout<<mid<<" ";
+//         int l=query(start,mid,left(index),sgt,val,min(mid,ma));
+//         int r=query(mid+1,end,right(index),sgt,val,min(end,ma));
+//         //cout<<l<<" "<<r<<" ";
+//         return mer(l,r);
+//     }
+//     //return 0;
+    
+// }
+// int range_query(int start,int end,int index,vector<int>& sgt,vector<int> & lazy,int l,int r){
+//     if(lazy[index]!=0){
+//         pushdown(start,end,index,sgt,lazy);
+//     }
+
+//     //disjoint case
+//     if(start>r || end<l){
+//         return default_value();
+//     }
+
+//     //complete overlap
+//     if(l<=start && end<=r){
+//         return sgt[index];
+//     }
+
+//     //partial overlap
+//     int mid=(start+end)/2;
+//     int lval=range_query(start,mid,left(index),sgt,lazy,l,r);
+//     int rval=range_query(mid+1,end,right(index),sgt,lazy,l,r);
+//     return merge(lval,rval);
+// }
+// //// SEGTREE END
+
+// // int Joshua(vector<int> person, int k, int index)
+// // {
+// //     if (person.size() == 1) {
+// //         //cout<<person[0]<<" ";
+// //         return person[0];
+// //     }
+// //     index = ((index + k) % person.size());
+// //     person.erase(person.begin() + index);
+// //     // for(auto it:person){
+// //     //     cout<<it<<" ";
+// //     // }
+// //     int q=Joshua(person, k, index);
+// //     return q;
+// // }
+// bool check(int m,vector<int> &a){
+//     set<pair<int,int>> sp;
+//     sp.insert({0,-1});
+//     int sum=0,j=0;
+//     vector<int> dp(a.size(),1e15);
+//     for(int i=0;i<a.size();i++){
+//         dp[i]=sp.begin()->first+a[i];
+//         sp.insert({dp[i],i});
+//         sum+=a[i];
+//         while(sum>m){
+//             sum-=a[j];
+//             j++;
+//             if(j>1){
+//                 sp.erase({dp[j-2],j-2});
+//             }
+//             else if(j==1){
+//                 sp.erase({0,-1});
+//             }
+//         }
+//     }
+//     //cout<<m<<" ";
+//     // for(int i=0;i<a.size();i++){
+//     //     cout<<dp[i]<<" ";
+//     // }
+//     // cout<<'\n';
+//     int lfsum=0;
+//     for(int i=a.size()-1;i>=0;i--){
+//         int temp=dp[i];
+//         if(i!=a.size()-1){
+//             lfsum+=a[i+1];
+//         }
+//         int t1=max(temp,lfsum);
+//         if(t1<=m){
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+int log_a_to_base_b(int a, int b)
+{
+    return log2(a) / log2(b);
+}
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t=1;
+    cin>>t;
+    for(int i=0;i<t;i++){
+        int n;
+        cin>>n;
+        int a[n];
+        map<int,int>mp;
+        for(int i=0;i<n;i++){
+            cin>>a[i];
+            mp[a[i]]++;
+        }
+        sort(a,a+n);
+        int p=(n+1)/2;
+        p--;
+        int cnt=0;
+        int req=a[p];
+        for(int i=p;i<n;i++){
+            if(a[i]==req){
+                cnt++;
+            }
+        }
+        cout<<cnt<<'\n';
+    }
+}
+
