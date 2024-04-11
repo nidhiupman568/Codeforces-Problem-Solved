@@ -1,0 +1,15 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+
+int T,a,b,c,d;
+
+int main(){
+	cin>>T;
+	while(T--){
+		cin>>a>>b>>c>>d;
+		int ans=a/2+b/2+c/2+d/2+(a%2 && b%2 && c%2);
+		cout<<ans<<endl;
+	}
+	return 0;
+}
