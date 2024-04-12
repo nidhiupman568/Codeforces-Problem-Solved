@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n,q[5005];
+char str[5005];
+
+bool check (int x) {
+	int v=1,b=0,e=0;
+	for (int i=1;i<=n;i++) {
+		if (str[i]!='0'+v) {
+			q[e++]=i; v^=1;
+		}
+		if (b<e&&q[b]+x-1==i) v^=1,b++;
+	}
+	if (b<e) return false;
+	return true;
+}
+
+int main () {
+	
+	int t; scanf ("%d",&t);
+	while (t--) {
+		scanf ("%d\n%s",&n,str+1);
+		for (int i=n;i>0;i--) {
+			if (check (i)) {
+				printf ("%d\n",i);
+				break;
+			}
+		}
+	}
+	
+	return 0;
+}
