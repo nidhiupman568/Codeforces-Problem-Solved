@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+typedef long long int ll;
+using namespace std;
+int main(){
+  int t;
+  cin>>t;
+  while(t--){
+ll n,k,ans=0,sum=0;
+cin>>n>>k;
+ll a[n];
+for(int i=0;i<n;i++){
+  cin>>a[i];sum+=a[i];
+}
+if(k>=sum)cout<<n<<endl;
+else{
+ll c=k/2+k%2;
+ll d=k/2;
+int i=0;
+while(a[i]-c<=0 && i<n){
+ans++;
+c-=a[i];
+i++;
+}
+int j=n-1;
+while(a[j]-d<=0 && j>=i){
+  ans++;
+  d-=a[j];
+  j--;
+}
+cout<<ans<<endl;
+}}}
