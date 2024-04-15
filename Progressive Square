@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+using namespace std;  
+ 
+ 
+ 
+#define ll long long
+#define ash(i,n) for(long long i=0;i<n;i++)  
+#define Asc(v) sort(v.begin(),v.end());
+#define vi vector<ll>
+#define vst vector<string>
+#define vvi vector<vector<ll>>
+#define vii vector<pair<ll,ll>>
+#define vch vector<char>
+#define ppi pair<ll,ll>
+ 
+#define mii map<ll,ll>
+#define mch map<char,ll>
+#define MOD 1000000007
+#define pf push_front
+ 
+#define Trav(x) x.begin(),x.end()
+#define rTrav(x) x.rbegin(), x.rend()
+#define lb lower_bound
+#define ub upper_bound
+#define each(a,x) for(auto a:x)  
+#define nwl cout<<"\n";
+#define ppp(xx) cout<<xx<<"\n";
+ 
+ 
+ 
+ 
+ 
+void Maddy(){
+  ll n,a,b;
+  cin>>n>>a>>b;
+  vi v(n*n);
+  ll mi=1e15;
+  ash(i,n*n){
+    cin>>v[i];
+    mi=min(mi,v[i]);
+  }
+  vi vv;
+  ash(i,n){
+  vv.push_back(mi);
+  mi+=a;
+  }
+  vi tot;
+  for(auto it:vv){
+    //vi temp;
+    ll x=it;
+    for(ll j=0;j<n;j++){
+      tot.push_back(x);
+      x+=b;
+    }
+  }
+  Asc(v)
+  Asc(tot)
+  ash(i,n*n){
+    if(v[i]!=tot[i]){
+      cout<<"NO"<<endl;
+      return;
+    }
+  }
+  cout<<"YES"<<endl;
+ 
+ 
+  
+ 
+  
+  
+  
+ 
+}
+ 
+ 
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+  freopen("input.txt","r",stdin);
+  freopen("output.txt","w",stdout);
+#endif 
+  ll Shine;
+  cin>>Shine;
+  while(Shine--){
+      Maddy();
+  }
+  return 0;
+ 
+}
