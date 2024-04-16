@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+#include<iomanip>
+using namespace std;
+//!ABDULLAH.....
+//**__NOTHING IS IMPOSSIBLE__**
+#define pb push_back
+#define ll long long
+#define endl '\n'
+const int N = 1e5 + 1;
+const int PRI =1e6 + 1;
+const ll INF = 1e18 + 1;
+const ll mod = 1e9 + 7;
+int Test_CASES=1;
+#define Savage ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0)
+//==========================================start code==============================================================
+ 
+void FORCES()
+{
+    int n, a, b;
+    cin >> n >> a >> b;
+ 
+    if (2 * a <= b)
+    {
+        cout << n * a << endl;
+    }
+    else
+    {
+        int min_cost = (n / 2) * b + (n % 2) * a;
+        cout << min_cost << endl;
+    }
+}
+int main()
+{
+    Savage;
+    cin >> Test_CASES;
+    while(Test_CASES--)
+        FORCES();
+    return 0;
+}
