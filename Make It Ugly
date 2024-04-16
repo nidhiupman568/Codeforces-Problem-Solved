@@ -1,0 +1,18 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a[301000],n;
+void sol(){
+	scanf("%d",&n);
+	int p=0,ans=n+3;
+	for(int i=1;i<=n;i++){
+		scanf("%d",&a[i]);
+		if(a[i]!=a[1])ans=min(ans,i-1-p),p=i; 
+	}
+	ans=min(ans,n-p);
+	if(ans==n)puts("-1");
+	else printf("%d\n",ans);
+}
+int main(){
+	int T;scanf("%d",&T);while(T--)sol(); 
+	return 0;
+}
