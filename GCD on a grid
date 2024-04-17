@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+int x,a,N,M,T,g,i,j,k,A[101][101],B[101][101];
+#define r for(i=0;i<N;i++)for(j=0;j<M;j++)
+#define c cin>>
+main(){
+cin>>T;while(T--){
+cin>>N>>M;
+r cin>>A[i][j];
+auto D=[](int d){
+B[0][0]=++x;
+r if(B[i][j]==x)B[i+1][j]=A[i+1][j]%d?-1:x,B[i][j+1]=A[i][j+1]%d?-1:x;
+if(B[N-1][M-1]==x)a=max(a,d);
+};
+a=1,g=A[0][0];
+for(k=1;k*k<=g;k++)if(g%k==0)D(k),D(g/k);
+cout<<a<<'\n';
+}
+}
