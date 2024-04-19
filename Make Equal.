@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define yy cout<<"YES"<<endl
+#define nn cout<<"NO"<<endl
+#define ll long long
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define vll vector<long long>
+#define mapii map<int,int>
+#define mapci map<char,int>
+#define f0(i,n) for(int i=0;i<n;i++)
+#define f1(i,n) for(int i=1;i<=n;i++)
+#define wh(t) int t; cin>>t; while(t--)
+
+int main(){
+	fastio;
+	wh(t){
+        int n, mini = INT_MAX;
+        cin >> n;
+        vi a(n);
+        f0(i,n) {
+            cin >> a[i];
+            mini = min(mini, a[i]);
+        }
+        f1(i,n-2){
+            if(a[i] >= a[i-1] && a[i] >= a[i+1]){
+                a[i]--;
+            }
+        }
+        if(a[0] == a[n-1] && a[0] == mini) yy;
+        else nn;
+    }
+	return 0;
+}
