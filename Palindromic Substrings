@@ -1,0 +1,45 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+#define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define yy cout<<"YES"<<endl
+#define nn cout<<"NO"<<endl
+#define ll long long
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define vll vector<long long>
+#define mapii map<int,int>
+#define mapci map<char,int>
+#define f0(i,n) for(int i=0;i<n;i++)
+#define f1(i,n) for(int i=1;i<=n;i++)
+#define wh(t) int t; cin>>t; while(t--)
+
+int main(){
+	fastio;
+	wh(t){
+		int n;
+		cin >> n;
+		string s;
+		cin >> s;
+		if(n == 1) {
+			cout << "Bob" << endl;
+			continue;
+		}
+		int zeroes = 0, ones = 0;
+		for(char c : s) {
+			if(c == '0') zeroes++;
+			else ones++;
+		}
+		int diff = abs(zeroes - ones);
+		// if (diff >= 2 && n % 2 == 0) cout << "Alice" << endl;
+		if(n % 2 == 0){
+			if(diff >= 2) cout << "Alice" << endl;
+			else cout << "Bob" << endl;
+		}
+		else{
+			if(diff >= 2) cout << "Bob" << endl;
+			else cout << "Alice" << endl;
+		}
+	}
+	return 0;
+}
