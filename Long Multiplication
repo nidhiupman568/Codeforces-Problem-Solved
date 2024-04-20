@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+string a,b; char d;
+int main(){
+	int t; cin>>t;
+	while(t--){
+		cin>>a>>b; int l=0;
+		while(a[l]==b[l]) ++l;
+		if(a[l]<b[l]) swap(a[l],b[l]);
+		for(int i=l+1;i<a.size();++i){
+			if(a[i]>b[i]){d=a[i]; a[i]=b[i]; b[i]=d;}
+		}cout<<a<<endl<<b<<endl;
+	}
+	return 0;
+}
