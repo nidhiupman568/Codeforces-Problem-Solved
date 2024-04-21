@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include<iomanip>
+#include <queue>
+#include <vector>
+#include <climits>
+ 
+#define Sherbinoo \
+ios::sync_with_stdio(0)\
+,cin.tie(0),cout.tie(0);
+#define ll long long
+#define dd double
+#define loop1(n) for(int i=0;i<n;i++)
+#define loop2(n) for(int j=n-1;j>=0;j--)
+#define foredge(v)for(auto it:v)
+#define count int counter=0
+#define pb push_back
+#define pool bool flag=0
+#define yes cout<<"YES\n"
+#define no cout<<"NO\n"
+#define endl "\n"
+// 48-57 -> 0-9  65-90 -> A-Z 97-122 -> a-z
+//cout << fixed<<setprecision// for the digits
+using namespace std;
+ 
+int main() {
+    Sherbinoo;
+    cout<<"safety";
+ 
+}
