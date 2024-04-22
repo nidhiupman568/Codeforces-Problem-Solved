@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+int t;string s;
+#define R return
+main(){
+ auto S=[&]{
+  auto C=[&](int l,int r){
+   if(l>r)
+    R 0;
+   for(int i=l;i<=r;i++)
+    if(s[i]!=s[l+r-i])
+     R 1;
+   R 0;
+  };
+  int n=s.size();
+  if(C(0,n-1))
+   R void(cout<<"YES\n1\n"+s+"\n");
+  for(int i=n/2-3;i<n/2;i++)
+   if(C(0,i)&C(i+1,n-1))
+    R void(cout<<"YES\n2\n"+s.insert(i+1," ")+"\n");
+  puts("NO");
+ };
+ for(cin>>t;cin>>s;)S();
+}
