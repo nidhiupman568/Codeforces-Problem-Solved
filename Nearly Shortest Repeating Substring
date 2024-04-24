@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+#define endl "\n"
+
+void solve()
+{
+	int n;std::cin>>n;
+	std::string s;std::cin>>s;
+	for(int i=1;i<=n;i++)
+	{
+		if(n%i==0)
+		{
+			for(int j=0;j<n&&j<=i;j+=i)
+			{
+				int ans=0;
+				for(int k=0;k<n;k++)
+				{
+					ans+=(s[j+k%i]!=s[k]);
+				}
+				if(ans<=1)
+				{
+					std::cout<<i<<endl;
+					return ;
+				}
+			}
+		}
+	}
+}
+int main()
+{
+	int T;std::cin>>T;
+	while(T--)
+	{
+		solve();
+	}
+	return 0;
+}
