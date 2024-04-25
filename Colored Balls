@@ -1,0 +1,3 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){int n,m=998244353,c,a=0,t[5001],v[5001];cin>>n;t[0]=1;for(int i=0;i<n;i++)cin>>v[i];sort(v,v+n);for(int i=0;i<n;i++)for(int j=5000;j>=v[i];j--){c=j+1;c/=2;c=max(c,v[i]);a+=1ll*t[j-v[i]]*c%m;t[j]+=t[j-v[i]];t[j]%=m;a%=m;}cout<<a<<"\n";}
