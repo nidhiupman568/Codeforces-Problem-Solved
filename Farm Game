@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod=998244353;
+int t,n,l,fac[1000005],vac[1000005];
+int main(){
+  fac[0]=vac[0]=vac[1]=1;
+  for(int i=2;i<=1000000;i++)vac[i]=1ll*vac[mod%i]*(mod-mod/i)%mod;
+  for(int i=1;i<=1000000;i++)fac[i]=1ll*fac[i-1]*i%mod,vac[i]=1ll*vac[i]*vac[i-1]%mod;
+  cin>>t;
+  while(t--){
+    cin>>l>>n;
+    int ans=0;
+    for(int i=0;i<=l-2*n;i+=2)ans=(ans+2ll*fac[i/2+n-1]*vac[n-1]%mod*vac[i/2]%mod*fac[l-n-i]%mod*vac[n]%mod*vac[l-2*n-i]%mod)%mod;
+    cout<<(2ll*fac[l]*vac[2*n]%mod*vac[l-2*n]%mod-ans+mod)%mod<<'\n';
+  }
+  return 0;
+}
