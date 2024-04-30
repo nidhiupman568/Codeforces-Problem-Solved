@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+void checkPossibility() {
+    int total_items, items_per_day, buffer;
+    cin >> total_items >> items_per_day >> buffer;
+
+    
+    if (total_items - (total_items / items_per_day + (total_items % items_per_day != 0)) <= buffer){
+        
+  
+        cout << "No" << endl;}
+    else
+        cout << "Yes" << endl;
+}
+
+int main() {
+    int test_cases;
+    cin >> test_cases;
+    while (test_cases--) {
+      
+        checkPossibility();
+    }
+    return 0;
+}
