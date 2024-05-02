@@ -1,0 +1,28 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<iomanip>
+#include<sstream>
+#include<string>
+using namespace std;
+int main (void)
+{
+    int t;cin>>t;
+    while(t--)
+    {
+        int n;cin>>n;int freq[104]={0};
+        int x=0;
+        for(int i=0;i<n;i++)
+        {
+            int s;
+            cin>>s;
+            freq[s]++;
+        }
+        for(int i=0;i<104;i++)
+        {
+            x+=max((freq[i]/3),max((freq[i]/4),(freq[i]/4)));
+        }
+        cout<<x<<endl;
+    }
+}
+ 
