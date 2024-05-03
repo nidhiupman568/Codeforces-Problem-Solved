@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+int t;
+cin>>t;
+while(t--)
+{
+int n,k;
+cin>>n>>k;
+if(n==1) cout<<k<<endl;
+else
+{
+long long x=(1<<__lg(k))-1;
+cout<<x<<" "<<k-x;
+for(int i=1;i<=n-2;i++) cout<<' '<<0;
+cout<<endl;
+}
+
+}
+
+}
