@@ -1,0 +1,631 @@
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <set>
+#include <map>
+#include <vector>
+#include <string>
+#include <unordered_set>
+#include <unordered_map>
+#include <stdlib.h>
+#include <stack>
+#include <bitset>
+#include <cmath>
+#include <iomanip>
+#include <random>
+#include <functional>
+#include <cassert>
+#include <chrono>
+
+using namespace std;
+
+#ifndef ONLINE_JUDGE
+  #define debug cout
+#else
+  #define debug 0 && cout
+#endif
+
+#define ll long long
+#define f first
+#define s second
+#define mp make_pair
+#define pb push_back
+#define eb emplace_back
+#define forn(i, n) for (int i = 0; i < n; i++)
+#define from(i,j,n) for (int i = j; i < n; i++)
+#define sz(v) (int)v.size()
+#define all(v) v.begin(),v.end()
+#define eb emplace_back
+
+template <typename T1, typename T2> ostream &operator<<(ostream &os, const pair<T1, T2> &pa) { os << '(' << pa.first << ',' << pa.second << ')'; return os; }
+template <typename T> vector<T> sort_unique(vector<T> vec) { sort(vec.begin(), vec.end()), vec.erase(unique(vec.begin(), vec.end()), vec.end()); return vec; }
+template <typename T> istream &operator>>(istream &is, vector<T> &vec) { for (auto &v : vec) is >> v; return is; }
+template <typename T> ostream &operator<<(ostream &os, const vector<T> &vec) { os << '['; for (auto v : vec) os << v << ','; os << ']'; return os; }
+template <typename T, size_t sz> ostream &operator<<(ostream &os, const array<T, sz> &arr) { os << '['; for (auto v : arr) os << v << ','; os << ']'; return os; }
+#if __cplusplus >= 201703L
+template <typename... T> istream &operator>>(istream &is, tuple<T...> &tpl) { std::apply([&is](auto &&... args) { ((is >> args), ...);}, tpl); return is; }
+template <typename... T> ostream &operator<<(ostream &os, const tuple<T...> &tpl) { os << '('; std::apply([&os](auto &&... args) { ((os << args << ','), ...);}, tpl); return os << ')'; }
+#endif
+template <typename T> ostream &operator<<(ostream &os, const deque<T> &vec) { os << "deq["; for (auto v : vec) os << v << ','; os << ']'; return os; }
+template <typename T> ostream &operator<<(ostream &os, const set<T> &vec) { os << '{'; for (auto v : vec) os << v << ','; os << '}'; return os; }
+template <typename T, typename TH> ostream &operator<<(ostream &os, const unordered_set<T, TH> &vec) { os << '{'; for (auto v : vec) os << v << ','; os << '}'; return os; }
+template <typename T> ostream &operator<<(ostream &os, const multiset<T> &vec) { os << '{'; for (auto v : vec) os << v << ','; os << '}'; return os; }
+template <typename T> ostream &operator<<(ostream &os, const unordered_multiset<T> &vec) { os << '{'; for (auto v : vec) os << v << ','; os << '}'; return os; }
+template <typename TK, typename TV> ostream &operator<<(ostream &os, const map<TK, TV> &mp) { os << '{'; for (auto v : mp) os << v.first << "=>" << v.second << ','; os << '}'; return os; }
+template <typename TK, typename TV, typename TH> ostream &operator<<(ostream &os, const unordered_map<TK, TV, TH> &mp) { os << '{'; for (auto v : mp) os << v.first << "=>" << v.second << ','; os << '}'; return os; }
+
+constexpr ll MOD = 998244353;
+
+template<int MOD>
+struct ModInt {
+  unsigned x;
+  ModInt() : x(0) { }
+  ModInt(signed sig) : x(sig) {  }
+  ModInt(signed long long sig) : x(sig%MOD) { }
+  int get() const { return (int)x; }
+  ModInt pow(ll p) { ModInt res = 1, a = *this; while (p) { if (p & 1) res *= a; a *= a; p >>= 1; } return res; }
+ 
+  ModInt &operator+=(ModInt that) { if ((x += that.x) >= MOD) x -= MOD; return *this; }
+  ModInt &operator-=(ModInt that) { if ((x += MOD - that.x) >= MOD) x -= MOD; return *this; }
+  ModInt &operator*=(ModInt that) { x = (unsigned long long)x * that.x % MOD; return *this; }
+  ModInt &operator/=(ModInt that) { return (*this) *= that.pow(MOD - 2); }
+ 
+  ModInt operator+(ModInt that) const { return ModInt(*this) += that; }
+  ModInt operator-(ModInt that) const { return ModInt(*this) -= that; }
+  ModInt operator*(ModInt that) const { return ModInt(*this) *= that; }
+  ModInt operator/(ModInt that) const { return ModInt(*this) /= that; }
+  bool operator<(ModInt that) const { return x < that.x; }
+  friend ostream& operator<<(ostream &os, ModInt a) { os << a.x; return os; }
+};
+using mint = ModInt<MOD>;
+
+vector<mint> fact, fact_inv;
+
+ll get_rand(ll mini, ll maxi) {
+  static random_device rd;
+  static mt19937 gen(rd());
+  uniform_int_distribution<ll> dist(mini, maxi);
+  return dist(gen);
+}
+
+void fill_fact() {
+  const int N = 1e6 + 2;
+  fact.resize(N, 1);
+  fact_inv.resize(N, 1);
+  for (int i = 2; i < fact.size(); i++) {
+    fact[i] = fact[i - 1] * (mint)i;
+    fact_inv[i] = fact[i].pow(MOD - 2);
+  }
+}
+
+ll pow(ll x, ll y) {
+  ll s = 1;
+  for(; y; y>>=1,x=x * x)
+    if (y & 1)
+      s = s * x;
+  return s; 
+}
+
+ll gcd(ll a, ll b) {
+  if (b == 0)
+    return a;
+  return gcd(b, a % b);
+}
+
+ll arif(ll a, ll b, ll d = 1) {
+  ll cnt = (b - a) / d + 1;
+  return (a + b) * cnt / 2;
+}
+
+struct Fenwick {
+  Fenwick(int n) : vec(n, 0) {}
+ 
+  void update(int pos, ll add) {
+    while (pos < vec.size()) {
+      vec[pos] += add;
+      pos = (pos | (pos - 1)) + 1;
+    }
+  }
+ 
+  ll get(int pos) {
+    ll sum = 0;
+    while (pos > 0) {
+      sum += vec[pos];
+      pos = (pos & (pos - 1));
+    }
+    return sum;
+  }
+ 
+  // returns sum (l, r]
+  ll get(int l, int r) {
+    return get(r) - get(l);
+  }
+ 
+  vector<ll> vec;
+};
+
+struct SNM {
+  struct Operation {
+    Operation() : empty(true) {}
+    Operation(int u, int v, int szv) : u(u), v(v), szv(szv), empty(false) {}
+
+    bool is_empty() {
+      return empty;
+    }
+
+    int u, v, szv;
+    bool empty = false;
+  };
+
+  SNM(int n) : n(n), comp_count(n) {
+    parent.resize(n, -1);
+    sz.resize(n, 1);
+  }
+
+  int get(int v) {
+    if (parent[v] == -1)
+      return v;
+    return get(parent[v]);
+  }
+
+  void uni(int u, int v) {
+    auto pu = get(u);
+    auto pv = get(v);
+    if (pu == pv) {
+      ops.push({});
+      return;
+    }
+    if (sz[pu] > sz[pv]) {
+      swap(pu, pv);
+    }
+    ops.push({pu, pv, sz[pv]});
+    parent[pu] = pv;
+    sz[pv] += sz[pu];
+    comp_count--;
+  }
+
+  void rollback() {
+    auto op = ops.top();
+    ops.pop();
+    if (!op.is_empty()) {
+      parent[op.u] = -1;
+      sz[op.v] = op.szv;
+      comp_count++;
+    }
+  }
+
+  int components() {
+    return comp_count;
+  }
+
+  void reset() {
+    while (!ops.empty())
+      rollback();
+  }
+
+  int n, comp_count;
+  vector<int> parent, sz;
+  stack<Operation> ops;
+};
+
+struct Query {
+  Query(int type, int ts) : type(type), l(ts), r(ts + 1) {}
+  Query(int type, int l, int r, int u, int v) : type(type), l(l), r(r), u(u), v(v) {}
+
+  // 1 - [l, r], 0 - get
+  int type, l=-1, r=-1, u=-1, v=-1;
+};
+
+vector<pair<int, int>> dsu_answer;
+
+void dsu_offline(SNM& snm, const vector<Query>& queries, int l, int r) {
+  int ops = 0;
+  auto mid = (l + r) / 2;
+  vector<Query> left, right;
+
+  for (auto q : queries) {
+    if (q.type == 1 && q.l <= l && r <= q.r) {
+      snm.uni(q.u, q.v);
+      ops++;
+      continue;
+    }
+    if (!(q.l >= mid || q.r <= l)) {
+      left.pb(q);
+    }
+    if (!(q.l >= r || q.r <= mid)) {
+      right.pb(q);
+    }
+  }
+  if (l + 1 == r) {
+    for (auto q : queries) {
+      if (q.type == 0) {
+        dsu_answer.pb(mp(l, snm.components()));
+      }
+    }
+  } else {
+    dsu_offline(snm, left, l, mid);
+    dsu_offline(snm, right, mid, r);
+  }
+  while (ops > 0) {
+    snm.rollback();
+    ops--;
+  }
+}
+
+vector<int> z_function (string s) {
+  int n = (int) s.length();
+  vector<int> z (n);
+  for (int i=1, l=0, r=0; i<n; ++i) {
+    if (i <= r)
+      z[i] = min (r-i+1, z[i-l]);
+    while (i+z[i] < n && s[z[i]] == s[i+z[i]])
+      ++z[i];
+    if (i+z[i]-1 > r)
+      l = i,  r = i+z[i]-1;
+  }
+  return z;
+}
+
+mint cnk(ll n, ll k) {
+  if (k > n || k < 0 || n < 0) {
+    return 0;
+  }
+  return fact[n] * fact_inv[k] * fact_inv[n - k];
+}
+
+namespace ST {
+  constexpr struct MinAssignOp {
+    /*
+     *  Операция вычисления минимума на отрезка с операцией присвоения на
+     *  отрезке
+     */
+    ll init() const {
+      return 1e18;
+    }
+
+    ll operator()(ll a, ll b) const {
+      return min(a, b);
+    }
+
+    void assign(vector<pair<ll, ll>>& tree, int v, int tl, int tr, ll val) {
+      tree[v].f = min(tree[v].f, val);
+      tree[v].s = min(tree[v].s, val);
+    }
+
+    void push(vector<pair<ll, ll>>& tree, int v, int tl, int tr) {
+      const auto val = tree[v].s;
+      const auto vl = 2 * v + 1;
+      const auto vr = 2 * v + 2;
+      assign(tree, vl, tl, tr, val);
+      assign(tree, vr, tl, tr, val);
+      tree[v].s = init();
+    }
+  } Min;
+
+  constexpr struct MaxAssignOp {
+    /*
+     *  Операция вычисления минимума на отрезка с операцией присвоения на
+     *  отрезке
+     */
+    ll init() const {
+      return -1e18;
+    }
+
+    ll operator()(ll a, ll b) const {
+      return max(a, b);
+    }
+
+    void assign(vector<pair<ll, ll>>& tree, int v, int tl, int tr, ll val) {
+      tree[v].f = max(tree[v].f, val);
+      tree[v].s = max(tree[v].s, val);
+    }
+
+    void push(vector<pair<ll, ll>>& tree, int v, int tl, int tr) {
+      const auto val = tree[v].s;
+      const auto vl = 2 * v + 1;
+      const auto vr = 2 * v + 2;
+      assign(tree, vl, tl, tr, val);
+      assign(tree, vr, tl, tr, val);
+      tree[v].s = init();
+    }
+  } Max;
+
+  constexpr struct SumAddOp {
+    /*
+     *  Операция суммы на отрезке с операцией прибавления на отрезке
+     */
+    ll init() const {
+      return 0;
+    }
+
+    ll operator()(ll a, ll b) const {
+      return a + b;
+    }
+
+    void assign(vector<pair<ll, ll>>& tree, int v, int tl, int tr, ll add) {
+      tree[v].f += (tr - tl) * add;
+      tree[v].s += add;
+    }
+
+    void push(vector<pair<ll, ll>>& tree, int v, int tl, int tr) {
+      const auto add = tree[v].s;
+      const auto vl = 2 * v + 1;
+      const auto vr = 2 * v + 2;
+      const auto mid = (tl + tr) / 2;
+
+      tree[vl].f += add * (mid - tl);
+      tree[vl].s += add;
+
+      tree[vr].f += add * (tr - mid);
+      tree[vr].s += add;
+      tree[v].s = 0;
+    }
+  } Sum;
+}
+
+template<typename Operation>
+struct SegmentTree {
+
+  SegmentTree(int n, Operation op) : n(n), tree(4 * n, mp(op.init(), op.init())), op(op) {}
+
+  void update(int l, int r, ll add) {
+    update_impl(0, 0, n, l, r, add);
+  }
+
+  void update(int l, ll add) {
+    update_impl(0, 0, n, l, l + 1, add);
+  }
+
+  ll get(int l, int r) {
+    return get_impl(0, 0, n, l, r);
+  }
+
+  ll get(int l) {
+    return get_impl(0, 0, n, l, l + 1);
+  }
+
+private:
+  void update_impl(int v, int tl, int tr, int l, int r, ll add) {
+    if (tl >= l && tr <= r) {
+      op.assign(tree, v, tl, tr, add);
+      return;
+    }
+    if (tl >= r || tr <= l) {
+      return;
+    }
+    const auto mid = (tl + tr) / 2;
+    op.push(tree, v, tl, tr);
+    update_impl(2 * v + 1, tl, mid, l, r, add);
+    update_impl(2 * v + 2, mid, tr, l, r, add);
+    tree[v].f = op(tree[2 * v + 1].f, tree[2 * v + 2].f);
+  }
+
+  ll get_impl(int v, int tl, int tr, int l, int r) {
+    if (tl >= l && tr <= r) {
+      return tree[v].f;
+    }
+    if (tl >= r || tr <= l) {
+      return op.init();
+    }
+    op.push(tree, v, tl, tr);
+    const auto mid = (tl + tr) / 2;
+    return op(get_impl(2 * v + 1, tl, mid, l, r), get_impl(2 * v + 2, mid, tr, l, r));
+  }
+
+  vector<pair<ll, ll>> tree;
+  int n;
+  Operation op;
+};
+
+template<class T, class Fun = function<T(const T &, const T &)>>
+struct FastSegTree {
+    /*
+     * Быстрое дерево отрезков умеет обновлять только один элемент
+     * FastSegTree<int> tr_pos(n + 1, [](int x, int y) { return max(x, y); }, -1);
+     * FastSegTree<int> tr_answer(n + 1, [](int x, int y) { return min(x, y); }, 1e9 + 228);
+     * FastSegTree<ll> tr_max(vec, [](ll x, ll y) { return max(x, y); }, 0ll);
+     * FastSegTree<ll> tr_sum(vec, [](ll x, ll y) { return x + y; }, 0ll);
+     */
+    Fun f;
+    vector<T> t;
+    int n;
+
+    FastSegTree(int sz, const Fun &g, T default_value) : f(g) {
+        n = 1;
+        while (n < sz) n <<= 1;
+        t.resize(n * 2, default_value);
+    }
+
+    FastSegTree(vector<T> &a, const Fun &g, T default_value) : FastSegTree(a.size(), g, default_value) {
+        for (int i = 0; i < sz(a); ++i) t[i + n] = a[i];
+        for (int i = n - 1; i >= 1; --i) t[i] = f(t[i << 1], t[i << 1 | 1]);
+    }
+
+    void update(int i, T x) {
+        i += n;
+        // ALARM
+        t[i] = x;
+        for (i >>= 1; i > 1; i >>= 1) t[i] = f(t[i << 1], t[i << 1 | 1]);
+    }
+
+    T get(int l, int r) {
+        T resL = t[0], resR = t[0];
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) resL = f(resL, t[l++]);
+            if (r & 1) resR = f(t[--r], resR);
+        }
+        return f(resL, resR);
+    }
+};
+
+bool is_prime(ll val) {
+  // Проверяет является ли число простым за O(sqrt(val))
+  if (val == 1)
+    return false;
+  for (int i = 2; i <= min(val - 1, (ll)sqrt(val) + 1); i++) {
+    if (val % i == 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+vector<int> gen_primes(int N) {
+  // Для каждого числа [1, N) записывает минимальный простой делитель
+  vector<int> primes(N, 1);
+  for (ll i = 2; i < primes.size(); i++) {
+    if (primes[i] == 1) {
+      primes[i] = i;
+      for (ll j = i * i; j < primes.size(); j += i) {
+        if (primes[j] == 1) {
+          primes[j] = i;
+        }
+      }
+    }
+  }
+  return primes;
+}
+
+vector<int> get_primes(int val, const vector<int>& primes) {
+  // Раскладывает число val на простые множители 12 = [2, 2, 3]
+  vector<int> p;
+  while (val > 1) {
+    p.pb(primes[val]);
+    val /= primes[val];
+  }
+  return p;
+}
+
+vector<int> gen_borders(ll val) {
+  /*
+   * максимальный размер sqrt 
+   * Для числа 105
+   * [1,2,3,4,5,6,7,8,9,10,11,12,14,16,18,22,27,36,53,106,]
+   */
+  int curr = 1;
+  vector<int> result;
+  while (curr <= val) {
+    //cout << curr << endl;
+    result.pb(curr);
+    auto balance = val % curr;
+    auto d = val / curr;
+    curr += balance / d + 1;
+  }
+  result.pb(val + 1);
+  return result;
+}
+
+class MO {
+public:
+  using T = ll;
+  using Func = std::function<void(T)>;
+  using GetFunc = std::function<T()>;
+
+  struct Query {
+    Query(size_t begin, size_t end, size_t idx)
+        : begin_(begin), end_(end), idx_(idx) {}
+
+    size_t begin_, end_, idx_;
+  };
+
+  MO(const vector<T> &vec, const Func &add, const Func &del, const GetFunc &get)
+      : vec_(vec), add_(add), del_(del), get_(get),
+        block_size_(sqrt(vec_.size())),
+        blocks_count_((vec_.size() + block_size_ - 1) / block_size_),
+        queries_(blocks_count_) {}
+  // Constructor with fixed block size, try N / sqrt(Q)
+  MO(const vector<T> &vec, const Func &add, const Func &del, const GetFunc &get, size_t block_size)
+      : vec_(vec), add_(add), del_(del), get_(get),
+        block_size_(block_size),
+        blocks_count_((vec_.size() + block_size_ - 1) / block_size_),
+        queries_(blocks_count_) {}
+
+  void AddQuery(const MO::Query &query) {
+    const size_t block_pos = query.begin_ / block_size_;
+    assert(block_pos < queries_.size());
+    queries_[block_pos].push_back(query);
+  }
+
+  void Run(vector<T> &result) {
+    forn(block_id, sz(queries_)) {
+      sort(all(queries_[block_id]),
+           [&](const MO::Query &lhs, const MO::Query &rhs) {
+             return lhs.end_ < rhs.end_;
+           });
+      const size_t block_begin = block_id * block_size_;
+      const size_t block_end = min(vec_.size(), (block_id + 1) * block_size_);
+      size_t pos = block_end;
+      for (const MO::Query &query : queries_[block_id]) {
+        assert(query.begin_ >= block_begin && "query begin less than block begin");
+        assert(query.begin_ < query.end_ && "query begin should be less than query end");
+        assert(query.begin_ < block_end && "query begin should be less than block end");
+        while (pos < vec_.size() && pos < query.end_) {
+          add_(vec_[pos++]);
+        }
+        for (int i = static_cast<int>(min(block_end, query.end_)) - 1; i >= static_cast<int>(query.begin_); i--) {
+          add_(vec_[i]);
+        } 
+        result[query.idx_] = get_();
+        for (auto i = query.begin_; i < min(block_end, query.end_); i++) {
+          del_(vec_[i]);
+        }
+      }
+      for (size_t i = block_end; i < pos; i++) {
+        del_(vec_[i]);
+      }
+    }
+  }
+
+private:
+  const vector<T> vec_;
+  const Func add_, del_;
+  const GetFunc get_;
+  const size_t block_size_;
+  const size_t blocks_count_;
+  vector<vector<Query>> queries_;
+};
+
+int get_msb(ll val)
+{
+  // Если все биты нулевые - возвращает 0
+  // Если первый бит равен единице - возращает 1 и т.д
+  // 0000 - return 0
+  // 0001 - return 1
+  // 0011 - return 2
+  return val == 0 ? 0 : 64 - __builtin_clzll(val);
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  time_t seconds;
+  seconds = time (NULL);
+  debug << "Current Seconds: " << seconds << " +2min: " << seconds + 120 << endl;
+  int t;
+  cin >> t;
+  while (t--) {
+    int n;
+    cin >> n;
+    vector<int> veca(n), vecb(n);
+    cin >> veca;
+    cin >> vecb;
+    auto check = [&]() {
+      forn(i, n) {
+        if (veca[i] > vecb[i]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    int op = 0;
+    while (!check()) {
+      op++;
+      debug << "HERE" << endl;
+      veca.pop_back();
+      veca.pb(1);
+      sort(all(veca));
+    }
+    cout << op << endl;
+  }
+  return 0;
+}
