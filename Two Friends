@@ -1,0 +1,753 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+using ld = long double;
+using ull = unsigned long long;
+using ui = unsigned int;
+using vi = vector<int>;
+using pi = pair<int, int>;
+using pll = pair<long long, long long>;
+using vb = vector <bool>;
+using vll = vector <long long>;
+using vld = vector <long double>;
+using vp = vector <pair <ll, ll>>;
+using vit = vector <int64_t>;
+using vuit = vector <uint64_t>;
+using vs = vector <string>;
+using it = int64_t;
+const ll INF = 1e9;
+ll n, m, u, q, t, s, k, a, b, c, d, l, r, x, y, z, k1, w, h, add, mid;
+bool b1 = false;
+
+vector <vector <int>> dfs1;
+vector <bool> vis;
+vll dist;
+vi tin;
+vi t1;
+
+vll link1;
+vll size_set;
+vll sum_set;
+
+vll anstopsort;
+
+//! priority_queue <int, vector <int>, greater<int>>;
+
+/*!
+#define F first
+#define S second
+#define B begin()
+#define E end()
+#define PB push_back
+#define MP make_pair
+#define FR(i,a,b) for (int i = a; i < b; i++)*/
+ll p = 1e9+7;
+
+ll modpow(ll n, ll x, ll mod) {
+    if (x <= 0) {
+        return 1;
+    } else {
+        if (x % 2 == 0) {
+            return (modpow(((n%mod) * (n%mod)) % mod, x / 2, mod)) % mod;
+        } else {
+            return (modpow(n % mod, x-1, mod) * (n%mod)) % mod;
+        }
+    }
+}
+
+ll unmodpow(ll n, ll x) {
+     if (x == 0) {
+        return 1;
+    } else {
+        if (x % 2 == 0) {
+            return unmodpow(n * n, x / 2);
+        } else {
+            return unmodpow(n, x-1) * n;
+        }
+    }
+}
+
+ll cnk(ll n, ll k) {
+    /*if (n == 0 || k == 0) {
+        return 0;
+    }*/
+    vi v(n+1);
+    for (int i = 2; i <= n; i++) {
+        int j = i;
+        for (int q = 2; q <= n; q++) {
+            while (j % q == 0) {
+                j /= q;
+                v[q]++;
+            }
+        }
+    }
+    for (int i = 2; i <= n-k; i++) {
+        int j = i;
+        for (int q = 2; q <= n; q++) {
+            while (j % q == 0) {
+                j /= q;
+                v[q]--;
+            }
+        }
+    }
+    for (int i = 2; i <= k; i++) {
+        int j = i;
+        for (int q = 2; q <= n; q++) {
+            while (j % q == 0) {
+                j /= q;
+                v[q]--;
+            }
+        }
+    }
+    ll ans = 1;
+    for (int i = 0; i <= n; i++) {
+        ans *= modpow(i, v[i], p);
+    }
+    return ans;
+}
+
+pll Evkl(ll a, ll b) {
+    if (a == 1 && b == 0) {
+        return {1, 0};
+    }
+    pll xy = Evkl(b, a % b);
+    return {xy.second, xy.first - xy.second * (a / b)};
+}
+
+vp T_prost(ll n) {
+    if (n == 1) {
+        return {};
+    }
+    int w = sqrt(n) + 1;
+    vector <int> v(w, 0);
+    vector <int> out;
+    v[0] = 1;
+    v[1] = 1;
+    for (int i = 2; i < w; i++) {
+        if (v[i] == 0) {
+            while (n % i == 0) {
+                out.push_back(i);
+                // out[i]++;
+                n /= i;
+            }
+            w = sqrt(n) + 1;
+            int q = i * 2;
+            while (q < w) {
+                v[q] = 1;
+                q += i;
+            }
+        }
+    }
+    if ((n > 1) || (out.size() == 0))
+        out.push_back(n);
+    int r = out.size();
+    // return r;
+    /*for (int i = 0; i < r; i++) {
+        cout << out[i] << " ";
+    }*/
+    /*set<int> ans;
+    for (auto u : out) {
+        ans.insert(u);
+    }*/
+    vp ans;
+    for (int i = 0; i < r; i++) {
+        k = 1;
+        a = out[i];
+        while (i < r && out[i] == out[i+1]) {
+            i++;
+            k++;
+        }
+        ans.push_back({a, k});
+    }
+    return ans;
+    /*if (r == 2 && out[0] != out[1]) {
+        cout << "YES";
+    } else {
+        cout << "NO";
+    }*/
+    // cout << r << '\n';
+}
+
+ll T_prostsz(ll n) {
+    if (n == 1) {
+        return 0;
+    }
+    int w = sqrt(n) + 1;
+    vector <int> v(w, 0);
+    vector <int> out;
+    v[0] = 1;
+    v[1] = 1;
+    ll ans = 0;
+    for (int i = 2; i < w; i++) {
+        if (v[i] == 0) {
+            if (n % i == 0) {
+                ans++;
+            }
+            while (n % i == 0) {
+                // out.push_back(i);
+                // out[i]++;
+                n /= i;
+            }
+            w = sqrt(n) + 1;
+            int q = i * 2;
+            while (q < w) {
+                v[q] = 1;
+                q += i;
+            }
+        }
+    }
+    if (n > 1)
+        ans++;
+    // int r = out.size();
+    // return r;
+    /*for (int i = 0; i < r; i++) {
+        cout << out[i] << " ";
+    }*/
+    /*set<int> ans;
+    for (auto u : out) {
+        ans.insert(u);
+    }*/
+    /*vll ans;
+    for (int i = 0; i < r; i++) {
+        k = 1;
+        a = out[i];
+        while (i < r && out[i] == out[i+1]) {
+            i++;
+            k++;
+        }
+        ans.push_back(a);
+    }*/
+    return ans;
+    /*if (r == 2 && out[0] != out[1]) {
+        cout << "YES";
+    } else {
+        cout << "NO";
+    }*/
+    // cout << r << '\n';
+}
+
+/*!void topsort(int v) {
+    vis[v] = true;
+    for (auto u : dfs1[v]) {
+        if (!vis[u]) {
+            topsort(u);
+        }
+    }
+    anstopsort.push_back(v);
+}*/
+
+bool sieve(ll n) {
+    if (n == 1)
+        return false;
+    ll w = sqrt(n) + 1;
+    vector <ll> v(w, 0);
+    v[0] = 1;
+    v[1] = 1;
+    for (ll i = 2; i < w; i++) {
+        if (v[i] == 0) {
+            if (n % i == 0)
+                return false;
+            int q = i * 2;
+            while (q < w) {
+                v[q] = 1;
+                q += i;
+            }
+        }
+    }
+    return true;
+}
+
+void bfs(int s, int t, int sz) {
+    queue <int> q;
+    vector <int> vpred(sz+1, -1);
+    vector <int> d(sz+1, -1);
+    q.push(s);
+    d[s] = 0;
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (auto i : dfs1[u]) {
+            if (d[i] == -1) {
+                d[i] = d[u]+1;
+                vpred[i] = u;
+                q.push(i);
+            }
+        }
+    }
+    cout << d[t];
+    /*for (auto u : d) {
+        cout << u << " ";
+    }
+    b1 = false;
+    cout << s+1;
+    vi ans(0);
+    while (t != s) {
+        ans.push_back(t);
+        t = vpred[t];
+    }
+    ans.push_back(t);
+    reverse(ans.begin(), ans.end());
+    for (auto u : ans) {
+        cout << u+1 << " ";
+    }*/
+}
+
+void Dextra(int s, int t, vector <vp> v) {
+    priority_queue<pair<long long, long long>> q;
+    vector<long long> dist(n, INF);
+    dist[s] = 0;
+    q.push({0, s});
+    vector <bool> procesed(n, false);
+    vector <int> vpred(n, -1);
+    while (!q.empty()) {
+        long long a = q.top().second;
+        q.pop();
+        if (procesed[a])
+            continue;
+        procesed[a] = true;
+        for (auto u : v[a]) {
+            long long b = u.first, w = u.second;
+            if (dist[a] + w < dist[b]) {
+                dist[b] = dist[a]+w;
+                q.push({-dist[b], b});
+                vpred[b] = a;
+            }
+        }
+    }
+}
+
+void Floyd(vector <vi> v) {
+    vector <vector <int>> dist(n, vi(n));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i == j) {
+                dist[i][j] = min(dist[i][j], 0);
+            } else if (v[i][j] != INF) {
+                dist[i][j] = v[i][j];
+            } else {
+                dist[i][j] = INF;
+            }
+        }
+    }
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][k] < INF && dist[k][j] < INF)
+                    dist[i][j] = min(dist[i][j], dist[i][k]  + dist[k][j]);
+            }
+        }
+    }
+}
+
+struct FenwickTree {
+    int n;
+    vi tree;
+    vi a;
+    // explicit FenwickTree(int n) : n(n), tree(n+1, 0) {}
+    explicit FenwickTree(const vector <int>& a) : n(n), tree(n+1, 0), a(a) {
+        buildF(a);
+    }
+    static int F(int x) {return x & -x;};
+
+    void buildF(const vector <int>& a) {
+        // for (int i = 0; i < n; i++) {
+          //  updateF(i+1, a[i]);
+        // }
+
+        vector <int> pref(n+1);
+        for (int i = 0; i < n; i++) {
+            pref[i+1] = pref[i] + a[i];
+        }
+        for (int i = 1; i <= n; i++) {
+            tree[i] = pref[i] - pref[i-F(i)];
+        }
+    }
+    int getF(int r) const {
+        int res = 0;
+        for (; r > 0; r -= F(r)) {
+            res += tree[r];
+        }
+        return res;
+    }
+    // O(n*n)
+    int getF1(int l, int r) {
+        int res = 0;
+        while (l != r) {
+            int x = F(r);
+            if (r - F(r) < l) {
+                res += a[r-1];
+                r--;
+            } else {
+                res += a[r];
+                r -= x;
+            }
+        }
+        return res;
+    }
+
+    // a[i] += x;
+    // i /in [1;n]
+    void updateF(int i, int x) {
+        a[i-1] += x;
+        for (; i <= n; i+=F(i)) {
+            tree[i] += x;
+        }
+    }
+};
+
+ld vectpr(ld ax, ld ay, ld bx, ld by) {
+    return ax * by - ay * bx;
+}
+
+/*void dfsbor(int v) {
+    vis[v] = true;
+    if (k1 >= k) {
+        return;
+    }
+    k1 += bor[v].isterm;
+    for (int i = 0; i < 26; i++) {
+        auto u = bor[v].next[i];
+        if (!vis[u]) {
+            dfsbor(u);
+        }
+        if (k1 >= k) {
+            borans = char(i+'a') + borans;
+            return;
+        }
+    }
+}*/
+
+const int MAXk = 18;
+vp pr;
+vector <vp> up;
+vi dep;
+
+ll getup(int v, int k) {
+    for (int q = 0; (1 << q) < n; q++) {
+        if ((1 << q) & k) {
+            v = up[q][v].first;
+        }
+    }
+    return v;
+}
+
+ll getmin(int v, int k) {
+    ll ans = INF;
+    for (int q = 0; (1 << q) < n; q++) {
+        if ((1 << q) & k) {
+            ans = min(ans, up[q][v].second);
+            v = up[q][v].first;
+        }
+    }
+    return ans;
+}
+
+ll LCA(int v, int u) {
+    if (dep[u] > dep[v]) {
+        swap(v, u);
+    }
+    v = getup(v, dep[v] - dep[u]);
+    if (v == u) {
+        return v;
+    }
+    for (int k = MAXk; k >= 0; k--) {
+        if (up[k][v].first == up[k][u].first) {
+            continue;
+        }
+        v = up[k][v].first;
+        u = up[k][u].first;
+    }
+    return up[0][v].first;
+}
+
+/*void dfsLCA(int v, int n1) {
+    vis[v] = true;
+    dep[v] = n1;
+    for (auto u : dfs1[v]) {
+        if (!vis[u]) {
+            dfs(u, n1+1);
+        }
+    }
+}*/
+
+ll find1(ll v) {
+    if (link1[v] == -1) {
+        return v;
+    }
+    return find1(link1[v]);
+}
+
+void unite(ll u, ll v) {
+    u = find1(u);
+    v = find1(v);
+    if (u == v) {
+        return;
+    }
+    if (size_set[u] > size_set[v]) {
+        link1[v] = u;
+        size_set[u] += size_set[v];
+    } else {
+        link1[u] = v;
+        size_set[v] += size_set[u];
+    }
+}
+
+vll dp;
+
+ll get1(ll v) {
+    if (link1[v] == -1) {
+        return dp[v];
+    }
+    return dp[v] + dp[get1(link1[v])];
+}
+
+const int MAXN = 300000;
+vector <ll> segtree(4 * MAXN);
+vector <ll> sum_push(4 * MAXN, 0);
+vll arr(MAXN, 0);
+
+/*
+void apply(int x, int v, int l, int r) {
+    sum_push[v] += x;
+    segtree[v] += x;
+}
+
+void push(int v, int l, int mid, int r) {
+    int x = sum_push[v];
+    if (x == 0) {
+        return;
+    }
+    sum_push[v] = 0;
+    apply(x, 2 * v + 1, l, mid);
+    apply(x, 2 * v + 2, mid, r);
+}
+
+void relax(int v) {
+    segtree[v] = max(segtree[2 * v + 1], segtree[2 * v + 2]);
+}
+
+ll get(int ql, int qr, int v, int l, int r) {
+    if (ql <= l && r <= qr) {
+        return segtree[v];
+    }
+    if (qr <= l || r <= ql) {
+        return 0;
+    }
+    int mid = (r + l) / 2;
+    push(v, l, mid, r);
+    ll g1 = get(ql, qr, 2 * v + 1, l, mid);
+    ll g2 = get(ql, qr, 2 * v + 2, mid, r);
+    return max(g1, g2);
+}
+
+void update(int ql, int qr, int x, int v, int l, int r) {
+    if (qr <= l || r <= ql) {
+        return;
+    }
+    if (ql <= l && r <= qr) {
+        return apply(x, v, l, r);
+    }
+    int mid = (r + l) / 2;
+    push(v, l, mid, r);
+    update(ql, qr, x, 2 * v + 1, l, mid);
+    update(ql, qr, x, 2 * v + 2, mid, r);
+    relax(v);
+}
+
+ll merge1(ll lans, ll rans) {
+    return max(lans, rans);
+}
+
+//! build(0, 0, n);
+void build(int v, int l, int r) {
+    if (r - l == 1) {
+        segtree[v] = arr[l];
+        return;
+    }
+    int mid = (l + r) / 2;
+    build(2 * v + 1, l, mid);
+    build(2 * v + 2, mid, r);
+    segtree[v] = merge1(segtree[2 * v + 1], segtree[2 * v + 2]);
+}
+*/
+/*
+//! get(ql, qr, 0, 0, n);
+ll get(int ql, int qr, int v, int l, int r) {
+    if (qr <= l || r <= ql) {
+        return INF;
+    }
+    if (ql <= l && qr >= r) {
+        return segtree[v];
+    }
+    int mid = (l + r) / 2;
+    ll g1 = get(ql, qr, 2 * v + 1, l, mid);
+    ll g2 = get(ql, qr, 2 * v + 2, mid, r);
+    return merge1(g1, g2);
+}
+
+//! update(i, x, 0, 0, n);
+void update(int i, int x, int v, int l, int r) {
+    if (r - l == 1) {
+        segtree[v] = arr[l];
+        return;
+    }
+    int mid = (l + r) / 2;
+    if (i < mid) {
+        update(i, x, 2 * v + 1, l, mid);
+    } else {
+        update(i, x, 2 * v + 2, mid, r);
+    }
+    segtree[v] = merge1(segtree[2 * v + 1], segtree[2 * v + 2]);
+}
+
+*/
+/*vector <vector <pll>> comp(0);
+
+void dfs(pair<int, int> v, int sz) {
+    vis[v] = true;
+    for (auto u : dfs1[v]) {
+        if (vis[u]) {
+            continue;
+        }
+        comp[sz].push_back(u);
+        dfs(u, sz);
+    }
+}
+*/
+
+struct vert {
+    int koll = 0;
+    int next0 = -1;
+    int next1 = -1;
+};
+
+int root = 0;
+
+vector <vert> bor(1);
+
+void add1(string s) {
+    int v = root;
+    for (auto i : s) {
+        if (i == '0') {
+            if (bor[v].next0 == -1) {
+                bor.push_back(vert());
+                bor[v].next0 = bor.size() - 1;
+            }
+            bor[v].koll++;
+            v = bor[v].next0;
+        } else {
+            if (bor[v].next1 == -1) {
+                bor.push_back(vert());
+                bor[v].next1 = bor.size() - 1;
+            }
+            bor[v].koll++;
+            v = bor[v].next1;
+        }
+    }
+}
+
+vs ans(0);
+
+string mindfsbor(string s) {
+    int v = 0;
+    b1 = true;
+    string ans = "";
+    for (auto u : s) {
+        if (u == '0') {
+            if (bor[v].next0 == -1 && bor[v].next1 == -1) {break;}
+            if (bor[v].next0 == -1) {
+                v = bor[v].next1;
+                ans += '1';
+                b1 = false;
+                continue;
+            }
+            if (bor[v].next1 == -1) {
+                v = bor[v].next0;
+                ans += '0';
+                continue;
+            }
+            if (bor[bor[v].next0].koll < 2 && b1) {
+                v = bor[v].next1;
+                ans += '1';
+                b1 = false;
+            } else {
+                v = bor[v].next0;
+                ans += '0';
+            }
+        } else {
+            if (bor[v].next0 == -1 && bor[v].next1 == -1) {break;}
+            if (bor[v].next0 == -1) {
+                v = bor[v].next1;
+                ans += '0';
+                continue;
+            }
+            if (bor[v].next1 == -1) {
+                v = bor[v].next0;
+                ans += '1';
+                b1 = false;
+                continue;
+            }
+            if (bor[bor[v].next1].koll < 2 && b1) {
+                v = bor[v].next0;
+                ans += '0';
+                b1 = false;
+            } else {
+                v = bor[v].next1;
+                ans += '1';
+            }
+        }
+    }
+    return ans;
+}
+
+string maxdfsbor(string s) {
+    int v = 0;
+    string ans = "";
+    for (auto u : s) {
+        if (u == '0') {
+            if (bor[v].next1 == -1) {
+                v = bor[v].next0;
+                ans += '0';
+            } else {
+                v = bor[v].next1;
+                ans += '1';
+            }
+        } else {
+            if (bor[v].next0 == -1) {
+                v = bor[v].next1;
+                ans += '1';
+            } else {
+                v = bor[v].next0;
+                ans += '0';
+            }
+        }
+    }
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0), cout.tie(0);
+    // freopen("stupid_rmq.in", "r", stdin);
+    // freopen("stupid_rmq.out", "w", stdout);
+    // auto rd = chrono::system_clock::now().time_since_epoch().count();
+    // mt19937 gen(rd);
+    cin >> t;
+    while (t--) {
+        cin >> n;
+        vi v(n);
+        for (int i = 0; i < n; i++) {
+            cin >> v[i];
+            v[i]--;
+        }
+        ll ans = 3;
+        for (int i = 0; i < n; i++) {
+            if (i == v[v[i]]) {
+                ans = 2;
+            }
+        }
+        cout << ans << '\n';
+    }
+}
