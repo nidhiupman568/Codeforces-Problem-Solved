@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+ 
+int main(){
+  long long a,x1,x2,n,sum1;
+ scanf("%lld",&a);
+ while(a--){
+    scanf("%lld%lld%lld",&n,&x1,&x2);
+    sum1=0;
+    if((x1+x2+n)%2){
+        printf("-1\n");
+    }else{
+        sum1=n;
+        //x2-=n;
+        if(x1+n>=x2){
+            printf("%lld\n",(x1+x2+n)/2);
+        }else{
+            printf("%lld\n",x1+n);
+        }
+    }
+    
+ }
+    return 0;
+}
