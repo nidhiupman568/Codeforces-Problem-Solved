@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        bool a[300]={0};
+        string s;
+        cin>>s;
+        for(int i=0;i<s.length();i++)a[int(s[i])]=1;
+        char b[100];
+        int tmp=0;
+        for(int i=97;i<=122;i++)
+        {
+            if(a[i]==1)
+            {
+                b[tmp]=char(i);
+                tmp++;
+            }
+        }
+       // for(int i=0;i<tmp;i++)cout<<b[i];
+        for(int i=0;i<s.length();i++)
+        {
+            for(int j=0;j<tmp;j++)
+            {
+                if(s[i]==b[j])
+                {
+                    cout<<b[tmp-j-1];
+                }
+            }
+        }
+        cout<<endl;
+    }
+}
