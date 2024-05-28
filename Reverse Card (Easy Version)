@@ -1,0 +1,7 @@
+#include<iostream>
+int64_t n,m,a,i;
+int main(){
+ for(std::cin>>n;std::cin>>n>>m;std::cout<<a-1<<'\n')
+  for(a=0,i=1;i<=m;i++)
+   a+=(n+i)/(i*i);
+}
