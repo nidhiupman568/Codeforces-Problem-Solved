@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+int main(){
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n;
+	cin>>n;
+	cout<<32<<endl;
+	for(int i=0;i<32;i++,n>>=1){
+		if(n&1){
+			if(n&2)n++,cout<<-1<<" ";
+			else  cout<<1<<" ";
+		}
+		else cout<<0<<" ";
+	}
+    }
+	
+	return 0;
+}
