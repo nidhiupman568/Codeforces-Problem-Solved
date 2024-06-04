@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+ 
+typedef long long int ll;
+ 
+typedef tree<
+ll,
+null_type,
+less_equal<ll>,
+rb_tree_tag,
+tree_order_statistics_node_update>
+ordered_set;
+ 
+ 
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+ 
+#define db double
+#define pii pair<ll,ll>
+#define f(i,a,b) for(ll i=a;i<b;i++)
+#define fr(i,a,b) for(ll i=a;i>=b;i--)
+#define pb push_back
+#define ss second
+#define ff first
+#define in insert
+#define sq(x)  (x*x)
+#define all(a)  a.begin(),a.end()
+#define nl '\n'
+#define parr pair<ll,ll>
+#define mpr  priority_queue <parr, vector<parr>, greater<parr> >
+ 
+ll gcd(ll a,ll b){
+       if(b==0)return a;
+       return gcd(b,a%b);
+}
+int getRandom(int L,int R)
+{
+    return rng()%(R-L+1) + L;
+}
+ 
+ll lcm(ll a,ll b){
+       return (a*b)/gcd(a,b);
+}
+ 
+ll cube(ll a){
+  return a*a*a;
+}
+ 
+const ll  N = 1005;
+const ll mod = 1e8;
+const ll neginf= -1e18;
+const ll inf = 1e15;
+ 
+ 
+int main(){
+ 
+       ios_base::sync_with_stdio(false);
+       cin.tie(NULL);
+       cout.tie(NULL);
+ 
+      ll t;
+      cin>>t;
+      while(t--){
+          ll l,r;
+          cin>>l>>r;
+          ll c=0;
+          while(r>=2){
+             r/=2;
+             c++;
+          }
+          cout<<c<<nl;
+      }
+ 
+ 
+}
+ 
