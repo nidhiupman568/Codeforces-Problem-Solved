@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+int a[300005];
+int f[300005][12];
+void solve(){
+	int n,k;
+	cin>>n>>k;
+	for(int i=1;i<=n;i++){
+		cin>>a[i];
+	}
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<=k;j++){
+			f[i][j]=f[i-1][j]+a[i];
+			int vmin=a[i];
+			for(int d=0;d<=j&&i-d>=1;d++){
+				f[i][j]=min(f[i][j],f[i-d-1][j-d]+(d+1)*vmin);
+				if(i-d-1>=1) vmin=min(vmin,a[i-d-1]);
+			}
+		}
+	}
+	cout<<f[n][k]<<endl;
+}
+signed main(){
+	int t;
+	cin>>t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
