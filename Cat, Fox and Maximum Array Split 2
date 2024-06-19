@@ -1,0 +1,27 @@
+#include<iostream>
+using namespace std;
+int t,n,k,temp;
+int main(){
+	cin>>t;
+	while(t--){
+		cin>>n>>k;
+		int ma=0,res=-1;
+		for(int i=1;i<=n;i++){
+			cout<<"? "<<1<<" "<<i*n<<endl;
+			cin>>temp;
+			if(temp==n) ma=i;
+		}
+		for(int i=1;i<=n/k;i++){
+			int num=k,l=1;
+			while(l<=n&&num--){
+				cout<<"? "<<l<<" "<<i*ma<<endl;
+				cin>>temp;
+				if(temp==n+1) break;
+				l=temp+1;
+			}
+			if(l==n+1&&!num) res=i*ma;
+		}
+		cout<<"! "<<res<<endl;
+		cin>>ma;
+	}
+}
