@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+int main()
+{
+	ios::sync_with_stdio(false),cin.tie(0);
+	int n,m;
+	cin>>n>>m;
+	vector<int>a(n+1),b(n+1),c(m+1),d(1000000+1,1e9),e(1000000+1);
+	for(int x=1;x<=n;x++)
+	cin>>a[x];
+	for(int x=1;x<=n;x++)
+	cin>>b[x],d[a[x]]=min(d[a[x]],a[x]-b[x]);
+	for(int x=1;x<=m;x++)
+	cin>>c[x];
+	for(int x=1;x<=1000000;x++)
+	{
+		d[x]=min(d[x],d[x-1]);
+		if(x>=d[x])e[x]=e[x-d[x]]+1;
+	}
+	long long ans=0;
+	for(int x=1;x<=m;x++)
+	{
+		if(c[x]>=1000000)
+		{
+			int _=(c[x]-1000000)/d[1000000]+1;
+			ans+=_,c[x]-=_*d[1000000];
+		}
+		ans+=e[c[x]];
+	}
+	cout<<2*ans<<endl;
+}
