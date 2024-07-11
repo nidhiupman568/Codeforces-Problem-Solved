@@ -1,0 +1,1082 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define ld long double
+#define pb push_back
+#define max3(a,b,c) max(max(a,b),c)
+#define min3(a,b,c) min(min(a,b),c)
+#define mk make_pair
+#define MOD 1000000007
+#define MOD2 998244353
+#define PI 3.1415926535897932384
+#define gcd __gcd
+#define endl '\n'
+#define inti __int128_t  //Set editor to GNU 20 64 bits
+#define B 322
+using namespace std;
+ 
+/*
+ " I AM VENGEANCE , I AM THE KNIGHT , I AM THE BATMAN ! "
+____ __ __ __ __ __ ___                             ___ __ __ __ __ __ ____
+ `-._:  .:'   `:::  .:\           |\__/|           /::  .:'   `:::  .:.-'
+     \      :          \          |:   |          /         :       /
+      \     ::    .     `-_______/ ::   \_______-'   .      ::   . /
+       |  :   :: ::'  :   :: ::'  :   :: ::'      :: ::'  :   :: :|
+       |     ;::         ;::         ;::         ;::         ;::  |
+       |  .:'   `:::  .:'   `:::  .:'   `:::  .:'   `:::  .:'   `:|
+       /     :           :           :           :           :    \
+      /______::_____     ::    .     ::    .     ::   _____._::____\
+                    `----._:: ::'  :   :: ::'  _.----'
+                           `--.       ;::  .--'
+                               `-. .:'  .-'
+                                  \    /
+                                   \  /
+                                    \/
+*/
+//*****************************************nCr%mod******************************************************************************
+/* Iterative Function to calculate (x^y)%p
+in O(log y) */
+ long long power( long long x, 
+                              long long y,long long p)
+{
+     long long res = 1; // Initialize result
+  
+    x = x % p; // Update x if it is more than or
+    // equal to p
+  
+    while (y > 0) 
+    {
+      
+        // If y is odd, multiply x with result
+        if (y & 1)
+            res = (res * x) % p;
+  
+        // y must be even now
+        y = y >> 1; // y = y/2
+        x = (x * x) % p;
+    }
+    return res;
+}
+  
+// // Returns n^(-1) mod p
+ long long modInverse( long long n,  
+                                    long long p)
+{
+    return power(n, p - 2, p);
+}
+  
+// // Returns nCr % p using Fermat's little
+// // theorem.
+//  long long nCrModPFermat(long long n,
+//                                  long long r, long long p)
+// {
+//     // If n<r, then nCr should return 0
+//     if (n < r)
+//         return 0;
+//     // Base case
+//     if (r == 0)
+//         return 1;
+ 
+  
+//     // Fill factorial array so that we
+//     // can find all factorial of r, n
+//     // and n-r
+//      long long fac[n + 1];
+//     fac[0] = 1;
+//     for (int i = 1; i <= n; i++)
+//         fac[i] = (fac[i - 1] * i) % p;
+  
+//     return (fac[n] * modInverse(fac[r], p) % p
+//             * modInverse(fac[n - r], p) % p)
+//            % p;
+// }
+ 
+// ********************************************************************************************************************************
+// ************************************ORDERED SET********************************************************************************
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// using namespace __gnu_pbds;
+// #define ordered_set tree < long long ,  null_type ,  less<long long> ,  rb_tree_tag ,  tree_order_statistics_node_update >
+ 
+// (DONT OPEN THESE 2 LINES)
+// order_of_key(k);
+// find_of_order(k);
+// ************************************ORDERED SET********************************************************************************
+ 
+ 
+// ****************************************BINARY EXPONENTATION************************************************************************
+ 
+// int smpower(int a,int b,int M){
+//    a = a%M;                     //if(a is near order 10^9 b is 10^9 and m is 10^9)
+//    int ans=1;                   // TC=O(log(N))
+//    while(b>0){
+//       if(b&1){
+//          ans = (ans * 1LL * a) % M;
+//       }
+//       a = (a * 1LL * a) % M;
+//       b >>= 1;
+//    }
+//    return ans;
+// }
+ 
+// ************************************************************************************************************************************
+ 
+// inline ll power(ll x, ll y, ll p )
+// {
+// 	ll res = 1;     
+// 	x = x % p;                    //if(a is near order 10^18 b is 10^18 and m is 10^9)
+// 	while (y > 0)                 // TC=O(log(N))
+// 	{
+// 		if (y & 1)
+// 			res = (res * x) % p;
+// 		y = y >> 1;
+// 		x = (x * x) % p;
+// 	}
+// 	return res;
+// }
+ 
+// ************************************************************************************************************************************
+ 
+ 
+// ll binExp(ll a,ll b,ll M){
+//    ll ans = 1;
+//    while(b > 0){                  //if(a is of order 10^18 b is 10^18 and m is 10^18).OPEN BOTH THIS AND BELOW
+//       if(b&1){                                 //T C is O(log^2(n))
+//          ans = multiply(ans, a ,M);
+//       }
+//       a = multiply(a, a ,M);
+//       b >>= 1;
+//    }
+//    return ans;
+// }
+ 
+// ll multiply(ll a,ll b,ll M){
+//    int ans=0;
+//    while(b>0){
+//       if(b&1){
+//          ans= (ans + a) % M;
+//       }
+//       a = (a + a) % M;
+//       b >>= 1;
+//    }
+//    return ans;
+// }
+ 
+ 
+//*************************************************************************************************************************************
+ 
+//*********************************************Sieve of Eratosthenes******************************************************************
+// vector<ll> seive(ll num){
+//    vector<ll>lp(1e5+10,1) ;
+//    vector<ll>hp(1e5+10,1);            //RETURN ALL NUMBERS WITH PRIME 1 AND COMP 0;
+//    vector<ll>vec(1e5+10,1);
+//    vec[0]=0;
+//    vec[1]=0;
+//    for(ll i=2;i<1e5+10;i++){        //return 0 if not prime and 1 if prime
+//       if(vec[i]==1){ 
+//                 lp[i]=hp[i]=i;                     // TC is (n)log(log(n))
+//          for(ll j=2*i;j<=1e5+1;j=j+i){
+//             vec[j]=0;
+//                hp[j]=i;               //array of highest prime(VERY IMPORTANT)
+//                if(lp[j]==1){
+//                   lp[j]=i;           //array of lowest prime(VERY IMPORTANT)
+//                }
+//          }
+//       }
+//    }
+//    return vec;
+// }
+// vector<ll> seive3(ll num){
+//    vector<ll>lp(1e5+10,1) ;         //RETURNS PRIME ARRAY
+//    vector<ll>hp(1e5+10,1);   
+//    vector<ll>vec(1e5+10,1);
+//    vector<ll>vec2;
+//    vec[0]=0;
+//    vec[1]=0;
+//    for(ll i=2;i<1e5+10;i++){        //return 0 if not prime and 1 if prime
+//       if(vec[i]==1){ 
+//                 lp[i]=hp[i]=i;                     // TC is (n)log(log(n))
+//                 vec2.pb(i);
+//          for(ll j=2*i;j<=1e5+1;j=j+i){
+//             vec[j]=0;
+//                hp[j]=i;               //array of highest prime(VERY IMPORTANT)
+//                if(lp[j]==1){
+//                   lp[j]=i;           //array of lowest prime(VERY IMPORTANT)
+//                }
+//          }
+//       }
+//    }
+//    return vec2;
+// }
+// vector<ll> seive2(ll num){
+//    vector<ll>lp(1e5+10,1) ;        //RETURN LOWEST PRIME
+//    vector<ll>hp(1e5+10,1);   
+//    vector<ll>vec(1e5+10,1);
+//    vec[0]=0;
+//    vec[1]=0;
+//    for(ll i=2;i<1e5+10;i++){        //return 0 if not prime and 1 if prime
+//       if(vec[i]==1){ 
+//                 lp[i]=hp[i]=i;                     // TC is (n)log(log(n))
+//          for(ll j=2*i;j<=1e5+1;j=j+i){
+//             vec[j]=0;
+//                hp[j]=i;               //array of highest prime(VERY IMPORTANT)
+//                if(lp[j]==1){
+//                   lp[j]=i;           //array of lowest prime(VERY IMPORTANT)
+//                }
+//          }
+//       }
+//    }
+//    return lp;
+// }
+ 
+//*************************************************************************************************************************************
+//***********************************************MOST efficient prime factorization****************************************************
+ 
+// map<ll,ll> prime_factors(ll n,vector<ll>& sie,vector<ll>& lp,vector<ll>& poke2){
+ 
+ 
+ 
+ 
+    
+    
+//        map<ll,ll>mp;
+//         ll num=n;
+//         ll k=sqrt(num); 
+        
+//         ll j=0;
+//         while(num!=1){
+//            bool snake=true;
+//            if(num<1e5){        //After number reduces below 1e5(check lowest prime array)
+//             snake=false;
+//             mp[lp[num]]++;
+//             num=num/lp[num];
+//             continue;
+//            }
+//             for(;poke2[j]<=k;j++){         //numbers between 1e9-1e5(using array of prime)
+//                 if(sie[poke2[j]] && num%poke2[j]==0){
+//                     snake=false;
+//                     mp[poke2[j]]++;
+//                     num=num/poke2[j];
+//                     break;
+//                 }
+//             }
+//             if(snake){       //Num is prime
+//             mp[num]++;
+            
+//            num=1;
+//         }
+            
+//         }
+//         return mp;
+ 
+//     }
+ 
+   
+ 
+ 
+//**************************************DSU(Rank and Size)*****************************************************************************
+ 
+// class DisjointSet {
+    
+// public: 
+//     vector<ll> rank, parent, size; 
+//     DisjointSet(ll n) {
+//         rank.resize(n+1, 0); 
+//         parent.resize(n+1);
+//         size.resize(n+1); 
+//         for(ll i = 0;i<=n;i++) {
+//             parent[i] = i; 
+//             size[i] = 1; 
+//         }
+//     }
+ 
+//     ll findUPar(ll node) {
+//         if(node == parent[node])
+//             return node; 
+//         return parent[node] = findUPar(parent[node]); 
+//     }
+ 
+//     void unionByRank(ll u, ll v) {
+//         ll ulp_u = findUPar(u); 
+//         ll ulp_v = findUPar(v); 
+//         if(ulp_u == ulp_v) return; 
+//         if(rank[ulp_u] < rank[ulp_v]) {
+//             parent[ulp_u] = ulp_v; 
+//         }
+//         else if(rank[ulp_v] < rank[ulp_u]) {
+//             parent[ulp_v] = ulp_u; 
+//         }
+//         else {
+//             parent[ulp_v] = ulp_u; 
+//             rank[ulp_u]++; 
+//         }
+//     }
+ 
+//     void unionBySize(ll u, ll v) {
+//         ll ulp_u = findUPar(u); 
+//         ll ulp_v = findUPar(v); 
+//         if(ulp_u == ulp_v) return; 
+//         if(size[ulp_u] < size[ulp_v]) {
+//             parent[ulp_u] = ulp_v; 
+//             size[ulp_v] += size[ulp_u]; 
+//         }
+//         else {
+//             parent[ulp_v] = ulp_u;
+//             size[ulp_u] += size[ulp_v]; 
+//         }
+//     }
+
+//    ll size_of_cluster(ll u){
+//         ll ult_par = findUPar(u);
+//         return size[ult_par];
+//    }
+// }; 
+ 
+//*************************************************************************************************************************************
+ 
+ 
+//Binary Search for desired position
+ 
+// int BinSearch(ll *arr,int n,ll k){
+//     int beg=0;
+//     int end=n-1;
+//     int mid;
+//     while(beg<=end){
+//         mid=beg+(end-beg)/2;
+//         if(arr[mid]==k){
+//             return mid;
+//         }
+//         else if(arr[mid]>k){
+//             end=mid-1;
+//         }
+//         else{
+//             beg=mid+1;
+//         }
+//     }
+// return -1;
+// }
+ 
+//Binary Search for index of first occurance of k
+ 
+// int BinSearch(ll *arr,int n,ll k){
+//     int beg=0;
+//     int end=n-1;
+//     int mid;
+//     while(beg<=end){
+//         mid=beg+(end-beg)/2;
+//         if(arr[mid]==k && (mid==0||arr[mid-1]!=k)){
+//             return mid;
+//         }
+//         else if(arr[mid]>=k){
+//             end=mid-1;
+//         }
+//         else{
+//             beg=mid+1;
+//         }
+//     }
+// return -1;
+// }
+ 
+ 
+//Binary Search for index of last occurance of k
+ 
+// int BinSearch(ll *arr,int n,ll k){
+//     int beg=0;
+//     int end=n-1;
+//     int mid;
+//     while(beg<=end){
+//         mid=beg+(end-beg)/2;
+//         if(arr[mid]==k && (mid==n-1||arr[mid+1]!=k)){
+//             return mid;
+//         }
+//         else if(arr[mid]>=k){
+//             end=mid-1;
+//         }
+//         else{
+//             beg=mid+1;
+//         }
+//     }
+// return -1;
+// }
+ 
+// bool comp(pair<pair<ll,ll>,ll>p1,pair<pair<ll,ll>,ll>p2){
+//     if(p1.first.first<p2.first.first){
+//         return true;
+//     }
+//     if(p1.first.first==p2.first.first){
+//         if(p1.first.second>p2.first.second){
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+ 
+//Number to string-->string s=to_string(a);
+//String to number-->ll a=atoi(s.c_str());
+ 
+//3D vector of dimension 2*2*3 with all elements as 1
+// vector<vector<vector<int> > > vect3d(2, vector<vector<int> > (2,vector<int>(3,1)));
+
+
+//*********************************************Bnary to Decimal************************************************************************
+ 
+// ll Bin_to_Dec(vector<ll>& poke){
+//     ll ans=0;
+//     ll power=1;
+//     ll n=poke.size();
+//     for(ll i=n-1;i>=0;i--){
+//         if(poke[i]==1){
+//             ans+=power;
+//         }
+//         power=power*2;
+//     }
+//     return ans;
+// }
+//*************************************************************************************************************************************
+ 
+//******************************************Decimal to Binary***************************************************************************
+ 
+// vector<ll>Dec_to_Bin(ll n){
+//     vector<ll>ans;
+//     if(n==0){
+//         ans.pb(0);
+//         return ans;
+//     }
+//     while(n>0){
+//         if(n%2==1){
+//             ans.pb(1);
+//         }
+//         else{
+//             ans.pb(0);
+//         }
+//         n=n/2;
+//     }
+//     reverse(ans.begin(),ans.end());
+//     return ans;
+// }
+ 
+//*************************************************************************************************************************************
+// __builtin_popcount = int              Number of set bits
+// __builtin_popcountl = long int
+// __builtin_popcountll = long long
+
+//*******************************************MATRIX EXPONENTATION****************************************************************************
+// vector<vector<ll>>multiply(vector<vector<ll>>& a,vector<vector<ll>>& b){
+//     vector<vector<ll>>ans={{0,0},{0,0}};
+//     for(ll i=0;i<2;i++){
+//         for(ll j=0;j<2;j++){                           //Matrix multiplication  Aik *Bkj
+//             for(ll k=0;k<2;k++){
+//                 ans[i][j]=((a[i][k]*b[k][j])%MOD+ans[i][j])%MOD;
+//             }
+//         }
+//     }
+//     return ans;
+// }
+// vector<vector<ll>>f(vector<vector<ll>>& a,ll b){
+//     vector<vector<ll>>ans={{0,1},{0,0}};        //Base case
+//     while(b!=0){
+//         if(b%2==1){
+//             ans=multiply(ans,a);
+//         }
+//         a=multiply(a,a);
+//         b=b/2;
+//     }
+//     return ans;
+// }
+// int main(){  
+// ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+ 
+// ll b;
+// cin>>b;
+// vector<vector<ll>>a(2,vector<ll>(2));
+ 
+ 
+// a[0][0]=0;      //Transition matrix
+// a[0][1]=1;
+// a[1][0]=1;
+// a[1][1]=1;
+// vector<vector<ll>>ans=f(a,b);
+// cout<<ans[0][0]<<endl;
+ 
+// }
+ 
+// ****************************************************************************************************************************************
+ 
+//                                //LPS//
+// vector<ll>lps(string s){
+//       int n=s.size();
+// 	    vector<ll>ans(n);
+// 	    for(ll i=1;i<n;i++){
+
+//         //Check the index that u compare with the cuur_index
+// 	        ll j=ans[i-1];
+// 	        while(s[j]!=s[i] && j!=0){
+// 	            j=ans[j-1];
+// 	        }
+// 	        if(s[i]==s[j]){
+// 	            j++;
+// 	            ans[i]=j;
+// 	        }
+// 	    }
+
+//       //In this ans array it specifies what is the longest prefix that has the same string as the suffix ending at that index
+//         return ans;
+// }
+
+//                               //KMP//
+
+// ll KMP_index(string & original,string & match){
+//       vector<ll>prefix_array = lps(match);
+
+//       ll index_1=0;
+//       ll index=-1;
+//       for(ll i=0;i<original.size();i++){
+
+//         //If the original index is matching with i then move forward
+
+//         if(original[i]==match[index_1]){
+//           index_1++;
+//         }
+//         else{
+
+//         //If it hits the first index then just increement the original string iterator
+//          if(index_1==0){
+//           continue;
+//          }
+
+//          //Try the lps string and go to the previous index where there may be a match
+//          index_1 = prefix_array[index_1-1];
+//          i--;
+//         }
+
+//         if(index_1==match.size()){
+//           return (i-match.size()+1);
+//         }
+//       }
+//       return -1;
+// }
+//*************************************************************************************************************************************
+
+// #include<ext/pb_ds/assoc_container.hpp>
+// #include<ext/pb_ds/tree_policy.hpp>
+
+// using namespace __gnu_pbds;
+ 
+// typedef tree<pair<int,int>,null_type,less<pair<int,int>>,rb_tree_tag,tree_order_statistics_node_update>ordered_set;  // find_by_order
+
+
+//*****************************************************************************************************************************************
+
+// class max_heap{
+//     private:
+//     set<pair<ll,ll>>st;
+//     public:
+//     void insert_num(ll index,ll val){
+//         st.insert({val,index});
+//     }
+
+//     void delete_num(ll index,ll val){
+//         if(st.find({val,index})!=st.end()){
+//             st.erase({val,index});
+//         }
+//     }
+
+//     pair<ll,ll> get_top_element(){
+//         auto it=st.end();
+//         it--;
+//         pair<ll,ll>a={it->first,it->second};
+//         return a;
+//     }
+
+//     ll size(){
+//         return st.size();
+//     }
+
+//     void pop_up(){
+//         auto it=st.end();
+//         it--;
+//         st.erase(it);
+//     }
+
+
+// };
+
+// class min_heap{
+//     private:
+//     set<pair<ll,ll>>st;
+//     public:
+//     void insert_num(ll index,ll val){
+//         st.insert({val,index});
+//     }
+
+//     void delete_num(ll index,ll val){
+//         if(st.find({val,index})!=st.end()){
+//             st.erase({val,index});
+//         }
+//     }
+
+//     pair<ll,ll> get_top_element(){
+//         auto it=st.begin();
+//          pair<ll,ll>a={it->first,it->second};
+//         return a;
+//     }
+
+//     ll size(){
+//         return st.size();
+//     }
+
+//     void pop_up(){
+//         auto it=st.begin();
+//         st.erase(it);
+//     }
+
+// };
+
+//***************************************************MERGE SORT TREE*****************************************************************************
+// void build_tree(vector<vector<ll>>& merge_sort_tree,vector<ll>& times,ll beg,ll end, ll node){
+//    if(beg==end){
+//       merge_sort_tree[node].pb(times[beg]);
+//       return;
+//    }
+
+//    ll mid =(beg+end)/2;
+//    build_tree(merge_sort_tree,times,beg,mid,2*node+1);
+//    build_tree(merge_sort_tree,times,mid+1,end,2*node+2);
+//    ll pointer1=0;
+//    ll pointer2=0;
+//    while(pointer1<merge_sort_tree[2*node+1].size() && pointer2<merge_sort_tree[2*node+2].size()){
+//       if(merge_sort_tree[2*node+1][pointer1]<=merge_sort_tree[2*node+2][pointer2]){
+//          merge_sort_tree[node].pb(merge_sort_tree[2*node+1][pointer1]);
+//          pointer1++;
+//       }
+//       else{
+//          merge_sort_tree[node].pb(merge_sort_tree[2*node+2][pointer2]);
+//          pointer2++;
+//       }
+//    }
+
+//    while(pointer1<merge_sort_tree[2*node+1].size()){
+//       merge_sort_tree[node].pb(merge_sort_tree[2*node+1][pointer1]);
+//       pointer1++;
+//    }
+
+//    while(pointer2<merge_sort_tree[2*node+2].size()){
+//       merge_sort_tree[node].pb(merge_sort_tree[2*node+2][pointer2]);
+//       pointer2++;
+//    }
+
+// }
+////////////////////////////////////////////Inverse_Mod////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+// ll inverse_mod(ll n,ll p){
+//     if(p==1){
+//         return n;
+//     }
+//     if(p==0){
+//         return 1;
+//     }
+
+//     ll a = inverse_mod(n,p/2);
+//     if(p%2==1){
+//         ll ans = (((a*a)%MOD2)*n)%MOD2;
+//         return ans;
+//     }
+//     else{
+//         ll ans = (a*a)%MOD2;
+//         return ans;
+//     }
+// }
+
+////////////////////////////////////////////Manachers_algorithm//////////////////////////////////////////////////////////////////////////////////
+
+    // vector<ll> manachar(string s) {
+    //     ll n = s.size();
+    //     string s2="";
+    //     for(ll i=0;i<n;i++){
+    //         s2+='*';
+    //         s2+=s[i];
+    //     }
+    //     s2+='*';
+    //     ll n2=s2.size();
+    //     vector<ll>dp(n2+1);
+    //     ll right = 0;
+    //     ll center = 0;
+    //     for(ll i=0;i<n2;i++){
+    //         ll mirror = 2*center-i;
+
+    //         if(right>=i){
+    //             dp[i] = min(right-i,dp[mirror]);
+    //         }
+
+    //         ll elongate = 0;
+    //         while(i-elongate-1-dp[i]>=0 && i+elongate+1+dp[i]<n2 &&  s2[i-dp[i]-elongate-1]==s2[i+dp[i]+elongate+1]){
+    //             elongate++;
+    //         }
+    //         dp[i]=dp[i]+elongate;
+
+    //         if(i+dp[i]>right){
+    //             center=i;
+    //             right=i+dp[i];
+    //         }
+    //     }
+    //     ll ans = 0;
+    //     ll index=-1;
+    //     for(ll i=0;i<n2;i++){
+    //        if(dp[i]>ans){
+    //         ans=dp[i];
+    //         index=i;
+    //        }
+    //     }
+        
+    //   return dp;
+    // }
+
+///////////////////////////////////////////////////////////////////////////LAZY SEG_MENT_TREE////////////////////////////////////////////////////////////////////////////
+
+// //For max change all + to max
+// ll range_sum(vector<ll>& lazy_seg_tree,vector<ll>& arr,ll left,ll right,ll node,vector<ll>& lazy,ll beg,ll end){
+
+//    //FISRT OF ALL CHECK FOR LAZY UPDATES
+//     if(lazy[node]!=0){
+//     lazy_seg_tree[node]+=(right-left+1)*lazy[node];
+//     if(left!=right){
+//       lazy[2*node+1]+=lazy[node];
+//       lazy[2*node+2]+=lazy[node];
+//     }
+//     lazy[node]=0;
+//   }
+
+
+//   //If range are out of bounds
+//   if(beg>right || end<left)return 0;
+
+//   //Completely lies indide
+//   if(beg<=left && end>=right){
+//     return lazy_seg_tree[node];
+//   }
+
+//    ll mid = (left+right)/2;
+//   ll a = range_sum(lazy_seg_tree, arr,left,mid,2*node+1,lazy,beg,end);
+//   ll b = range_sum(lazy_seg_tree, arr,mid+1,right,2*node+2,lazy,beg,end);
+//  return (a+b);
+
+// }
+// void range_update(vector<ll>& lazy_seg_tree,vector<ll>& arr,ll left,ll right,ll node,vector<ll>& lazy,ll beg,ll end,ll val){
+  
+
+//   //FISRT OF ALL CHECK FOR LAZY UPDATES
+//   if(lazy[node]!=0){
+//     lazy_seg_tree[node]+=(right-left+1)*lazy[node];
+//     if(left!=right){
+//       lazy[2*node+1]+=lazy[node];
+//       lazy[2*node+2]+=lazy[node];
+//     }
+//     lazy[node]=0;
+//   }
+
+
+//   //If range are out of bounds
+//   if(beg>right || end<left)return;
+
+
+//   //Completely lies indide
+//   if(beg<=left && end>=right){
+//     lazy_seg_tree[node]+= (right-left+1)*val;
+//     if(right!=left){
+//       lazy[2*node+1]+=val;
+//       lazy[2*node+2]+=val;
+//     }
+//     return ;
+//   }
+
+//   ll mid = (left+right)/2;
+//   range_update(lazy_seg_tree, arr,left,mid,2*node+1,lazy,beg,end,val);
+//   range_update(lazy_seg_tree, arr,mid+1,right,2*node+2,lazy,beg,end,val);
+//   lazy_seg_tree[node] =  lazy_seg_tree[2*node+1] + lazy_seg_tree[2*node+2];
+ 
+// }
+// void build(vector<ll>& lazy_seg_tree,vector<ll>& arr,ll left,ll right,ll node,vector<ll>& lazy){
+//   if(left==right){
+//     lazy_seg_tree[node]=arr[right];
+//     return;
+//   }
+//   ll mid = (left+right)/2;
+//   build(lazy_seg_tree,arr,left,mid,2*node+1,lazy);
+//   build(lazy_seg_tree,arr,mid+1,right,2*node+2,lazy);
+//   lazy_seg_tree[node]=lazy_seg_tree[2*node+2]+lazy_seg_tree[2*node+1];
+// }
+
+/////////////////////////////////////////////////////////MERGE SORT TREE/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//   vector<ll> merge(vector<ll> &a,vector<ll>& b){
+//     ll a_size=a.size();
+//     ll b_size=b.size();
+//     ll pointer_a=0;
+//     ll pointer_b=0;
+// vector<ll>poke;
+//        while(pointer_a<a_size && pointer_b<b_size){
+//     if(a[pointer_a]>b[pointer_b]){
+//       poke.pb(b[pointer_b]);
+//       pointer_b++;
+//     }
+//     else{
+//       poke.pb(a[pointer_a]);
+//       pointer_a++;
+//     }
+//    }
+
+//    while(pointer_a<a_size){
+//       poke.pb(a[pointer_a]);
+//       pointer_a++;
+//    }
+
+//     while(pointer_b<b_size){
+//       poke.pb(b[pointer_b]);
+//       pointer_b++;
+//    }
+
+//    return poke;
+//   }
+  
+  
+  
+//   ll greater_than_or_equal_to(vector<ll>& arr,vector<vector<ll>> & seg_tree,ll node,ll left,ll right,ll val,ll beg,ll end){
+//   if(beg>right || end<left){
+//     return 0;
+//   }
+//   if(beg<=left && end>=right){
+//     ll index = lower_bound(seg_tree[node].begin(),seg_tree[node].end(),val)-seg_tree[node].begin();
+//     return seg_tree[node].size()-index;
+//   }
+//   ll mid = (left+right)/2;
+//   ll a = greater_than_or_equal_to(arr,seg_tree,2*node+1,left,mid,val,beg,end);
+//   ll b = greater_than_or_equal_to(arr,seg_tree,2*node+2,mid+1,right,val,beg,end);
+//   return (a+b);
+
+// }
+
+
+
+
+// void update(vector<ll>& arr,vector<vector<ll>> & seg_tree,ll node,ll left,ll right,ll point,ll val){
+//   if(left==right && left==point){
+   
+//     seg_tree[node][0]=val;
+//     return;
+//   }
+
+//   if(point<left || point>right)return;
+
+//   ll mid = (left+right)/2;
+//    update(arr,seg_tree,2*node+1,left,mid,point,val);
+//    update(arr,seg_tree,2*node+2,mid+1,right,point,val);
+  
+
+//    seg_tree[node]=merge(seg_tree[2*node+1],seg_tree[2*node+2]);
+
+// }
+
+// void build(vector<ll>& arr,vector<vector<ll>> & seg_tree,ll node,ll left,ll right){
+//   if(left==right){
+//     seg_tree[node].pb(arr[left]);
+//     return;
+//   }
+
+
+//   ll mid = (left+right)/2;
+//    build(arr,seg_tree,2*node+1,left,mid);
+//    build(arr,seg_tree,2*node+2,mid+1,right);
+
+
+
+//    seg_tree[node]=merge(seg_tree[2*node+1],seg_tree[2*node+2]);
+// }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                    //Tarjan Algo (Returns the bridges)
+// ll timeer = 0;
+//     void dfs1(vector<ll>& parent,vector<ll>adj[],ll node,vector<ll>& vis){
+//         for(auto it:adj[node]){
+//             if(vis[it]==0){
+//                 vis[it]=1;
+//                 parent[it]=node;
+//                 dfs1(parent,adj,it,vis);
+//             }
+//         }
+//     }
+//     void dfs2(ll node,vector<ll>& parent,vector<ll>adj[],vector<ll>& vis2,vector<ll>& first_time,vector<ll>& min_time,vector<vector<ll>>& critical){
+//         first_time[node]=timeer;
+//         min_time[node]=timeer;
+//         timeer++;
+//         for(auto it:adj[node]){
+//             if(vis2[it]==0){
+//                 vis2[it]=1;
+//                 dfs2(it,parent,adj,vis2,first_time,min_time,critical);
+//                 min_time[node]=min(min_time[it],min_time[node]);
+//                 if(first_time[node]<min_time[it]){
+//                   int node2=node;
+//                   int it2=it;
+//                     critical.pb({node2,it2});
+//                 }
+//             }
+//             else{
+//                if(parent[node]!=it)  min_time[node]=min(min_time[it],min_time[node]);
+//             }
+//         }
+//     }
+// vector<vector<ll>>tarzan(ll n,vector<ll>adj[]){
+//       vector<ll>parent(n+1);
+
+//         vector<ll>vis(n+1);
+//         for(ll i=1;i<=n;i++){
+//             if(vis[i]==0){
+//                 vis[i]=1;
+//                 parent[i]=-1;
+//                 dfs1(parent,adj,i,vis);
+//             }
+//         }
+
+//         vector<ll>first_time(n+1);
+//         vector<ll>min_time(n+1);
+//         vector<vector<ll>>critical;
+//         vector<ll>vis2(n+1);
+//         for(ll i=1;i<=n;i++){
+//             if(vis2[i]==0){
+//                 vis2[i]=1;
+//                 dfs2(i,parent,adj,vis2,first_time,min_time,critical);
+//             }
+//         }
+//         timeer = 0;
+//         return critical;
+// }
+///////////////////////////////////////Segtree_template////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// void segment_tree(vector<ll>& arr,vector<ll>& seg_tree,ll index,ll low,ll high){
+//   if(low==high){
+//     seg_tree[index]=arr[low];
+//     return;
+//   }
+//   ll mid=(high+low)/2;
+//   segment_tree(arr,seg_tree,2*index+1,low,mid);
+//   segment_tree(arr,seg_tree,2*index+2,mid+1,high);
+//   seg_tree[index]=seg_tree[2*index+1]+seg_tree[2*index+2];
+ 
+// }
+ 
+// void point_update(vector<ll>& arr,vector<ll>& seg_tree,ll index,ll low,ll high,ll node,ll val){
+  
+//   if(node>=low && node<=high){
+    
+//     if(low==high){
+//     seg_tree[index]=val;
+    
+//     return;
+//   }
+//   ll mid=(high+low)/2;
+//   point_update(arr,seg_tree,2*index+1,low,mid,node,val);
+//   point_update(arr,seg_tree,2*index+2,mid+1,high,node,val);
+//   seg_tree[index]=seg_tree[2*index+1]+seg_tree[2*index+2];
+ 
+//   }
+// }
+ 
+// ll range_sum(vector<ll>& arr,vector<ll>& seg_tree,ll index,ll low,ll high,ll left,ll right){
+ 
+//   if(left<=low && right>=high){
+//     return seg_tree[index];
+//   }
+//   if(low<left && high<left || low>right && high>right){
+    
+//     return 0;
+//   }
+//   ll mid=(high+low)/2;
+//   ll lef=range_sum(arr,seg_tree,2*index+1,low,mid,left,right);
+//   ll righ=range_sum(arr,seg_tree,2*index+2,mid+1,high,left,right);
+//   return lef+righ;
+ 
+// }
+
+////////////////////////////////////////////////////DSU of Pairs//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// class DisjointSet_Pair {
+// public:
+//     vector<vector<pair<ll, ll>>> parent;
+//     vector<vector<ll>> size;
+
+//     DisjointSet_Pair(ll n, ll m) {
+
+//         parent.resize(n + 1, vector<pair<ll, ll>>(m + 1));
+//         size.resize(n + 1, vector<ll>(m + 1, 1));
+
+//         for (ll i = 0; i <= n; ++i) {
+//             for (ll j = 0; j <= m; ++j) {
+//                 parent[i][j] = {i, j};
+//             }
+//         }
+//     }
+
+//     pair<ll, ll> find(pair<ll, ll> cell) {
+//         ll i = cell.first;
+//         ll j = cell.second;
+//         if (parent[i][j] != make_pair(i, j)) {
+//             parent[i][j] = find(parent[i][j]);
+//         }
+//         return parent[i][j];
+//     }
+
+//     void union_sets(pair<ll, ll> cell1, pair<ll, ll> cell2) {
+//         pair<ll, ll> root1 = find(cell1);
+//         pair<ll, ll> root2 = find(cell2);
+
+//         if (root1 != root2) {
+//             ll r1_i = root1.first, r1_j = root1.second;
+//             ll r2_i = root2.first, r2_j = root2.second;
+
+//             if (size[r1_i][r1_j] < size[r2_i][r2_j]) {
+//                 parent[r1_i][r1_j] = root2;
+//                 size[r2_i][r2_j] += size[r1_i][r1_j];
+//             } else {
+//                 parent[r2_i][r2_j] = root1;
+//                 size[r1_i][r1_j] += size[r2_i][r2_j];
+//             }
+//         }
+//     }
+// };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+int main(){  
+ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);  
+    ll t;
+    cin>>t;
+    while(t--){
+        ll n,a,b;
+        cin>>n>>a>>b;
+        if(a>=b){
+            cout<<n*a<<endl;
+        }
+        else{
+            if(b-a>=n){
+                ll last = b-n+1;
+                cout<<(n*(2*b+1-n))/2<<endl;
+            }
+            else{
+                ll last = b-a+1;
+                ll poke = ((b-a)*(b+a+1))/2;
+              
+                poke+=(n-(b-a))*a;
+                
+                cout<<poke<<endl;
+            }
+
+        }
+
+    }
+}
+
+ 
