@@ -1,0 +1,198 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ar array
+#define int long long
+#define ld long double
+#define sza(x) ((int)x.size())
+#define all(a) (a).begin(), (a).end()
+const int MAX_N = 1e5 + 5;
+const int MOD = 1e9 + 7;
+const int INF = 1e9;
+const ld EPS = 1e-9;
+bool primes[1000001];
+const int N = 200005;
+ 
+ 
+ 
+struct Node{
+    Node*arr[26];
+    bool flag = false;
+};
+ 
+class Trie {
+    private: Node*root;
+public:
+    Trie() {
+        root = new Node();
+    }
+    
+    void insert(string s) {
+        Node*curr = root;
+        
+        for(char x:s){
+            int ind = x-'a';
+            if(curr->arr[ind]==NULL){
+                curr->arr[ind] = new Node();
+            }
+          curr = curr->arr[ind];
+        }
+        curr->flag = true;
+    }
+    
+    bool search(string s) {
+        Node*curr = root;
+        for(char x:s){
+            int ind = x-'a';
+            if(curr->arr[ind]==NULL) return false;
+            else curr = curr->arr[ind];
+        }
+        return curr->flag;
+    }
+    
+    bool startsWith(string s) {
+         Node*curr = root;
+        for(char x:s){
+            int ind = x-'a';
+            if(curr->arr[ind]==NULL) return false;
+            else curr = curr->arr[ind];
+        }
+        return true;       
+    }
+};
+long long binpow(long long a, long long b, long long m) {
+a %= m;
+long long res = 1;
+while (b > 0) {
+if (b & 1)
+res = res * a % m;
+a = a * a % m;
+b >>= 1;
+}
+return res;
+}
+ 
+//-----------------------------------NUmber Theory----------------------
+ 
+int inv(int n,int m){
+    return binpow(n,m-2,m);
+}
+ 
+void seive(){
+int n = 1000001;
+fill(primes,primes+n,true);
+primes[0] = primes[1] = false;
+for (int i = 2; i*i<=n; i++)
+{
+if(primes[i]){
+for (int j =i*i; j<n; j = j+i)
+{
+primes[j] = false;
+}
+}
+}
+}
+ 
+ 
+vector<int>primefactors(int n){
+    vector<int>ans;
+    for (int i = 2; i*i<=n; i++)
+    {
+        while (n%i==0)
+        {
+            n = n/i;
+            ans.push_back(i);
+        }
+        
+    }
+    if(n>1){
+        ans.push_back(n);
+    }
+    return ans;
+}
+ 
+int fact[N], invfact[N];
+ 
+int pow(int a, int b, int m)
+{
+    int ans=1;
+    while(b)
+    {
+        if(b&1)
+            ans=(ans*a)%m;
+        b/=2;
+        a=(a*a)%m;
+    }
+    return ans;
+}
+ 
+int modinv(int k)
+{
+    return pow(k, MOD-2, MOD);
+}
+ 
+void precompute()
+{
+    fact[0]=fact[1]=1;
+    for(int i=2;i<N;i++)
+    {
+        fact[i]=fact[i-1]*i;
+        fact[i]%=MOD;
+    }
+    invfact[N-1]=modinv(fact[N-1]);
+    for(int i=N-2;i>=0;i--)
+    {
+        invfact[i]=invfact[i+1]*(i+1);
+        invfact[i]%=MOD;
+    }
+}
+ 
+int nCr(int n, int k)
+{
+return fact[n] * invfact[k] % MOD * invfact[n - k] % MOD;
+}
+ 
+ 
+ 
+ 
+// state ---->
+//Transition -->
+/*
+ 
+ 
+*/
+//Base Case --->
+//Final Subproblem --->
+ 
+ 
+//-----------------------------------------------------end----------------------------------------------------------
+void solve() {
+    int k;
+    cin>>k;
+int n;
+cin>>n;
+ 
+int arr[n];
+for(int i = 0;i<n;i++){
+cin>>arr[i];
+}
+sort(arr,arr+n);
+ 
+int sum = 0;
+int curr = 0;
+for (int i = 0; i <n-1; i++)
+{
+    sum = sum+arr[i];
+    curr = curr+arr[i]-1;
+}
+cout<<sum+curr<<"\n";
+ 
+}
+signed main() {
+    ios_base::sync_with_stdio(false);
+cin.tie(NULL);
+int t;
+cin>>t;
+while(t--){
+solve();
+}
+}
