@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+int t;
+cin>>t;
+while(t--){
+int a,b,c;
+cin>>a>>b>>c;
+string st;
+cin>>st;
+int x=0,y=-1,f=0;
+for(int i=0;i<a;i++){
+if(st[i]=='C' ){
+  int l=i-y;
+  if(l>=b){f++;break;}}
+  else if(st[i]=='W'){
+int l= i-y;
+if(l>=b){x++;}}
+else{ y=i;}}
+int j=a+1;
+if(x>c || f>0){cout<<"no"<<endl;}
+else cout<<"yes"<<endl;}
+
+
+return 0;}
