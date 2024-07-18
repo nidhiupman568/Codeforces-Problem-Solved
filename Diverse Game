@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+	int t;
+	cin >> t;
+
+	while (t--) {
+		int n, m;
+		cin >> n >> m;
+
+		vector<int> xs(n*m);
+		for (int &x: xs)
+			cin >> x;
+
+		if (n*m == 1) {
+			cout  << "-1\n";
+			continue;
+		}
+
+		for (int i = 1; i < n*m; ++i)
+			cout << xs[i] << " ";
+		cout << xs[0] << "\n";
+	}
+}
