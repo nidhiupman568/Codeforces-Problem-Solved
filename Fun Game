@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+string s,t;
+int main()
+{
+	int q;
+	cin >> q;
+	while(q--)
+	{
+		int n;
+		cin >> n >> s >> t;
+		if(s.find('1') <= t.find('1'))
+		{
+			printf("YES\n");
+		}
+		else
+		{
+			printf("NO\n");
+		}
+	}
+	return 0;
+}
