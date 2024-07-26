@@ -1,0 +1,14 @@
+#include<cstdio>
+int main(){
+  int t;scanf("%d",&t);
+  while(t--){
+    int n,k;scanf("%d%d",&n,&k);
+    int cnt=0;
+    while(k>0){
+      k-=(!cnt?n:n-(cnt+1)/2);
+      ++cnt;
+    }
+    printf("%d\n",cnt);
+  }
+  return 0;
+}
