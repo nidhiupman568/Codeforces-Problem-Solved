@@ -1,0 +1,24 @@
+#include<iostream>
+#include<map>
+using namespace std;
+int main()
+{int t;
+cin>>t;
+while(t--)
+{long long n,m;
+cin>>n>>m;
+long long a[n],ans=0,mx=0;
+map<long long,long long>mp;
+for(int i=0;i<n;i++)cin>>a[i];
+for(int i=0;i<n;i++)cin>>mp[a[i]];
+for(int i=0;i<n;i++)
+{ans=0;
+	long long f,f1,f3;
+f=min((m/a[i]),mp[a[i]]);
+f1=min(((m-f*a[i])/(a[i]+1)),mp[a[i]+1]);
+ans=(f*a[i]+f1*(a[i]+1));
+f3=min(f,mp[a[i]+1]-f1);
+ans+=f3;
+mx=max(mx,min(ans,m));
+if(mx==m)break;}
+cout<<mx<<endl;}}
