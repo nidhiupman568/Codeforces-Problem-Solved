@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int T;
+	cin>>T;
+	while(T--)
+	{
+	    int n;
+	    cin>>n;
+	    int a[n],b[n];
+		for(auto &i:a) cin>>i;
+		long long ans=0;
+        b[0]=0;
+		for(int i=1;i<n;i++)
+		{
+            if(a[i]==1 && a[i-1]!=1) { ans=-1; break; }
+            ans+=b[i]=max(0,b[i-1]+int(ceil(log2(log(a[i-1])/log(a[i])))));
+            // ans+=b[i];
+		}
+		cout<<ans<<"\n";
+	}
+	return 0;
+}
