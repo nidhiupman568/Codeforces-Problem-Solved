@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ff first
+#define ss second
+#define pb push_back
+#define ll long long
+int arr[200005];
+ll prefix[200005];
+int n;
+ll getPrefix(int l, int r){
+    if(r < l)return 0;
+    if( r <= 0 )return 0;
+    if( l > n)return 0;
+    return prefix[r] - prefix[l-1];
+}
+ 
+void tc(){
+ 
+    cin >> n;
+    prefix[0] = 0;
+    for(int i = 1; i <= n ; i ++){
+        cin >> arr[i];
+        prefix[i] = prefix[i-1] + arr[i];
+    }
+ 
+    ll kMax = 0;
+    for(int i = 1; i <= n ; i ++){
+        kMax = max(kMax, abs(prefix[i]) + getPrefix(i + 1, n));
+    }
+    cout << kMax << "\n";
+ 
+ 
+}
+ 
+void terminar_caso(){
+ 
+}
+ 
+ 
+int main(){
+    #ifdef LOCAL
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+ 
+    #endif // LOCAL
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int t;
+    cin>>t;
+    while(t--){
+        tc();
+        terminar_caso();
+    }
+ 
+}
+ 
