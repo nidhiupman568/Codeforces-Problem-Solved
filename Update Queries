@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct aa{
+  long long a,b;
+}t[200010];
+// long long e[200010],n;
+// int lowbit(long long i){
+// 	return (-i)&i;
+// }
+// void add(int i,int z){
+// 	for(;i<=n;i+=lowbit(i)){
+// 		e[i]+=z;
+// 	}
+// }
+// long long sum(long long x){
+// 	long long s=0;
+// 	for(int i=x;i>0;i-=lowbit(i)){
+// 		s+=e[i];
+// 	}
+// 	return s;
+// }
+int main(){
+ 
+  long long a,x1,x2,m,l1,l2,l3,l4,l5,m1,m2,l0,g1,g2,g3,max1,x,y,z,k,n,mid;
+ scanf("%lld",&a);
+ 
+ while(a--){ 
+    scanf("%lld%lld",&n,&m);
+    string t,r;
+    cin>>t;
+    multiset<char>q1;
+    vector<long long>e(m+5);
+    for(int i=1;i<=m;i++){
+      scanf("%lld",&e[i]);
+ 
+    }
+    sort(e.begin()+1,e.begin()+1+m);
+    cin>>r;
+    r=' '+r;
+    t=' '+t;
+    for(int i=1;i<=m;i++){
+      q1.insert(r[i]);
+    }
+    for(int i=1;i<=m;i++){
+      if(e[i]==e[i+1]){
+        auto c=q1.rbegin();
+        q1.erase(q1.find(*c));
+      }else{
+        auto c=q1.begin();
+        
+        t[e[i]]=*c;
+        q1.erase(q1.find(*c));
+      }
+    }
+    cout<<t;
+    printf("\n");
+  }
+    return 0;
+}
