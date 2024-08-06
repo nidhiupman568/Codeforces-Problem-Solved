@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <array>
+
+const int NUM_CHARACTERS = 4;
+
+struct CharCount {
+    char character;
+    int count;
+};
+
+void countCharacters(const std::string& str, std::array<CharCount, NUM_CHARACTERS>& counts) {
+    for (char c : str) {
+        for (auto& count : counts) {
+            if (c == count.character) {
+                count.count++;
+                break;
+            }
+        }
+    }
+}
+
+int calculateResult(const std::array<CharCount, NUM_CHARACTERS>& counts, int n) {
+    int result = 0;
+    for (const auto& count : counts) {
+        result += std::min(count.count, n);
+    }
+    return result;
+}
+
+void processTestCase() {
+    int n;
+    std::string s;
+    std::cin >> n >> s;
+
+    std::array<CharCount, NUM_CHARACTERS> counts = {{
+        {'A', 0}, {'B', 0}, {'C', 0}, {'D', 0}
+    }};
+
+    countCharacters(s, counts);
+    int result = calculateResult(counts, n);
+    std::cout << result << std::endl;
+}
+
+int main() {
+    int t;
+    std::cin >> t;
+
+    while (t--) {
+        processTestCase();
+    }
+
+    return 0;
+}
