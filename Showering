@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class ShowerScheduler {
+private:
+    struct Task {
+        long long start, end;
+        Task(long long s, long long e) : start(s), end(e) {}
+    };
+
+    long long taskCount, showerTime, dayLength;
+    std::vector<Task> tasks;
+
+    bool canShowerBefore(const Task& firstTask) const {
+        return firstTask.start >= showerTime;
+    }
+
+    bool canShowerBetween(const Task& prevTask, const Task& currTask) const {
+        return currTask.start - prevTask.end >= showerTime;
+    }
+
+    bool canShowerAfter(const Task& lastTask) const {
+        return dayLength - lastTask.end >= showerTime;
+    }
+
+public:
+    void readInput() {
+        std::cin >> taskCount >> showerTime >> dayLength;
+        tasks.reserve(taskCount);
+        for (long long i = 0; i < taskCount; ++i) {
+            long long start, end;
+            std::cin >> start >> end;
+            tasks.emplace_back(start, end);
+        }
+        std::sort(tasks.begin(), tasks.end(), [](const Task& a, const Task& b) {
+            return a.start < b.start;
+        });
+    }
+
+    bool isShoweringPossible() const {
+        if (tasks.empty() || canShowerBefore(tasks[0])) {
+            return true;
+        }
+
+        for (size_t i = 1; i < tasks.size(); ++i) {
+            if (canShowerBetween(tasks[i-1], tasks[i])) {
+                return true;
+            }
+        }
+
+        return canShowerAfter(tasks.back());
+    }
+};
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int testCases;
+    std::cin >> testCases;
+
+    while (testCases--) {
+        ShowerScheduler scheduler;
+        scheduler.readInput();
+        std::cout << (scheduler.isShoweringPossible() ? "YES" : "NO") << std::endl;
+    }
+
+    return 0;
+}
