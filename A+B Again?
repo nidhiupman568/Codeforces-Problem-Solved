@@ -1,0 +1,20 @@
+#include <iostream>
+
+int sumDigits(int nonumber) {
+    return nonumber / 10 + nonumber % 10;
+}
+
+void processTestCases(int count) {
+    while (count--) {
+        int nonumber;
+        std::cin >> nonumber;
+        std::cout << sumDigits(nonumber) << std::endl;
+    }
+}
+
+int main() {
+    int testCases;
+    std::cin >> testCases;
+    processTestCases(testCases);
+    return 0;
+}
