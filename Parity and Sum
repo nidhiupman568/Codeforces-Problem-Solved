@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+class ParitySolver {
+    vector<ll> numbers;
+    ll maxOdd = 0, maxEven = 0;
+    bool sameParity() { return all_of(numbers.begin() + 1, numbers.end(), [&](ll value){ return value % 2 == numbers[0] % 2; }); }
+    void findMaxOddEven() { for(ll value : numbers) value % 2 ? maxOdd = max(maxOdd, value) : maxEven = max(maxEven, value); }
+public:
+    void readInput() { int size; cin >> size; numbers.resize(size); for(ll &value : numbers) cin >> value; }
+    int calculateOperations() {
+        if(sameParity()) return 0;
+        findMaxOddEven();
+        int operations = 0;
+        sort(numbers.begin(), numbers.end());
+        for(ll &value : numbers) if(value % 2 == 0 && value < maxOdd) { value += maxOdd; maxOdd = max(maxOdd, value); operations++; }
+        if(sameParity()) return operations;
+        auto position = find(numbers.begin(), numbers.end(), maxOdd);
+        *position = maxOdd + maxEven;
+        return operations + 1 + count_if(numbers.begin(), numbers.end(), [](ll value){ return value % 2 == 0; });
+    }
+};
+
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int testCases; cin >> testCases;
+    while(testCases--) { ParitySolver solver; solver.readInput(); cout << solver.calculateOperations() << '\n'; }
+}
