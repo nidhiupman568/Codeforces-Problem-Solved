@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+string modifyString(string str, const string& templateStr) {
+    auto strIt = str.begin();
+    auto tempIt = templateStr.begin();
+
+    for (; strIt != str.end() && tempIt != templateStr.end(); ++strIt)
+        if (*strIt == *tempIt || *strIt == '?') *strIt = *tempIt, ++tempIt;
+    
+    if (tempIt == templateStr.end()) {
+        replace(strIt, str.end(), '?', 'a');
+        return str;
+    }
+    
+    return "";
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int testCount; cin >> testCount;
+    while (testCount--) {
+        string source, target;
+        cin >> source >> target;
+        auto result = modifyString(source, target);
+        cout << (result.empty() ? "NO" : "YES\n" + result) << '\n';
+    }
+}
