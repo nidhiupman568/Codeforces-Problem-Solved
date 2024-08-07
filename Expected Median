@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+#define MAXN 200002
+using namespace std;
+typedef long long LL;
+const int mod=1000000007;
+int f[MAXN],inv[MAXN];
+int C(const int n,const int m){return n<m?0:(LL)f[n]*inv[m]%mod*inv[n-m]%mod;}
+int n,k;
+int main(){
+	f[0]=f[1]=inv[0]=inv[1]=1;
+	for(int i=2;i<MAXN;i++) f[i]=(LL)f[i-1]*i%mod,inv[i]=(LL)(mod-mod/i)*inv[mod%i]%mod;
+	for(int i=1;i<MAXN;i++) inv[i]=(LL)inv[i-1]*inv[i]%mod;
+	int T;cin>>T;
+	while(T--){
+		cin>>n>>k;
+		int s=0,ans=0;
+		for(int i=1,x;i<=n;i++) cin>>x,s+=x;
+		for(int i=(k+1)>>1;i<=min(s,k);i++) ans=(ans+(LL)C(s,i)*C(n-s,k-i)%mod)%mod;
+		cout<<ans<<endl;
+	} 
+	return 0;
+}
