@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+
+void execute() {
+    int test_cases;
+    std::cin >> test_cases;
+
+    for (int current_case = 0; current_case < test_cases; ++current_case) {
+        int coord_x, coord_y, distance_k;
+        std::cin >> coord_x >> coord_y >> distance_k;
+
+        std::vector<std::pair<int, int>> coordinates_list;
+
+        if (distance_k % 2) {
+            coordinates_list.push_back(std::make_pair(coord_x, coord_y));
+        }
+
+        for (int step = 1; step <= distance_k / 2; ++step) {
+            coordinates_list.push_back(std::make_pair(coord_x - step, coord_y - step));
+            coordinates_list.push_back(std::make_pair(coord_x + step, coord_y + step));
+        }
+
+        for (auto& coordinate : coordinates_list) {
+            std::cout << coordinate.first << " " << coordinate.second << std::endl;
+        }
+    }
+}
+
+int main() {
+    execute();
+    return 0;
+}
