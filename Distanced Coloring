@@ -1,0 +1,36 @@
+#include <iostream>
+#include <algorithm>
+
+class ProblemSolver {
+private:
+    long long dimensions[3];
+
+    void getInputDimensions() {
+        for (int i = 0; i < 3; ++i) {
+            std::cin >> dimensions[i];
+        }
+    }
+
+    long long computeResult() {
+        return std::min(dimensions[0], dimensions[2]) * 
+               std::min(dimensions[1], dimensions[2]);
+    }
+
+public:
+    void executeCase() {
+        getInputDimensions();
+        std::cout << computeResult() << '\n';
+    }
+};
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int remainingCases;
+    for (std::cin >> remainingCases; remainingCases > 0; --remainingCases) {
+        ProblemSolver().executeCase();
+    }
+
+    return 0;
+}
