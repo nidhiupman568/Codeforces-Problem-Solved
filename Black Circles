@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+struct Point { ll x, y; };
+
+ll dist2(const Point& a, const Point& b) {
+    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+}
+
+void solve() {
+    int n; cin >> n;
+    vector<Point> c(n);
+    for (auto& p : c) cin >> p.x >> p.y;
+    Point s, t; cin >> s.x >> s.y >> t.x >> t.y;
+    
+    ll maxd = dist2(s, t);
+    cout << (all_of(c.begin(), c.end(), [&](const Point& p) { 
+        return dist2(p, t) > maxd; 
+    }) ? "YES\n" : "NO\n");
+}
+
+int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    int tc; cin >> tc;
+    while (tc--) solve();
+    return 0;
+}
