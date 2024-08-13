@@ -1,0 +1,26 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+typedef long long ll;
+ll a[200001],s[200001];
+int main()
+{
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		int n,m,k,w;
+		ll ans=0;
+		cin>>n>>m>>k>>w;
+		for(int i=1;i<=w;i++) cin>>a[i];
+		sort(a+1,a+w+1);
+		for(int i=1;i<=n;i++)
+			for(int j=1;j<=m;j++)
+				s[(i-1)*m+j]=min(min(i,n-i+1),min(k,n-k+1))*min(min(j,m-j+1),min(k,m-k+1));
+		sort(s+1,s+n*m+1);
+		for(int i=0;i<w;i++)
+			ans+=a[w-i]*s[n*m-i];
+		cout<<ans<<endl;
+	}
+	return 0;
+}
