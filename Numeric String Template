@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+bool isMatch(const vector<int>& a, const string& s) {
+    if (a.size() != s.length()) return false;
+    unordered_map<int, char> n2c;
+    unordered_map<char, int> c2n;
+    for (int i = 0; i < a.size(); ++i) {
+        if ((n2c.count(a[i]) && n2c[a[i]] != s[i]) || 
+            (c2n.count(s[i]) && c2n[s[i]] != a[i])) return false;
+        n2c[a[i]] = s[i]; c2n[s[i]] = a[i];
+    }
+    return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    int t, n, m; cin >> t;
+    while (t--) {
+        cin >> n;
+        vector<int> a(n);
+        for (int& x : a) cin >> x;
+        cin >> m;
+        while (m--) {
+            string s; cin >> s;
+            cout << (isMatch(a, s) ? "YES\n" : "NO\n");
+        }
+    }
+}
