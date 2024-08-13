@@ -1,0 +1,25 @@
+#include <iostream>
+#include <set>
+#include <vector>
+using namespace std;
+
+bool isValid(const vector<int>& s) {
+    set<int> o;
+    for (int x : s) {
+        if (!o.empty() && !o.count(x-1) && !o.count(x+1)) return false;
+        o.insert(x);
+    }
+    return true;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t, n;
+    for (cin >> t; t--; ) {
+        cin >> n;
+        vector<int> s(n);
+        for (int& x : s) cin >> x;
+        cout << (isValid(s) ? "YES\n" : "NO\n");
+    }
+}
