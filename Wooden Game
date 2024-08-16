@@ -1,0 +1,29 @@
+#include<stdio.h>
+ 
+signed main(){
+	int T,k,n,x,f,p;
+	scanf("%d",&T);
+	
+	while(T--){
+		scanf("%d",&k);
+		f=0;
+		
+		while(k--){
+			scanf("%d",&n);
+			x=f|n;
+			
+			while(--n){
+				scanf("%d",&p);
+				
+				if((f|n)>x)
+					x=f|n;
+			}
+			
+			f=x;
+		}
+		
+		printf("%d\n",f);
+	}
+	
+	return 0;
+}
