@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        int cnt=n/4;
+        cout<<cnt+(n-cnt*4)/2<<endl;
+    }
+}
