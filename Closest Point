@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+      #include<cstdio>
+      #include<algorithm>
+      using namespace std;
+      
+    int main(){
+        long long a,l1,l2,l3,l4,l5,k,m1,m2,l0,g1,g2,g3,g4,max1,z,mid,y1,n,m,sum1,sum2,x,x1,x2,x3,max2,y,mod=998244353;
+          
+        scanf("%lld",&a);
+        while(a--){
+          scanf("%lld",&n);
+          vector<long long >t(n+5),r(110);
+          for(int i=1;i<=n;i++){
+            scanf("%lld",&t[i]);
+          }
+          x1=0;
+          if(n>2){
+            printf("NO\n");
+          }else if(n==1){
+            printf("YES\n");
+          }else{
+            if(t[1]!=t[2]-1){
+              printf("YES\n");
+            }else{
+              printf("NO\n");
+            }
+          }
+        }
+  
+        
+        return 0;
+    }
+ 
