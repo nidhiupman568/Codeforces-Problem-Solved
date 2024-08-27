@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+string s;
+int t;
+ll res=0;
+ll mod=1e9+7;
+int main(){
+	cin>>t;
+	while(t--){
+		map<ll,ll> mp;
+		res=0;
+		cin>>s;
+		ll cur=0;
+		mp[cur]=1;
+		int n=s.size();
+		for(int i=0;i<=n-1;i++){
+			cur+=(s[i]=='1'?1:-1);
+			res=(res+(n-i)*mp[cur])%mod;
+			mp[cur]=(mp[cur]+i+2)%mod;
+		}
+		cout<<res<<endl;
+	}
+}
