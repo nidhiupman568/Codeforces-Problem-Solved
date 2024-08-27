@@ -1,0 +1,3 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;int T;int main(){cin>>T;while(T--){int n,x;cin>>n>>x;ll ans=0;for(int a=1;a<=x;a++)for(int b=1;a+b<=x&&a*b<=n;b++)ans+=min((n-a*b)/(a+b),x-a-b);cout<<ans<<'\n';}return 0;}
