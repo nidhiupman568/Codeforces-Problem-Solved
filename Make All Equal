@@ -1,0 +1,2 @@
+#import<bits/stdc++.h>
+using namespace std;int n,a,s,i;main(){for(cin>>n;cin>>n;printf("%d\n",s)){map<int,int>m;for(i=s=n;i--;s=min(s,n-++m[a]))cin>>a;}}
