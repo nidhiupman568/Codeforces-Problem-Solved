@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+bool isSquareMatrix(const string& s, int n) {
+    int side = sqrt(n);
+    if (side * side != n) return false;
+
+    // Check if all corner elements are 1
+    if (s[0] != '1' || s[side-1] != '1' || s[n-side] != '1' || s[n-1] != '1') return false;
+
+    // Check top and bottom rows
+    for (int i = 1; i < side - 1; i++) {
+        if (s[i] != '1' || s[n-side+i] != '1') return false;
+    }
+
+    // Check left and right columns
+    for (int i = 1; i < side - 1; i++) {
+        if (s[i*side] != '1' || s[i*side + side - 1] != '1') return false;
+    }
+
+    // Check inner elements
+    for (int i = 1; i < side - 1; i++) {
+        for (int j = 1; j < side - 1; j++) {
+            if (s[i*side + j] != '0') return false;
+        }
+    }
+
+    return true;
+}
+
+int main() {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        string s;
+        cin >> n >> s;
+
+        cout << (isSquareMatrix(s, n) ? "Yes" : "No") << endl;
+    }
+
+    return 0;
+}
