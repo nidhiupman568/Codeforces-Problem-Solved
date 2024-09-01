@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+long long findMaxLength(long long l, long long r) {
+    long long left = 1, right = 100000; // 10^5 is a safe upper bound
+    long long result = 0;
+
+    while (left <= right) {
+        long long mid = left + (right - left) / 2;
+        long long sum = (mid * (mid - 1)) / 2;
+
+        if (l + sum <= r) {
+            result = mid;
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        long long l, r;
+        cin >> l >> r;
+        cout << findMaxLength(l, r) << "\n";
+    }
+
+    return 0;
+}
