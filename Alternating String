@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+class StringOperations {
+private:
+    int calculateResult(const vector<int>& even_count, const vector<int>& odd_count, int n) {
+        return (n / 2 - *max_element(even_count.begin(), even_count.end())) + 
+               (n / 2 - *max_element(odd_count.begin(), odd_count.end()));
+    }
+
+    int handleEvenCase(const string& s, int n) {
+        vector<int> even_count(26, 0), odd_count(26, 0);
+        for (int i = 0; i < n; ++i) {
+            (i % 2 == 0 ? even_count : odd_count)[s[i] - 'a']++;
+        }
+        return calculateResult(even_count, odd_count, n);
+    }
+
+    int handleOddCase(const string& s, int n) {
+        if (n == 1) return 1;
+
+        vector<int> even_count(26, 0), odd_count(26, 0);
+        for (int i = 0; i < n - 1; ++i) {
+            (i % 2 == 0 ? even_count : odd_count)[s[i] - 'a']++;
+        }
+
+        int best = calculateResult(even_count, odd_count, n - 1);
+        vector<int> even_count_after(26, 0), odd_count_after(26, 0);
+
+        for (int i = n - 2; i >= 0; --i) {
+            if (i % 2 == 0) {
+                even_count[s[i] - 'a']--;
+                even_count_after[s[i + 1] - 'a']++;
+            } else {
+                odd_count[s[i] - 'a']--;
+                odd_count_after[s[i + 1] - 'a']++;
+            }
+
+            vector<int> merged_even(26), merged_odd(26);
+            for (int j = 0; j < 26; ++j) {
+                merged_even[j] = even_count[j] + even_count_after[j];
+                merged_odd[j] = odd_count[j] + odd_count_after[j];
+            }
+
+            best = min(best, calculateResult(merged_even, merged_odd, n - 1));
+        }
+
+        return best + 1;
+    }
+
+public:
+    void solve() {
+        int n_tests;
+        cin >> n_tests;
+
+        while (n_tests--) {
+            int n;
+            string s;
+            cin >> n >> s;
+            cout << ((n % 2 == 0) ? handleEvenCase(s, n) : handleOddCase(s, n)) << endl;
+        }
+    }
+};
+
+int main() {
+    StringOperations().solve();
+    return 0;
+}
