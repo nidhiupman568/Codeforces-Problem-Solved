@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+int T,n,id,fa[1005];
+int main(){
+	cin>>T;
+	while(T--){
+		cin>>n;
+		for(int i=2;i<=n;i++){
+			id=1;
+			while(id!=i){
+				fa[i]=id;
+				cout<<"? "<<i<<" "<<fa[i]<<endl;
+				cin>>id;
+			}
+		}
+		cout<<"! ";
+		for(int i=2;i<=n;i++) cout<<fa[i]<<" "<<i<<" ";
+		cout<<endl;
+	}
+	return 0;
+}
