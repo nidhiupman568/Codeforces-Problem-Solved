@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+int t, n, res, tot;
+int SG[10000002];
+int main(){
+	ios::sync_with_stdio(0);
+	cin>>t;
+	SG[1]=tot=1;
+	for (int i=3;i<=10000000;i+=2){
+		if (SG[i]==0){
+			++tot;
+			for(int j=i;j<=10000000;j+=i+i)
+				if(SG[j]==0) SG[j]=tot;
+		}
+	}
+	while(t--){
+		cin>>n;res=0;
+		int k;
+		while(n--){
+			cin>>k;
+			res^=SG[k];
+		}
+		puts(res ? "Alice" : "Bob");
+	}
+}
