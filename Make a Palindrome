@@ -1,0 +1,26 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<map>
+using namespace std;
+#define int long long
+const int N=2005;
+map<int,int>mp;
+int n,a[N],ans,T;
+signed main(){
+	int i,j,x;
+	scanf("%lld",&T);
+	while(T--){
+		scanf("%lld",&n);mp.clear();ans=0;
+		for(i=1;i<=n;i++)scanf("%lld",&a[i]),ans+=i*(n-i+1);
+		for(i=1;i<=n;i++){
+			int sum=0;
+			for(j=i;j>=1;j--){
+				sum+=a[j];mp[sum]+=1;
+				ans-=mp[sum];
+			}
+		}
+		printf("%lld\n",ans);
+	}
+
+}
