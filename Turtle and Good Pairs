@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+int t;cin>>t;
+while(t--)
+{
+int n;
+cin>>n;
+string s;
+cin>>s;
+map<char,int>mp;
+for(int i=0;i<n;i++)
+mp[s[i]]++;
+while(n>0)
+{
+for(auto [a,b]:mp)
+{
+if(b>0)
+{
+cout<<a;
+n--;
+mp[a]--;
+}
+}
+}
+cout<<endl;
+}
+}
+
+    
