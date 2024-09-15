@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define db double
+#define pb push_back
+#define mp make_pair
+ 
+
+ 
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0); cout.tie(0);
+	int tt; cin >> tt;
+	while(tt--){
+		int n; cin >> n;
+		ll sum=0;
+		int c=1;
+		while(n--){
+			int a; cin >> a;
+			if(c%2==1) sum+=a;
+			else sum-=a;
+			c++;
+		}
+		cout << sum << "\n";
+	}
+}
