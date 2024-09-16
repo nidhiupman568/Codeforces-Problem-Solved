@@ -1,0 +1,138 @@
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+
+
+#define ll long long
+#define pb push_back
+#define ppb pop_back
+#define sz size()
+#define all(x) x.begin(), x.end()
+#define vi vector<int>
+#define vii vector<pair<int , int>>
+#define pii pair<int , int>
+#define vl vector<long long>
+#define vll vector<pair<long long,long long>>
+#define pll pair<long long , long long>
+#define F first
+#define S second
+#define no cout<<"NO"<<endl;
+#define yes cout<<"YES"<<endl;
+#define cases int t;\
+              cin>>t;\
+              while(t--)
+#define spd                  \
+    ios::sync_with_stdio(0); \
+    cin.tie(0);              \
+    cout.tie(0);
+#define rme(x) auto last = unique(x.begin(),x.end());\
+               x.erase(last, x.end());
+#define stp(x) setprecision(x)
+#define newl cout<<endl
+#define fr(i , x , n) for(int i=x ; (x>n)? i>=n : i<=n ; (x>n)? --i : ++i)
+
+ll power(ll a,ll n)
+{
+    if(n==0)
+        return 1;
+    ll ans=power(a,n/2);
+    ans=ans*ans;
+    if(n&1)
+        ans*=a;
+    return ans;
+}
+
+ll fct(ll n)
+{
+    if(n==1)
+        return 1;
+    if(n==0)
+        return 1;
+    return n*fct(n-1);
+}
+
+ll C(ll n, ll r)
+{
+    return (fct(n))/(fct(r)*fct(n-r));
+}
+
+ll sum(ll l, ll r)
+{
+    return ((r-l+1)*(r-l))/2;
+}
+
+ll lcm(ll x, ll y)
+{
+    return (x*y)/__gcd(x, y);
+}
+
+void rtt(string & s, ll n)
+{
+    n=n%s.sz;
+    s=s.substr(s.sz-n)+s.substr(0,s.sz-n);
+}
+
+vector <int> dec_to_bin (int n)
+{
+    vector <int> ans;
+    while(n)
+    {
+        ans.pb(n%2);
+        n/=2;
+    }
+    return ans;
+}
+
+long long dc_to_bn(int n)
+{
+    int ans=0;
+    while(n)
+    {
+        ans*=10;
+        ans+=n%2;
+        n/=2;
+    }
+    return ans;
+}
+
+
+
+
+
+int main()
+{
+  
+    spd
+    cases
+    {
+        ll k,x,y;
+        cin>>x>>y>>k;
+        //x++;
+        //y++;
+        ll ans=0;
+        ll a=x/k;
+        ll b=y/k;
+        if(x%k>0) a++;
+        if(y%k>0) b++;
+        if(b>a)
+        {
+            cout<<2*b<<"\n";
+            continue;
+        }
+        if(a>b)
+        {
+            //cout<<a<<" "<<b<<" "<<a-b<<"\n";
+            cout<<2*b+(2*(a-b)-1)<<"\n";
+            continue;
+        }
+        if(a==b)
+        {
+            cout<<2*a<<"\n";
+            continue;
+        }
+        //cout<<ans<<endl;
+    }
+}
+
