@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	long long t; cin>>t;
+	while(t--){
+		long long n,ans=0,k; cin>>n>>k;
+		for(long long i=0; i<n; i++){
+			long long l,curr=0,ind=0; cin>>l;
+			map<long long,long long> map;
+			for(long long j=0; j<l; j++){
+				long long a; cin>>a; map[a]++;
+			}
+			while(curr<=1){
+				if(!map[ind])curr++;
+				if(curr==2)ans=max(ans,ind);
+				ind++;
+			}
+		}
+		if(ans>=k)cout<<ans*(k+1)<<endl;
+		else cout<<ans*(k+1)+((k-ans)*(k-ans+1)/2)<<endl;
+	}
+}
