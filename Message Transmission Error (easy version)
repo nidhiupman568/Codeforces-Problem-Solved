@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define int long long
+using namespace std;
+const int maxn = 4e5 + 10;
+const int base1 = 31;
+const int mod1 = 1e9 + 7;
+const int base2 = 41;
+const int mod2 = 3e9 + 7;
+string s;
+int n;
+int Ha1[maxn];
+int Pow1[maxn];
+int Ha2[maxn];
+int Pow2[maxn];
+int get1(int i, int j) {
+    return (Ha1[j] - Ha1[i - 1] * Pow1[j - i + 1] + mod1 * mod1) % mod1;
+}
+int get2(int i, int j) {
+    return (Ha2[j] - Ha2[i - 1] * Pow2[j - i + 1] + mod2 * mod2) % mod2;
+}
+int32_t main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);cout.tie(0);
+    cin >> s;
+    n = s.size();
+    s = ' ' + s;
+    Pow1[0] = 1;
+    Pow2[0] = 1;
+    for(int i = 1; i <= n; ++ i) {
+        Pow1[i] = Pow1[i - 1] * base1 % mod1;
+        Ha1[i] = (Ha1[i - 1] * base1 + s[i] - 'a' + 1) % mod1;
+        Pow2[i] = Pow2[i - 1] * base2 % mod2;
+        Ha2[i] = (Ha2[i - 1] * base2 + s[i] - 'a' + 1) % mod2;
+    }
+    int st = n / 2 + 1;
+    for(int i = st; i <= n - 1; ++ i) {
+        if(get1(1, i) == get1(n - i + 1, n) && get2(1, i) == get2(n - i + 1, n)){
+            cout << "YES" << '\n';
+            for(int j = 1; j <= i; ++ j) cout << s[j];
+            return 0;
+        }
+    }
+    cout << "NO";
+    return 0;
+}
