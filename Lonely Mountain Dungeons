@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+const ll N=1e6+3,INF=(ll)1e18;
+ll n,b,c,a[N];
+map<ll,ll>mp;
+ll Ans(ll t)
+{
+	ll s=0;
+	for(int i=1;i<=n;i++)
+	{
+		ll z=a[i],x=z/t,y=z%t;
+		if(z<=t){s+=z*(z-1);continue;}
+		s+=(z-x-1)*y*(x+1)+(z-x)*(z-y*(x+1));
+	}
+	return s/2*b-(t-1)*c;
+}
+void Solve()
+{
+	cin>>n>>b>>c;ll s=-INF;mp.clear();
+	for(int i=1;i<=n;i++)cin>>a[i];
+	for(int i=1;i<=n;i++)
+		for(int l=1,r=1;l<=a[i];l=r+1)
+			r=a[i]/(a[i]/l),mp[l]=mp[r]=1;
+	for(auto p:mp)s=max(s,Ans(p.first));
+	cout<<s<<endl;
+}
+int main()
+{
+	int T;cin>>T;
+	while(T--)Solve();
+}
