@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+using ll = long long;
+const int MOD = 1E9 + 7;
+const int INF = 1E9; const ll INFLL = 1E18;
+ 
+vector<int> Z(string s) {
+	int n = s.size();
+	vector<int> wochien(n);
+	int l = 0; int r = 0;
+	for(int i = 1; i < n; i++) {
+		if(i < r) {
+			wochien[i] = min(r - i, wochien[i - l]);
+		}
+		while(i + wochien[i] < n && s[wochien[i]] == s[i + wochien[i]]) {
+			wochien[i]++;
+		}
+		if(i + wochien[i] > r) {
+			l = i;
+			r = i + wochien[i];
+		}
+	}
+	return wochien;
+}
+ 
+string s;
+ 
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cin >> s;
+	vector<int> zf = Z(s);
+	bool found = false;
+	for(int i = 1; i < s.size(); i++) {
+		if(zf[i] + i == s.size() && 2 * (s.size() - i) > s.size()) {
+			found = true;
+			cout << "YES\n";
+			cout << s.substr(i) << "\n";
+			break;
+		}
+	}
+	if(!found) {
+		cout << "NO\n";
+	}
+}
