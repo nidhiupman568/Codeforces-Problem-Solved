@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int t,n,k;
+ 
+void solve() {
+	cin >> n >> k;
+	long long s=0;
+	int x=n-k+1;
+	s=((x)+n)*k/2;
+	if (s%2==0) cout << "YES\n";
+	else cout << "NO\n";
+}
+ 
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	cin >> t;
+	while (t>0) {
+		t--;
+		solve();
+	}
+}
