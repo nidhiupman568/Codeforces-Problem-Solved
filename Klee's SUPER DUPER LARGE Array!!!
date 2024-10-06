@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define IOS ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define pii pair<int,int>
+//#define x first
+//#define y second
+const int N=2e5+5;int n,k;
+bool check(int i){
+	int lf,rt;
+	lf=i*k+(i-1)*i/2;
+	rt=(n-i)*k+(i+n-1)*(n-i)/2;
+	if(lf-rt<0) return true;
+	else return false;
+}
+signed main() {
+	IOS
+	int T;
+	cin>>T;
+	while(T--) {
+		cin>>n>>k;
+		int ans=LONG_MAX;
+		int l=1,r=n,mid;
+		while(l<r) {
+			int mid=l+(r-l)/2;
+			if(check(mid)) l=mid+1;
+			else r=mid;
+		}
+		int cnt=(l*k+(l-1)*l/2)-((n-l)*k+(l+n-1)*(n-l)/2);
+		cnt=abs(cnt);
+		r=l+1;
+		l--;
+		int lf=(l*k+(l-1)*l/2)-((n-l)*k+(l+n-1)*(n-l)/2);
+		lf=abs(lf);
+		int rt=(r*k+(r-1)*r/2)-((n-r)*k+(r+n-1)*(n-r)/2);
+		rt=abs(rt);
+		ans=min({cnt,lf,rt});
+		cout<<ans<<endl;
+	}
+	return 0;
+}
+ 
+ 
