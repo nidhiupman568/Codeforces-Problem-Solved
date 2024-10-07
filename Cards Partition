@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+using namespace std;
+int T,n;
+int main()
+{
+	scanf("%d",&T);
+	while(T--)
+	{
+		long long s=0,k,x,m=0;
+		scanf("%d%lld",&n,&k);
+		for(int i=1;i<=n;i++) scanf("%lld",&x),s+=x,m=max(m,x);
+		for(int i=n;i;i--)
+		{
+			if((s+k)/i>=m&&(s-1)/i!=(s+k)/i){printf("%d\n",i);break;}
+		}
+	}
+}
