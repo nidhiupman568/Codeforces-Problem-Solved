@@ -1,0 +1,5 @@
+#include<bits/stdc++.h>
+using I=long long;template<class T>using V=std::vector<T>;
+int main(){I t;std::cin>>t;while(t--){I n,q;std::cin>>n>>q;V<I>x(n);for(I&e:x)std::cin>>e;
+std::map<I,I>w;for(I i=0;i<n;i++)w[(i+1)*(n-(i+1))]+=x[i+1]-x[i]-1,w[(i+1)*(n-i)-1]++;
+while(q--){I k;std::cin>>k;std::cout<<w[k]<<' ';}std::cout<<'\n';}return 0;}
