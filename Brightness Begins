@@ -1,0 +1,9 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+int q;cin>>q;
+while(q--){
+long long k;cin>>k;
+cout<<k+int(sqrtl(k)+0.5)<<endl;
+}
+}
