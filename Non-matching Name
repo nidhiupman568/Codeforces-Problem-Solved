@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+typedef vector<string> vs;
+typedef vector<int> vi;
+typedef pair<int, int> pii;
+
+#define all(x) (x).begin(), (x).end()
+#define sz(x) ((ll)(x).size())
+
+
+//-------------------Code-------------------//
+
+void solve(){
+    int n, m;
+    cin >> n >> m;
+    
+    string s, t;
+    cin >> s >> t;
+    
+    string a = s+t;
+
+    set<char> cs;
+    cs.insert(all(a));
+    
+    if (cs.size() < 26) {
+        cout << "YES" << endl;
+    } else {
+        cout << "NO" << endl;
+    }
+}
+
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int t=1;
+    cin>>t;
+
+    while(t--){
+        solve();
+    }
+    return 0;
+}
