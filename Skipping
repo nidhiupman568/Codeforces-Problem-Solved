@@ -1,0 +1,24 @@
+#include<bits/stdc++.h> 
+#define rep(i,p,q) for (ll i=(p);i<=(q);i++)
+#define ll long long
+#define fr first
+#define sc second
+#define pll pair<ll,ll> 
+using namespace std;
+const int N=4e5+5; int n; ll a[N],b[N],f[N];
+void solve() {
+	ll t=0,s=0; priority_queue<pll,vector<pll>,greater<> >q;
+	scanf("%d",&n);
+	rep(i,1,n) scanf("%lld",a+i);
+	rep(i,1,n) scanf("%lld",b+i),f[i]=1e18;
+	f[1]=0,q.push({a[1],b[1]});
+	rep(i,2,n) {
+		for (;q.size()&&q.top().sc<i;) q.pop();
+		if (!q.size()) break;
+		f[i]=q.top().fr;
+		if (b[i]>i) q.push({f[i]+a[i],b[i]});
+	}
+	rep(i,1,n) t+=a[i],s=max(s,t-f[i]);
+	printf("%lld\n",s);
+}
+int main() {int T; for (scanf("%d",&T);T--;) solve();}
