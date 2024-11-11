@@ -1,0 +1,222 @@
+#include<bits/stdc++.h>
+#define ll long long int
+#define ld long double
+#define PI 2*acos(0.0)
+#define oo (ll)1e18
+#define _oo (ll)-11e18
+using namespace std;
+
+const int N = 4000 + 1;
+ll n, k, m;
+
+const int MOD = 998244353;  // check mod
+struct mod_int {
+    int val;
+ 
+    mod_int(long long v = 0) {
+        if (v < 0)
+            v = v % MOD + MOD;
+ 
+        if (v >= MOD)
+            v %= MOD;
+ 
+        val = v;
+    }
+ 
+    static int mod_inv(int a, int m = MOD) {
+        int g = m, r = a, x = 0, y = 1;
+ 
+        while (r != 0) {
+            int q = g / r;
+            g %= r; swap(g, r);
+            x -= q * y; swap(x, y);
+        }
+ 
+        return x < 0 ? x + m : x;
+    }
+ 
+    explicit operator int() const {
+        return val;
+    }
+ 
+    mod_int& operator+=(const mod_int &other) {
+        val += other.val;
+        if (val >= MOD) val -= MOD;
+        return *this;
+    }
+ 
+    mod_int& operator-=(const mod_int &other) {
+        val -= other.val;
+        if (val < 0) val += MOD;
+        return *this;
+    }
+ 
+    static unsigned fast_mod(uint64_t x, unsigned m = MOD) {
+           #if !defined(_WIN32) || defined(_WIN64)
+                return x % m;
+           #endif
+           unsigned x_high = x >> 32, x_low = (unsigned) x;
+           unsigned quot, rem;
+           asm("divl %4\n"
+            : "=a" (quot), "=d" (rem)
+            : "d" (x_high), "a" (x_low), "r" (m));
+           return rem;
+    }
+ 
+    mod_int& operator*=(const mod_int &other) {
+        val = fast_mod((uint64_t) val * other.val);
+        return *this;
+    }
+ 
+    mod_int& operator/=(const mod_int &other) {
+        return *this *= other.inv();
+    }
+ 
+    friend mod_int operator+(const mod_int &a, const mod_int &b) { return mod_int(a) += b; }
+    friend mod_int operator-(const mod_int &a, const mod_int &b) { return mod_int(a) -= b; }
+    friend mod_int operator*(const mod_int &a, const mod_int &b) { return mod_int(a) *= b; }
+    friend mod_int operator/(const mod_int &a, const mod_int &b) { return mod_int(a) /= b; }
+ 
+    mod_int& operator++() {
+        val = val == MOD - 1 ? 0 : val + 1;
+        return *this;
+    }
+ 
+    mod_int& operator--() {
+        val = val == 0 ? MOD - 1 : val - 1;
+        return *this;
+    }
+ 
+    mod_int operator++(int32_t) { mod_int before = *this; ++*this; return before; }
+    mod_int operator--(int32_t) { mod_int before = *this; --*this; return before; }
+ 
+    mod_int operator-() const {
+        return val == 0 ? 0 : MOD - val;
+    }
+ 
+    bool operator==(const mod_int &other) const { return val == other.val; }
+    bool operator!=(const mod_int &other) const { return val != other.val; }
+ 
+    mod_int inv() const {
+        return mod_inv(val);
+    }
+ 
+    mod_int pow(long long p) const {
+        assert(p >= 0);
+        mod_int a = *this, result = 1;
+ 
+        while (p > 0) {
+            if (p & 1)
+                result *= a;
+ 
+            a *= a;
+            p >>= 1;
+        }
+ 
+        return result;
+    }
+ 
+    friend ostream& operator<<(ostream &stream, const mod_int &m) {
+        return stream << m.val;
+    }
+    friend istream& operator >> (istream &stream, mod_int &m) {
+        return stream>>m.val;   
+    }
+};
+
+mod_int fact[N];
+
+ll binpow(ll a, ll b) {
+    ll res = 1;
+    while(b > 0) {
+        if(b&1) {
+            res = (res * a)%MOD;
+        }
+        a = (a*a)%MOD;
+        b >>= 1;
+    }
+    return res;
+}
+
+mod_int ncr(ll n, ll r) {
+    if(r < 0) return 0;
+    if(n < 0) return 0;
+    if(n < r) return 0;
+
+    mod_int ans = fact[n];
+    mod_int den = (fact[r] * fact[n-r]);
+    ans /= den;
+
+    return ans;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    ll t;
+    t = 1;
+    cin>>t;
+    fact[0] = 1;
+    for(int i=1; i<N; i++) {
+        fact[i] = fact[i-1];
+        fact[i] *= i;
+    }
+    // mod_int crn[N][N];
+    // for(int i=0; i<N; i++) {
+    //     for(int j=0; j<N; j++) {
+    //         crn[i][j] = ncr(i, j);
+    //     }
+    // }
+    while(t--) {
+        cin>>n>>m>>k;
+
+        mod_int ans = 0;
+        ll mm = min(n, k);
+        mod_int dp[mm+1];
+
+        dp[0] = 0;
+        dp[1] = 1;
+
+
+        for(int i=2; i<=mm; i++) {
+            dp[i] = binpow(i, n);
+            mod_int prevv = 1;
+
+            for(int j=1; j<i; j++) {
+                prevv *= (i-j+1);
+                prevv /= (j);
+                mod_int z = prevv*dp[j];
+                dp[i] -= z;
+            }
+        }
+        mod_int pref[n+1];
+        pref[0] = 0;
+        for(int i=1; i<=n; i++) {
+            pref[i] = pref[i-1];
+            pref[i] += binpow(i, m);
+
+        }
+
+        
+
+        mod_int dp1[mm+1];
+        dp1[1] = k;
+        for(int i=2; i<=mm; i++) {
+            dp1[i] = dp1[i-1];
+            dp1[i] *= (k-i+1);
+            dp1[i] /= i;
+        }
+
+
+        for(int x=1; x<=mm; x++) {
+            mod_int z = dp1[x];
+            z *= pref[x];
+            z /= x;
+            z *= dp[x];
+            z *= n;
+            ans += z;
+        }
+        cout<<ans<<"\n";
+    }
+}
