@@ -1,0 +1,33 @@
+#include "bits/stdc++.h"
+#define ll long long
+#define ld long double
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define mp make_pair
+ 
+using namespace std;
+ 
+void setIO(string s = ""){
+ ios_base::sync_with_stdio(false);
+ cin.tie(nullptr);
+ cout.tie(nullptr);
+ if (!s.empty()){
+	freopen((s+".in").c_str(), "r", stdin);
+	freopen((s+".out").c_str(), "w", stdout);
+	}
+}
+ 
+void solve(){
+	int n;
+	cin >> n;
+	cout << (n&1 ? "Kosuke" : "Sakurako") << '\n';
+}
+ 
+int main(){
+	setIO();
+    int test;
+    cin >> test;
+    for (int tt = 1; tt <= test;tt++) solve();
+    
+}
