@@ -1,0 +1,71 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <string.h>
+#include <bits/stdc++.h>
+#include <cstdlib>
+#include <time.h>
+#include <fstream>
+#include <iterator>
+#include <utility>
+#include <algorithm>
+#include <set>
+#include <map>
+#include <bitset>
+using namespace std;
+ 
+#define ll long long
+#define ld long double
+typedef vector<int> vi;
+typedef vector<ll> vill;
+#define all(v) ((v).begin()), ((v).end())
+#define sz(v) ((ll)((v).size()))
+ 
+#define vinp(v, n)               \
+    for (ll i = 0; i < (n); i++) \
+    cin >> (v)[i]
+#define printv(v)      \
+    for (auto i : (v)) \
+    cout << i << " "
+#define fast()               \
+    ios::sync_with_stdio(0); \
+    cin.tie(0);              \
+    cout.tie(0);
+#define loop(i, n) for (int(i) = 0; (i) < (n); (i)++)
+#define _CRT_SECURE_NO_WARNING
+const ll MOD = 1000000007;
+ 
+void solve()
+{
+    int n;
+    cin >> n;
+    string s;
+    for (int i = 0; i < n/2; ++i)
+    {
+        s+='0';
+    }
+    s+='1';
+    if(n%2!=0){
+        for(int i=0;i<n/2;i++){
+            s+='0';
+        }
+    }
+    else{
+        for(int i=1;i<n/2;i++){
+            s+='0';
+        }
+    }
+ 
+    cout << s << endl;
+}
+ 
+int main()
+{
+    fast();
+    int t = 1;
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+}
