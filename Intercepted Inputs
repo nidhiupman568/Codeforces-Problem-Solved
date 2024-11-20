@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+#include <math.h>
+#define name " "
+
+using namespace std;
+using ull = unsigned long long;
+const long long MAX = 1e6 + 2;
+
+long long t;
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    if(fopen(name".INP", "r")){
+       freopen(name".INP", "r", stdin);
+       freopen(name".OUT", "w", stdout);
+    }
+    cin >> t;
+    while(t--){
+        long long k;
+        cin >> k;
+        vector <long long> a(k);
+        for(int i = 0; i < k; i++){
+            cin >> a[i];
+        }
+        sort(a.begin(), a.end());
+        for(int i = 0; i < k; i++){
+            if((k - 2) % a[i] == 0){
+                if(binary_search(a.begin() + i + 1, a.end(), (k - 2) / a[i])){
+                    cout << a[i] << " " << (k - 2) / a[i] << '\n';
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
