@@ -1,0 +1,59 @@
+
+ 
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define speed ios_base::sync_with_stdio(false), cin.tie(0), cout.tie(0)
+#define tc    \
+    int t;    \
+    cin >> t; \
+    while (t--)
+#define yes cout << "YES" \
+                 << '\n'
+#define no cout << "NO" \
+                << '\n'
+#define pb push_back
+#define allv v.begin(), v.end()
+#define alls s.begin(), s.end()
+#define allarr arr, arr + n
+ 
+using ll = long long;
+using ld = long double;
+using vi = vector<int>;
+using vb = vector<bool>;
+using vd = vector<double>;
+using vll = vector<long long>;
+using vpi = vector<pair<int, int>>;
+using vc = vector<char>;
+using vs = vector<string>;
+using ss = string;
+
+const ll oo = 1e9;
+
+ll segmap(ll n){
+    return n*(n+1)/2;
+}
+
+
+ll segmam(ll n){
+    return n*(n-1)/2;
+}
+
+
+
+void solve(){
+    int n;cin>>n;
+    int h=0,w=0;
+    for(int i=0;i<n;i++){
+        int x,y;cin>>x>>y;
+        h=max(h,x);
+        w=max(w,y);
+    }
+    cout<<(h+w)*2<<'\n';
+}
+ 
+ 
+int main(){
+    speed;
+    tc solve();
+}
