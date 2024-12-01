@@ -1,0 +1,50 @@
+
+
+#include <bits/stdc++.h>
+
+#define f first
+#define s second
+#define mod 1000000007
+#define PB push_back
+#define PF push_front
+#define all(x) x.begin(), x.end()
+#define inf 10000007
+#define round(m,n) setprecision((int)m) << fixed << double(n)
+#define ll long long
+#define bit(x, i) ((x >> i) & 1)
+#define pii pair<int, int>
+#define cbit __builtin_popcount
+#define TASK "A"
+
+using namespace std;
+
+void ADD(int &x, int y){
+    x += y;
+    if (x >= mod) x -= mod;
+    if (x < 0) x += mod;
+}
+
+int t, n, f[105][105];
+
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    if(fopen(TASK".INP", "r")){
+        freopen(TASK".INP", "r", stdin);
+//        freopen(TASK".OUT", "w", stdout);
+    }
+
+    cin >> t;
+    while(t--){
+        cin >> n;
+        for(int i = 1; i <= n; i++)
+            cout << i + (i - 1) << " ";
+        cout << '\n';
+    }
+}
+
+
+
+
+
