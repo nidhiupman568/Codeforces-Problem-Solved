@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define endl '\n'
+#define B break
+#define C continue
+#define F first
+#define S second
+#define pb push_back
+#define yes cout<<"YES\n";
+#define no cout<<"NO\n";
+#define fast ios_base::sync_with_stdio(NULL); cin.tie(0); cout.tie(0);
+/*
+                            777712166120
+*/
+using namespace std;
+const int N=1e6+100;
+const int NN=1e9+7;
+ll t,n,k,l,r,x,y,c,z,h,mx,mi,sum,ans,a[N],b[N];
+vector<ll>v;
+int main(){
+    cin>>t;
+    while(t--){
+        map<ll,ll>m;
+        vector<ll>v;
+        cin>>n>>k;
+        ans=0;
+        for(int i=0;i<k;i++){
+            cin>>a[i]>>b[i];
+            m[a[i]]+=b[i];
+        }
+        for(int i=0;i<k;i++){
+            if(m[a[i]]!=0)v.pb(m[a[i]]);
+            m[a[i]]=0;
+        }
+        sort(v.begin(),v.end());
+        x=v.size();
+ 
+        for(int i=x-1;i>=0&&i>=x-n;i--){
+            ans+=v[i];
+          }
+        cout<<ans<<endl;
+ 
+    }
+}
