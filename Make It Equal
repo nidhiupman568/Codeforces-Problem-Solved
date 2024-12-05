@@ -1,0 +1,400 @@
+
+#include<iostream>
+#include<map>
+#include<set>
+#include<list>
+#include<iostream>
+#include<stack>
+#include<tuple>
+#include<random>
+#include <cstdarg> 
+
+#include<vector>
+#include<string>
+#include<math.h>
+#include<algorithm>
+#include<cmath>
+#include <iomanip>
+#include<climits> // INT_MAX INT_MIN
+#include <numeric> // accumulate(value.begin(), value.end(), 0); (сумма элементов вектора + 0) 
+#include<fstream>
+#include<ostream>
+#include <queue>
+
+//#define endl '\n'
+#define Pi 3.14159265358979323846264338327950288419716939
+#define INF int(1e9+1)
+#define e double(1e-9)
+#define rall(value) value.rbegin(), value.rend()
+#define all(value) value.begin(), value.end()
+#define int long long
+#define ll  long long
+#define ld long double
+
+using namespace std;
+
+namespace myspace {
+
+	template<class T>
+	void print(const T*& a, int size=-1) {
+		if (size == -1)
+			size = a.size();
+		for (int i = 0; i < size; i++)
+			cout << a[i] << ' ';
+		cout << endl;
+	}
+
+	template<class T>
+	T sum(const vector<T>& v, int mod = -1) {
+		T s = 0;
+		if (mod == -1) {
+			for (auto& el : v)
+				s += el;
+		}
+		else {
+			for (auto& el : v)
+				s = (s + el) % mod;
+		}
+		return s;
+	}
+
+	int factorial(int x) {
+		if (x <= 1) return 1;
+		return x * factorial(x - 1);
+	}
+
+	class XYZ {
+	public:
+		int x, y, z;
+
+		XYZ(int a, int b, int c) {
+			x = a;
+			y = b;
+			z = c;
+		}
+
+		XYZ() {}
+
+		friend istream& operator>>(istream& input, XYZ& obj) {
+			input >> obj.x >> obj.y >> obj.z;
+			return input;
+		}
+
+		friend ostream& operator<<(ostream& output, const XYZ& obj) {
+			output << obj.x << ' ' << obj.y << ' ' << obj.z;
+			return output;
+		}
+
+	};
+
+	class XY {
+	public:
+		int x, y;
+
+		XY(int a, int b) {
+			x = a;
+			y = b;
+		}
+
+		XY(){}
+
+		friend istream& operator>>(istream& input, XY& obj) {
+			input >> obj.x >> obj.y;
+			return input;
+		}
+		
+		friend ostream& operator<<(ostream& output, const XY& obj) {
+			output << obj.x << ' ' << obj.y;
+			return output;
+		}
+
+	};
+
+	template<class T>
+	istream& operator>>(istream& input, vector<T>& vec) {
+		for(int i = 0; i < vec.size(); i++)
+			input >> vec[i];
+		return input;
+	}
+
+	template<class T>
+	std::ostream& operator<<(std::ostream& stream, const vector<T>& vec)
+	{
+		for (int i = 0; i < vec.size(); i++)
+			stream << vec[i] << ' ';
+		return stream;
+	}
+
+	template<class T1, class T2>
+	istream& operator>>(istream& input, pair<T1, T2>& pair) {
+		input >> pair.first >> pair.second;
+		return input;
+	}
+
+	template<class T1, class T2>
+	std::ostream& operator<<(std::ostream& stream, const pair<T1, T2>& pair)
+	{
+		stream << pair.first << ' ' << pair.second;
+		return stream;
+	}
+
+	template<class T>
+	istream& operator>>(istream& input, vector<vector<T>>& vec) {
+		for (int i = 0; i < vec.size(); i++)
+			for(int j = 0; j < vec[i].size(); j++)	
+				input >> vec[i][j];
+		return input;
+	}
+
+	template<class T>
+	std::ostream& operator<<(std::ostream& stream, const vector<vector<T>>& vec)
+	{
+		for (int i = 0; i < vec.size(); i++)
+		{
+			for (int j = 0; j < vec[i].size(); j++)
+				stream << vec[i][j] << ' ';
+			stream << endl;
+		}
+		return stream;
+	}
+
+	int bin_find(vector<int>& v, int x) {
+		int k = 0, n = v.size();
+		for (int b = n / 2; b >= 1; b /= 2)
+			while (b + k < n && v[b + k] <= x) k += b;
+		return k;
+	}
+
+	template<class T>
+	T max(const vector<T>& v)
+	{
+		T maxi = v.front();
+		for (auto& el : v)
+			maxi = maxi > el ? maxi : el;
+		return maxi;
+	}
+
+	template<class T>
+	T min(const vector<T>& v)
+	{
+		T mi = v.front();
+		for (T el : v)
+			mi = mi < el ? mi : el;
+		return mi;
+	}
+
+	template<class T>
+	T min(const T a, const T b, const T c) {
+		vector<T> v = { a,b,c };
+		return min(v);
+	}
+
+	template<class T>
+	T min(const T a, const T b, const T c, const T d) {
+		vector<T> v = { a,b,c,d };
+		return min(v);
+	}
+
+	template<class T>
+	T max(const T a, const T b, const T c) {
+		vector<T> v = { a,b,c };
+		return max(v);
+	}
+
+	template<class T>
+	T max(const T a, const T b, const T c, const T d) {
+		vector<T> v = { a,b,c,d };
+		return max(v);
+	}
+}
+
+using namespace myspace;
+
+int gcd(int a, int b) {
+	return b ? gcd(b, a % b) : a;
+}
+
+int min_path(vector<vector<int>> v) {
+	for (int i = 1; i < v.size(); i++)
+		v[i][0] += v[i - 1][0];
+	for (int i = 1; i < v[0].size(); i++)
+		v[0][i] += v[0][i-1];
+	for (int i = 1; i < v.size(); i++) 
+		for (int j = 1; j < v[0].size(); j++) 
+			v[i][j] += min(v[i - 1][j], v[i][j - 1]);
+	return v.back().back();
+}
+
+void H() {
+	int n, a, b;
+	cin >> n >> a >> b;
+	vector<int> va(n + 1), vb(n + 1);
+	int ind_min_a = 0;
+	int ind_min_b = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		va[i] = gcd(i, a);
+		vb[i] = gcd(i, b);
+		if (va[i] == 1)
+			ind_min_a = i;
+		if (vb[i] == 1)
+			ind_min_b = i;
+	}
+
+	int sum = 0;
+	for (int i = 1; i <= ind_min_a; i++)
+		sum += 1 + va[i];
+	for (int i = 2; i <= ind_min_b; i++)
+		sum += 1 + vb[i];
+
+	sum -= 2;
+	vector<vector<int>> matrix1(n - ind_min_a + 1, vector<int>(n - ind_min_b + 1));
+	for (int i = 0; i <= n - ind_min_a; i++)
+		for (int j = 0; j <= n - ind_min_b; j++)
+			matrix1[i][j] = va[i + ind_min_a] + vb[j + ind_min_b];
+	int sum_matrix = min_path(matrix1);
+	std::cout << sum + sum_matrix;
+}
+
+bool detect_solve_J(vector<int> v, int k, int sum) {
+	int i = 0, sum_etal = k * v.size();
+	while (sum > sum_etal) {
+		if (i == v.size())
+			i = 0;
+
+		if (v[i] > k) {
+			int d = (v[i] - k+1) / 2;
+			v[i] -= d * 2;
+			sum -= d;
+			if (i + 1 == v.size())
+				v[0] += d;
+			else
+				v[i + 1] += d;
+		}
+
+		i++;
+	}
+
+	for (int i = 0; i < v.size(); i++) 
+		if (v[i] != k) 
+			return false;
+	
+	return true;
+
+}
+
+void J() {
+	int n;
+	cin >> n;
+	vector<int> v(n);
+	int sum = 0;
+	for (int i = 0; i < n; i++) {
+		cin >> v[i];
+		sum += v[i];
+	}
+
+	int l = -1, r = max(10ll, sum / n + 5);
+	while (l <= r) {
+		int med = (l + r) / 2;
+		
+		if (detect_solve_J(v, med, sum))
+			l = med + 1;
+		else
+			r = med - 1;
+	}
+
+	if (l == -1)
+		cout << -1;
+	else
+		cout << sum - n * (l-1);
+	cout << endl;
+}
+
+int serch_frend(const vector<vector<int>> &v, int frend, const vector<int> &dist, const set<int> &f) {
+	int search = 0;
+	for (auto el : v[frend]) {
+		if (dist[el] + 1 != dist[frend])
+			continue;
+		if (f.find(el) != f.end()) {
+			search = 0;
+			return 1;
+		}
+		search |= serch_frend(v, el, dist, f);
+	}
+	return search;
+}
+
+void solve() {
+	int n, m;
+	cin >> n >> m;
+	vector<vector<int>> v(n+1);
+	for (int i = 0; i < m; i++) {
+		int a, b;
+		cin >> a >> b;
+		v[a].push_back(b);
+		v[b].push_back(a);
+	}
+
+	int nf;
+	cin >> nf;
+	set<int> f;
+	vector<int> vec_f(n+1);
+	for (int i = 1; i <= nf; i++) {
+		cin >> vec_f[i];
+		f.insert(vec_f[i]);
+	}
+
+	int nk;
+	cin >> nk;
+	vector<int> k(nk);
+	for (int i = 0; i < nk; i++) {
+		cin >> k[i];
+		k[i] = vec_f[k[i]];
+	}
+
+	for (int i = 0; i < nk; i++)
+		f.erase(k[i]);
+
+	priority_queue<pair<int,int>> q;
+	vector<int> dist(n+1, 1e9);
+	vector<bool> vis(n+1);
+
+	dist[1] = 0;
+	q.push({ 0,1 });
+	while (!q.empty()) {
+		int a = q.top().second;
+		q.pop();
+
+		if (vis[a]) 
+			continue;
+		vis[a] = true;
+		for (auto& el : v[a]) {
+			int b = el;
+			if (dist[a] + 1 < dist[b]) {
+				dist[b] = dist[a] + 1;
+				q.push({ -dist[b],b });
+			}
+		}
+	}
+
+	int count_deliverys = 0;
+	for (auto frend : k) {
+		count_deliverys += serch_frend(v, frend, dist, f);
+	}
+
+	cout << count_deliverys << endl;
+}
+
+int32_t main() {
+	//freopen("java2016.in", "r", stdin);
+	//freopen("java2016.out", "w", stdout);
+	//ios_base::sync_with_stdio(false); cout.tie(nullptr); cin.tie(nullptr);
+
+	//int tt;	cin >> tt; while (tt--) { solve(); }
+	int tt;	cin >> tt; while (tt--) { J(); }
+	//H();
+	//solve();
+}
+
+
+
