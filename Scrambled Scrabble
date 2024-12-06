@@ -1,0 +1,421 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool st;
+namespace _wrk{;
+template<int mod>
+struct modint{
+	int num;
+	const static __uint128_t brt=((__uint128_t)(1)<<(64))/mod;
+	modint(){
+		num=0;
+	}
+	modint(int x){
+		num=x%mod;
+	}
+	modint(long long x){
+		num=x%mod;
+	}
+	modint<mod>operator=(int x){
+		num=x%mod;
+		return (*this);
+	}
+	modint<mod>operator=(long long x){
+		num=x%mod;
+		return (*this);
+	}
+	modint<mod>operator=(modint<mod>x){
+		num=x.num;
+		return (*this);
+	}
+	modint<mod> operator+(modint<mod> c)const{
+		long long x=num+c.num;
+		return x>=mod?x-mod:x;
+	}
+	modint<mod> operator-(modint<mod> c)const{
+		long long x=num-c.num;
+		return x<0?x+mod:x;
+	}
+	modint<mod>operator*(modint<mod>c)const{
+		long long x=(long long)num*c.num;
+		x=x-mod*(brt*x>>64);
+		while(x>=mod)x-=mod;
+		return x;
+	}
+	modint<mod>fpof(long long x)const{
+		if(x<0)return inv().fpof(-x);
+		if(x==0)return 1;
+		auto c=((*this)*(*this)).fpof(x/2);
+		if(x&1)return c*(*this);
+		else return c;
+	}
+	struct modint_pow{
+		int pf;
+		modint_pow(int x){
+			pf=x;
+		}
+		modint_pow(modint<mod> x){
+			pf=x.num;
+		}
+		modint_pow operator+(modint_pow x){
+			return pf+x.pf;
+		}
+	};
+	modint_pow operator*(){
+		return modint_pow(num);
+	}
+	modint<mod> operator*(modint_pow x){
+		return (*this).fpof(x.pf);
+	}
+	modint<mod>inv()const{
+		return fpof(mod-2);
+	}
+	modint<mod>operator/(modint<mod>c){
+		return (*this)*c.inv();
+	}
+	operator int(){
+		return num;
+	}
+
+	modint<mod>operator+=(modint<mod> c){
+		return (*this)=(*this)+c;
+	}
+	modint<mod>operator-=(modint<mod> c){
+		return (*this)=(*this)-c;
+	}
+	modint<mod>operator*=(modint<mod> c){
+		return (*this)=(*this)*c;
+	}
+	modint<mod>operator/=(modint<mod> c){
+		return (*this)=(*this)/c;
+	}
+	modint<mod>operator-(){
+		return mod-num;
+	}
+	friend ostream& operator<<(ostream &w,modint<mod>&&x){
+		w<<x.num;
+		return w;
+	}
+	friend istream& operator>>(istream &w,modint<mod>&x){
+		w>>x.num;
+		x.num%=mod;
+		return w;
+
+	}
+	bool operator==(modint<mod>x){
+		return num==x.num;
+	}
+
+};
+
+template<int mod,class type>
+modint<mod>operator+(type a,modint<mod>b){
+	return modint<mod>(a)+b;
+}
+template<int mod,class type>
+modint<mod>operator-(type a,modint<mod>b){
+	return modint<mod>(a)-b;
+}
+template<int mod,class type>
+modint<mod>operator*(type a,modint<mod>b){
+	return modint<mod>(a)*b;
+}
+template<int mod,class type>
+modint<mod>operator/(type a,modint<mod>b){
+	return modint<mod>(a)/b;
+}
+#define int long long
+
+template<class type,int N>
+struct matrix{
+	type a[N+2][N+2];
+	int n;
+	type* operator[](int pos){
+		return a[pos];
+	}
+	matrix<type,N> operator*(matrix<type,N>b){
+		matrix<type,N>ans;
+		ans.n=n;
+		for(int i=1;i<=n;i++){
+			for(int j=1;j<=n;j++){
+				for(int k=1;k<=n;k++){
+					ans[i][j]+=a[i][k]*b[k][j];
+				}
+			}
+		}
+		return ans;
+	}
+};
+template<class type>
+type fp(type a,int b){
+	if(b==0)return type();
+	if(b==1)return a;
+	type w=fp(a*a,b/2);
+	if(b%2)return w*a;
+	return w;
+}
+template<int N>
+struct yw_int_array{
+	struct three21bit{
+		int a:21;
+		int b:21;
+		int c:21;
+	}a[N/3+2];
+	struct ref{
+		three21bit& s;
+		char type;
+		operator int(){
+			if(type==0)return s.a;
+			if(type==1)return s.b;
+			return s.c;
+		}
+		ref& operator=(int x){
+			if(type==0)s.a=x;
+			else if(type==1)s.b=x;
+			else s.c=x;
+			return (*this);
+		}
+	};
+	ref operator[](int pos){
+		char w=pos%3;
+		return {a[pos/3],(char)w};
+	}
+};
+template<class type,int N>
+struct backup_array{
+	type name[N+5];
+	vector<vector<pair<int,int>>>cc;
+	void new_array(){
+		cc.push_back(vector<pair<int,int>>());
+	}
+	backup_array(){
+		cc.resize(1);
+	}
+	struct x{
+		int id;
+		type* name;
+		vector<vector<pair<int,int>>> &cc;
+		operator type(){
+			return name[id];
+		}
+		type operator=(type w){
+			cc.back().push_back({id,name[id]});
+			name[id]=w;
+			return w;
+		}
+	};
+	x operator[](int pos){
+		return {pos,name,cc};
+	}
+	void backup(){
+		reverse(cc.back().begin(),cc.back().end());
+		for(auto &x:cc.back()){
+			name[x.first]=x.second;
+		}
+		cc.pop_back();
+	}
+};
+template<class type,int N>
+struct Math{
+	type jc[N+5],inv[N+5],invjc[N+5];
+	Math(){
+		jc[0]=jc[1]=inv[1]=invjc[1]=invjc[0]=1;
+		for(int i=2;i<=N;i++){
+			jc[i]=jc[i-1]*type(i);
+		}
+		invjc[N]=type(1)/jc[N];
+		for(int i=N-1;i>=2;i--){
+			invjc[i]=invjc[i+1]*type(i+1);
+		}
+		for(int i=1;i<=N;i++){
+			inv[i]=invjc[i]*jc[i-1];
+		}
+	}
+	type binom(int a,int b){
+		return jc[a]*invjc[b]*invjc[a-b];
+	}
+	type catalan(int n){
+		return binom(2*n,n)/type(n+1);
+	}
+};
+template<class type,int num,int maxnum>
+struct pows{
+	type w[maxnum+5];
+	pows(){
+		w[0]=type(1);
+		for(int i=1;i<=maxnum;i++)w[i]=w[i-1]*type(num);
+	}
+	type operator[](int pos){
+		return w[pos];
+	}
+};
+#ifdef use_seg_tree
+template<class type,class laz_type,int len>
+struct segment_tree{
+	type a[len<<2];
+	laz_type laz[len<<2];
+	void pushup(int now){
+		PUSHUP_VALUE
+	}
+	void pushdown(int now,int l,int r){
+		PUSHDOWN_VALUE
+	}
+	void build(int now,int l,int r){
+		if(l+1==r){
+			FIRST_VALUE
+			return;
+		}
+		LAZ_CLEAR
+		int mid=(l+r)>>1;
+		build(now<<1,l,mid);
+		build(now<<1|1,mid,r);
+		pushup(now);
+	}
+	void do1(int now,int l,int r,int L,int R,...){
+		if(l+1!=r)pushdown(now,l,r);
+		if(R<=l||r<=L)return;
+		if(L<=l&&r<=R){
+			FULL_BLOCK_VALUE
+			return;
+		}
+		int mid=(l+r)>>1;
+		do1(now<<1,l,mid,L,R,...);
+		do1(now<<1|1,mid,r,L,R,...);
+		pushup(now);
+	}
+	void do1_one(int now,int l,int r,int p,...){
+		if(l+1!=r)pushdown(now,l,r);
+		if(l+1==r){
+			DO1_VALUE
+			return;
+		}
+		int mid=(l+r)>>1;
+		if(p<mid)do1_one(now<<1,l,mid,p,...);
+		else do1_one(now<<1|1,mid,r,p,...);
+		pushup(now);
+	}
+	type qu1(int now,int l,int r,int L,int R){
+		if(l+1!=r)pushdown(now,l,r);
+		if(R<=l||r<=L)return BASE_VALUE
+		if(L<=l&&r<=R)return a[now];
+		int mid=(l+r)>>1;
+		return RETURN_VALVE qu1(now<<1,l,mid,L,R)+qu1(now<<1|1,mid,r,L,R);
+	}
+	type qu1_one(int now,int l,int r,int p){
+		if(l+1!=r)pushdown(now,l,r);
+		if(l+1==r)return a[now];
+		int mid=(l+r)>>1;
+		if(p<mid)return qu1_one(now<<1,l,mid,p);
+		else return qu1_one(now<<1|1,mid,r,p);
+
+	}
+};
+#endif
+//#define mod 998244353
+//#define mint modint<mod>
+//pows<mint,2,10000007>tp;note the size
+//Math<mint,1000006>math;
+//vector<int>g[1000006]
+string s;
+int ddp[5003][5003];
+int ca[5003];
+int dcp[5003];
+signed main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);cout.tie(0);
+	cin>>s;
+	int n=s.length();
+	s='$'+s;
+//	dp[0][1]=dp[0][2]=-1e9;
+	//0 zhuangtai
+	for(int i=1;i<=n;i++){	
+		if(s[i]=='A'||s[i]=='E'||s[i]=='I'||s[i]=='O'||s[i]=='U'){
+			ca[0]++;
+		}else if(s[i]=='Y'){
+			ca[1]++;
+		}else if(s[i]=='N'){
+			ca[2]++;
+		}else if(s[i]=='G'){
+			ca[3]++;
+		}else{
+			ca[4]++;
+		}
+	}
+	int w=min(ca[2],ca[3]);
+	ca[4]+=ca[2]+ca[3]-2*w;
+	ca[2]=ca[3]=w;
+	int yuan=ca[0],fuone=ca[4],fudou=ca[3],spc=ca[1];
+	int douca=0;
+	int ans=0;
+	while(1){
+		if(!yuan&&!spc)break;
+		if(!yuan){
+			spc--;
+			yuan++; 
+		} 
+		if(fudou>=2){
+			fudou-=2;
+			ans+=5;
+			douca+=2;
+			
+		}else if(fudou==1){
+			if(!fuone){
+				if(!spc){
+					fudou--;
+					ans+=3;
+					
+				}else{
+					douca++;
+					spc--;
+					ans+=4;
+					fudou--;
+					
+				}
+			}else{
+				douca++;
+				fuone--;
+				fudou--;
+				ans+=4;
+			}
+		}else if(fuone>=2){
+			fuone-=2;
+			ans+=3;
+		}else if(fuone==1){
+			if(spc>=1){
+				fuone--;
+				spc--;
+				
+				ans+=3;
+			}else if(douca>=1){
+				fuone--;
+				douca--;
+				ans+=2;
+			}else{
+				break;
+			}
+		}else if(spc>=2){
+			spc-=2;
+			ans+=3;
+			
+		}else if(douca>=2){
+			douca-=2;
+			ans++;
+		}else{
+			break;
+		}
+		yuan--;
+	}
+	cout<<ans;
+	return 0;
+}
+}
+bool en;
+signed main(){
+	#ifdef LOCAL_WRK
+	cerr<<"[Static Memory : "<<fixed<<((&st)-(&en))/1048576.0<<"MB]"<<endl;
+	#endif
+	   return _wrk::main();
+}
+
+
+
+
