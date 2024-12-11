@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+#include <math.h>
+#define name " "
+
+using namespace std;
+using ull = unsigned long long;
+const long long MAX = 1e6 + 2;
+
+long long t;
+bool cmp(pair <char, long long> a, pair <char, long long> b){
+    return a.second < b.second;
+}
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    if(fopen(name".INP", "r")){
+       freopen(name".INP", "r", stdin);
+       freopen(name".OUT", "w", stdout);
+    }
+    cin >> t;
+    while(t--){
+        long long n;
+        cin >> n;
+        vector <pair <char, long long>> a(n + 1);
+        for(int i = 0; i < n; i++){
+            cin >> a[i].first;
+            a[i].second = i;
+        }
+        sort(a.begin(), a.end() - 1);
+        a[n] = {':', n};
+
+        long long ma = 1, mi = n, cur = 1, posmi = 0;
+        char mac = a[0].first;
+        for(int i = 1; i <= n; i++){
+            if(a[i].first == a[i - 1].first) cur++;
+            else{
+                if(cur > ma){
+                    ma = cur;
+                    mac = a[i - 1].first;
+                }
+                cur = 1;
+            }
+        }
+        for(int i = 1; i <= n; i++){
+            if(a[i].first == a[i - 1].first) cur++;
+            else{
+                if(cur < mi){
+                    mi = cur;
+                    posmi = i - 1;
+                }
+                else if(cur == mi and a[i - 1].first != mac) posmi = i - 1;
+                cur = 1;
+            }
+        }
+
+        a[posmi].first = mac;
+        sort(a.begin(), a.end() - 1, cmp);
+        for(int i = 0; i < n; i++){
+            cout << a[i].first;
+        }
+        cout << '\n';
+    }
+}
+
+
+
+
+
+
+
