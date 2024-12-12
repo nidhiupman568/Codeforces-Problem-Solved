@@ -1,0 +1,493 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define el endl
+#define UwU ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(0);
+
+using namespace std;
+
+
+//
+//
+//
+//
+//int min_jumps(int x, int y, int d) {
+//    int jumps = 0;
+//    int direction = 1; // 1 for x-direction, -1 for y-direction
+//
+//    while (x != 0 || y != 0) {
+//        int jump_size = min({abs(x), abs(y), d});
+//        x -= jump_size * direction;
+//        y -= jump_size * (direction == 1 ? 0 : 1); // Adjust y-coordinate only when moving in y-direction
+//        jumps += jump_size;
+//        direction *= -1;
+//    }
+//
+//    return jumps;
+//}
+//
+//bool check(pair<int, int> p1, pair<int, int> p2) {
+//
+//    if (p1.first == p2.first)
+//        return p1.second > p2.second;
+//    return p1.first < p2.first;
+//
+//}
+//
+//bool notsorted(vector<int> v) {
+//    for (int i = 0; i < v.size() - 1; i++)
+//        if (v[i] < v[i + 1])
+//            return false;
+//    return true;
+//}
+//
+//bool compare(const pair<int, int> &a, const pair<int, int> &b) {
+//    return a.second < b.second;
+//}
+//
+//int intlog(double base, double x) {
+//    return (int) (log(x) / log(base));
+//}
+//
+//ll min_operations(ll n, ll k) {
+//    ll operations = 0;
+//    if (k == 1) {
+//        return n;
+//    }
+//    while (n > 0) {
+//        operations += n % k;
+//        n /= k;
+//    }
+//    return operations;
+//}
+//
+//void solve(long long k) {
+//    long long l = 1, r = 2e18, ans = 0;
+//
+//    while (l <= r) {
+//        long long mid = (l + r) / 2;
+//        long long t = sqrt(mid);
+//
+//        long long cnt = mid - t;
+//
+//        if (cnt >= k) {
+//            ans = mid;
+//            r = mid - 1;
+//        } else {
+//            l = mid + 1;
+//        }
+//    }
+//
+//    cout << ans << endl;
+//}
+//
+//class Graph {
+//    int V; // Number of vertices
+//    vector<vector<int>> adjList; // Adjacency list
+//
+//    // Helper function for DFS to detect cycles
+//    bool dfs(int node, vector<bool> &visited, vector<bool> &recStack) {
+//        // Mark the current node as visited and add it to the recursion stack
+//        visited[node] = true;
+//        recStack[node] = true;
+//
+//        // Iterate over all the neighbors of the current node
+//        for (int neighbor: adjList[node]) {
+//            // If the neighbor is not visited, recurse
+//            if (!visited[neighbor]) {
+//                if (dfs(neighbor, visited, recStack)) {
+//                    return true;
+//                }
+//            }
+//                // If the neighbor is already in the recursion stack, a cycle is detected
+//            else if (recStack[neighbor]) {
+//                return true;
+//            }
+//        }
+//
+//        // Remove the current node from the recursion stack
+//        recStack[node] = false;
+//        return false;
+//    }
+//
+//public:
+//    // Constructor
+//    Graph(int V) {
+//        this->V = V;
+//        adjList.resize(V);
+//    }
+//
+//    // Function to add an edge to the graph
+//    void addEdge(int u, int v) {
+//        adjList[u].push_back(v);
+//    }
+//
+//    // Function to check if the graph contains a cycle
+//    bool hasCycle() {
+//        vector<bool> visited(V, false);  // To keep track of visited nodes
+//        vector<bool> recStack(V, false); // To keep track of nodes in the recursion stack
+//
+//        // Perform DFS for each node to detect cycles
+//        for (int i = 0; i < V; i++) {
+//            if (!visited[i]) {
+//                if (dfs(i, visited, recStack)) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//};
+//
+//vector<ll> summ(string s1, string s2) {
+//    vector<ll> arr(s1.size()), arr1(s2.size());
+//
+//    for (ll i = 0, j = s1.size() - 1; i < s1.size(); i++, j--) {
+//        arr[i] = s1[j] - '0';
+//    }
+//    for (ll i = 0, j = s2.size() - 1; i < s2.size(); i++, j--) {
+//        arr1[i] = s2[j] - '0';
+//    }
+//
+//    int maxi = max(s1.size(), s2.size());
+//    vector<ll> ans(maxi + 1);
+//
+//    ll carry = 0;
+//    for (int i = 0; i < maxi; i++) {
+//        ll sum = carry;
+//        if (i < arr.size()) sum += arr[i];
+//        if (i < arr1.size()) sum += arr1[i];
+//        ans[i] = sum % 10;
+//        carry = sum / 10;
+//    }
+//    if (carry) {
+//        ans[maxi] = carry;
+//    }
+//
+//    while (ans.size() > 1 && ans.back() == 0) {
+//        ans.pop_back();
+//    }
+//
+//    return ans;
+//}
+//
+//bool lessThan(vector<ll> a, vector<ll> b) {
+//    if (a.size() != b.size()) return a.size() < b.size();
+//    for (ll i = a.size() - 1; i >= 0; i--) {
+//        if (a[i] != b[i]) return a[i] < b[i];
+//    }
+//    return false;
+//}
+//
+//void printResult(const vector<ll> result) {
+//    for (ll i = result.size() - 1; i >= 0; i--) {
+//        cout << result[i];
+//    }
+//    cout << endl;
+//}
+//
+//long long findMinimumK(const vector<long long>& a) {
+//    int n = a.size();
+//
+//    // If there is only one cell, k can be 1 (can paint one additional cell)
+//    if (n == 1) return 1;
+//
+//    long long maxGap = 0;
+//
+//    // Calculate the maximum gap between consecutive elements
+//    for (int i = 1; i < n; ++i) {
+//        maxGap = max(maxGap, a[i] - a[i - 1]);
+//    }
+//
+//    // Determine k based on whether maxGap is even or odd
+//    return (maxGap % 2 == 0) ? (maxGap / 2) : (maxGap / 2) + 1;
+//}
+//bool is_possible(int n, const vector<long long>& a, long long k) {
+//    // We can initially paint the first cell and then see how many we can cover
+//    int painted = 1; // Start by painting the first cell
+//    long long last_painted = a[0]; // Track the last painted cell
+//
+//    // Try to paint all cells in the array
+//    for (int i = 1; i < n; i++) {
+//        // Check if the next cell can be painted
+//        if (a[i] - last_painted <= k) {
+//            painted++; // We can paint this cell
+//            last_painted = a[i]; // Update last painted cell
+//        } else {
+//            // We can try to paint an extra cell if it's available
+//            if (painted < n) {
+//                // Check if we can paint the cell before the current one
+//                if (last_painted - k <= a[i]) {
+//                    painted++; // Paint the current cell
+//                    last_painted = a[i]; // Update last painted cell
+//                } else {
+//                    return false; // Cannot paint the cell
+//                }
+//            } else {
+//                return false; // Cannot paint all required cells
+//            }
+//        }
+//    }
+//
+//    // If we have painted all cells, return true
+//    return painted >= n;
+//}
+//
+int main() {
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+    ll t = 1;
+    cin >> t;
+    bool boo = false;
+
+
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        vector<int> v(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> v[i];
+        }
+        ll sum = 0;
+        ll ans = 0;
+
+        sort(v.begin(), v.end());
+
+        while (!v.empty() && ans < k) {
+            sum = ans;
+            ans += v.back();
+            v.pop_back();
+        }
+
+        if (ans == k) {
+            cout << 0<<endl;
+        } else if (ans < k) {
+            cout << (k - ans)<<endl;
+        } else {
+            cout << (k - sum)<<endl;
+        }
+
+
+}
+////        int left = 0;
+////        int ans = 0;
+////        int res = INT_MIN;
+////        for(int i =0;i<nums.size();i++){
+////            ans+= nums[i];
+////
+////            while(ans>k){
+////
+////                ans -= nums[left];
+////                left+=1;
+////            }
+////            res = max(i-left+1,res);
+////        }
+////
+////        cout<<res;
+//
+//
+//
+////        int n;
+////        cin>>n;
+////        int arr[n];
+////        int k;
+////        cin>>k;
+////        for(int i =0;i<n;i++){
+////            cin>>arr[i];
+////        }
+////        vector<int>pre(n+1);
+////        for(int i =1;i<=n;i++){
+////            pre[i] = pre[i-1] + arr[i-1];
+////        }
+////        int minLength = INT_MAX;
+////
+////        for (int i = 0; i < n; i++) {
+////            int targetSum = pre[i] + k;
+////            // Find the smallest index j such that prefix[j] >= targetSum
+////
+////            int low = i + 1, high = n, bound = n + 1;
+////            while (low <= high) {
+////                int mid = low + (high - low) / 2;
+////
+////                if (pre[mid] >= targetSum) {
+////                    bound = mid;
+////                    high = mid - 1;
+////                } else {
+////                    low = mid + 1;
+////                }
+////            }
+//////            auto bound = lower_bound(prefix.begin(), prefix.end(), targetSum);
+////            if (bound <= n) {
+////                minLength = min(minLength, bound - i);
+////            }
+////        }
+////        cout << (minLength == INT_MAX ? 0 : minLength) << endl;
+//    }
+//
+//
+//
+//
+//
+//
+//
+////int t;
+////cin>>t;
+////while(t--){
+////    int x;
+////    cin>>x;
+////
+////    char arr[3][x];
+////    for(int i=0;i<x;i++){
+////        for(int j =0;j<4;j++){
+////            cin>>arr[i][j];
+////        }
+////    }
+////    vector<int>v;
+////    for(int i=x-1;i>=0;i--){
+////        for(int j=0;j<4;j++){
+////            if(arr[i][j]=='#'){
+////                v.push_back(j+1);
+////                break;
+////            }
+////        }
+////    }
+////    for(auto i:v){
+////        cout<<i<<" ";
+////    }
+////    cout<<endl;
+////
+////    }
+//
+//
+////    int n, m;
+////    cin >> n >> m; // Assuming n is the number of nodes
+////
+////    for (int i = 0; i < m; i++) {
+////        int x, y;
+////        cin >> x >> y;
+////        adj[x].push_back(y);
+////    }
+////
+////    vector<int> path;
+////    dfs(0, path, n); // Start DFS from node 0 to find all paths to node n - 1
+////
+////    // Output all paths
+////    for (const auto& path : allPaths) {
+////        for (int node : path) {
+////            cout << node << " ";
+////        }
+////        cout << endl;
+////    }
+////    long long t;
+////    cin >> t;
+////    while (t--) {
+////        long long n, s, m;
+////        cin >> n >> s >> m;
+////        long long l, r;
+////
+////        vector< long long> vec(m, 0);
+////
+////        while (n--) {
+////            cin >> l >> r;
+////            for ( long long i = l; i < r; i++) {
+////                if (i < m) {
+////                    vec[i]++;
+////                }
+////            }
+////        }
+////
+////        if (hasConsecutiveValues(vec, 0, s)) {
+////            cout << "YES" << endl;
+////        } else {
+////            cout << "NO" << endl;
+////        }
+////    }
+////    return 0;
+//
+////    int x1,x2,y1,y2;
+////    cin>>x1>>x2>>y1>>y2;
+////    int cnt=0;
+////
+////    int suneet_wins = 0, slavic_wins = 0;
+////    if (x1 > y1) suneet_wins++; else if (x1 < y1) slavic_wins++;
+////    if (x2 > y2) suneet_wins++; else if (x2 < y2) slavic_wins++;
+////    if (suneet_wins > slavic_wins) cnt++;
+////
+////    suneet_wins = 0; slavic_wins = 0;
+////    if (x1 > y2) suneet_wins++; else if (x1 < y2) slavic_wins++;
+////    if (x2 > y1) suneet_wins++; else if (x2 < y1) slavic_wins++;
+////    if (suneet_wins > slavic_wins) cnt++;
+////
+////    suneet_wins = 0; slavic_wins = 0;
+////    if (x2 > y1) suneet_wins++; else if (x2 < y1) slavic_wins++;
+////    if (x1 > y2) suneet_wins++; else if (x1 < y2) slavic_wins++;
+////    if (suneet_wins > slavic_wins) cnt++;
+////
+////    suneet_wins = 0; slavic_wins = 0;
+////    if (x2 > y2) suneet_wins++; else if (x2 < y2) slavic_wins++;
+////    if (x1 > y1) suneet_wins++; else if (x1 < y1) slavic_wins++;
+////    if (suneet_wins > slavic_wins) cnt++;
+////
+////    cout << cnt << endl;
+//
+////    TreeNode
+//////    ll n, m;
+//////    cin >> m;
+//////    ll sta;
+//////    for (ll i = 0; i < m; i++) {
+//////
+//////        ll x, y;
+//////        cin >> x >> y;
+//////        if(i == 0){
+//////        sta = x;}
+//////        adj[x].push_back(y);
+//////        adj[y].push_back(x);
+//////
+//////    }
+//////    dfs(sta,0);
+//////
+//////
+//////    vis.clear();
+//////    path.clear();
+//////    dfs(farnode, 0);
+////////    cout << maxdepth;
+//////    for (int i = 0; i < path.size(); i++) {
+//////        cout << path[i];
+//////        if (i != path.size() - 1) {
+//////            cout << " ";
+//////        }
+//////    }
+////
+////    int t;
+////    cin >> t;
+////
+////    while(t--) {
+////        string s;
+////        cin >> s;
+////
+////        vector<int> ve(s.size());
+////        for(int i = 0; i < s.size(); i++) {
+////            ve[i] = s[i] - 'a';
+////        }
+////
+////        sort(ve.begin(), ve.end());
+////
+////        bool boo = true;
+////        for(int i = 1; i < ve.size(); i++) {
+////            if(ve[i] != ve[i-1] + 1) {
+////                boo = false;
+////                break;
+////            }
+////        }
+////
+////        if(boo) {
+////            cout << "YES";
+////        } else {
+////            cout << "NO";
+////        }
+////        cout << endl;
+////    }
+//    return 0;
+}
