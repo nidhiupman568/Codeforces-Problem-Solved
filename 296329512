@@ -1,0 +1,148 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+#define FELIX
+#define ll long long int
+#define vi vector<ll>
+#define ip(v,n) for(ll i=0;i<n;i++)cin>>v[i];
+#define op(v,n) for(ll i=0;i<n;i++)cout<<v[i]<<" ";
+#define opp(v,n) for(ll i=0;i<n;i++)cout<<v[i].first<<" "<<v[i].second<<endl;
+#define all(x) x.begin(),x.end()
+#define srt(x) sort(all(x))
+#define cl(a,b) ceil(a/(double)b)
+#define fors(n) for(ll i=0;i<n;i++)
+long long binaryExponentiation(long long base, long long exponent) {
+    long long result = 1;
+
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result *= base;  // If exponent is odd, multiply the result by the base
+        }
+
+        base *= base;  // Square the base
+        exponent /= 2;  // Divide the exponent by 2
+    }
+
+    return result;
+}
+bool checkprime(ll n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    for (ll i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) return false;
+    }
+    return true;
+}
+
+vi getFactorization(ll n) {
+  
+    vi factors;
+    for (ll i = 2; i * i <= n; ++i) {
+        if (n % i == 0) {
+            factors.push_back(i);
+            if (i != n / i) {
+                factors.push_back(n / i);
+            }
+        }
+    }
+       return factors;
+}
+bool check_if_no_is_in_2_ki_power_any_x(ll n){
+  if(!(n&(n-1)))return false;
+  return true;
+}
+vector<ll>findpro(ll n){
+ 
+  vector<ll>result;
+  ll d=2;
+  while(d*d<=n||n!=1){
+    if(n%d==0){
+      result.push_back(d);
+      n=n/d;
+    }else{
+      while(n%d!=0)d++;
+    }
+  }
+  return result;
+}
+ll gcd(ll a,ll b) {
+    while (b != 0) {
+        ll temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+class compare{
+public:
+  bool operator()(ll&a,ll&b){
+    return a<b;
+  }
+};
+class Node{
+public:
+  int val;
+  char letter;
+  Node*left;
+  Node*right;
+  Node(int val,char letter){
+    this->letter=letter;
+    this->val=val;
+    left=NULL;
+    right=NULL;
+  }
+};
+ll bnsearch(ll low,ll high,vi &v,ll sum){
+  if(sum>v[high])return high;
+  while(low<high){
+    ll plus=(low+high)/2;
+    if(v[plus]>=sum)high=plus-1;
+    else low=plus+1;
+  }
+  if(v[low]>=sum)return -1;
+  else return low;
+}
+
+int main(){
+  #ifdef FELIX
+  auto _clock_start = chrono::high_resolution_clock::now();
+  #endif
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr); cout.tie(nullptr);
+  #ifndef ONLINE_JUDGE
+    freopen("input.in", "r", stdin);
+    freopen("output.out", "w", stdout);
+    freopen("error.out", "w", stderr);
+  #endif
+
+  ll t;
+  cin>>t;
+  while(t--){
+
+    ll n;
+    cin>>n;
+    vector<pair<ll,ll>>v1;
+    vector<pair<ll,ll>>v2;
+    vector<ll>row1(n,0);
+    vector<ll>row2(n,0);
+    ip(row1,n);
+    ip(row2,n);
+    ll top=0;
+    ll down=0;
+    for(ll i=0;i<n;i++){
+      if(row1[i]>=row2[i]){v1.push_back({row1[i],row2[i]});top+=row1[i];}
+      else {v2.push_back({row1[i],row2[i]});down+=row2[i];}
+    }
+    ll ans=INT_MIN;
+    for(ll i=0;i<v1.size();i++){
+      ans=max(ans,top+v1[i].second+down);
+    }
+    for(ll i=0;i<v2.size();i++){
+      ans=max(ans,top+down+v2[i].first);
+    }
+    cout<<ans<<endl;
+  }
+  return 0;
+}
