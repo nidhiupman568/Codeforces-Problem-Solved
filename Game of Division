@@ -1,0 +1,74 @@
+#include <bits/stdc++.h>
+#define debug(x) cout << #x << " = " << x << endl
+#define raya cout << "========================" << endl
+#define Rep0(i, n) for (Long i = 0; i < n; i++)
+#define Rep1(i, n) for (Long i = 1; i <= n; i++)
+#define Asce(A) sort(A.begin(), A.end())
+#define Desce(A) sort(A.rbegin(), A.rend())
+#define interactivo fflush(stdout)
+#define sl '\n'
+#define pb push_back
+using namespace std;
+ 
+using Long = long long;
+using uLong = unsigned long long;
+const Long MX = 2e5 + 7;
+const Long INF = 1e17 + 7;
+ 
+Long Factorial[14];
+void factorialexe() {
+    Long q = 1;
+    Rep1(i, 14) {
+        Factorial[i] = q;
+        q *= i;
+    }
+}
+Long getBit(Long n, Long pos) {
+    return (n >> pos) & 1;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+ 
+    int t;
+    cin >> t;
+    while (t--) {
+        Long n, k;
+        cin >> n >> k;
+        vector<Long> a(n);
+        Rep0(i, n) {
+            cin >> a[i];
+        }
+        Long count = 0LL;
+        Long ans1 = 0LL;
+        bool ans = false;
+        Rep0(i, n) {
+            Rep0(j, n) {
+                if (i != j) {
+                    if (abs(a[i] - a[j]) % k != 0) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (count == n - 1LL) {
+                ans = true;
+                ans1 = i + 1LL;
+            }
+            if (ans) {
+                break;
+            }
+            count = 0LL;
+        }
+        if (ans) {
+            cout << "YES" << sl;
+            cout << ans1 << sl;
+        } else {
+            cout << "NO" << sl;
+        }
+    }
+ 
+    return 0;
+}
