@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+const int maxn=1e6+10;
+int a[maxn],b[maxn],n;
+void solve(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++) scanf("%d",&a[i]);
+	b[n]=a[n];
+	for(int i=n-1;i>=1;i--) b[i]=min(a[i],b[i+1]);
+	
+	int k=1e9;
+	for(int i=1;i<=n;i++){
+		if(k<a[i]||a[i]>b[i]){
+			a[i]++;
+			k=min(k,a[i]);
+		}
+	}
+	sort(a+1,a+n+1);
+	for(int i=1;i<=n;i++) printf("%d ",a[i]);puts("");
+}
+int main(){
+	int T;
+	cin>>T;
+	while(T--) solve();
+}
