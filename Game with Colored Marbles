@@ -1,0 +1,169 @@
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <set>
+#include <stack>
+#include <deque>
+#include <queue>
+#include <map>
+#include <climits>
+#include <cctype>
+#include <iomanip>
+#include <algorithm>
+#include <list>
+#include <unordered_map>
+#include <bitset>
+using namespace std;
+using ll = unsigned long long;
+const ll LLMIN = INT64_MIN;
+const ll LLMAX = INT64_MAX;
+bool comp(ll a, ll b) {
+	return a > b;
+}
+int main() {
+	ios_base::sync_with_stdio(0);
+	cin.tie(0); cout.tie(0);
+	ll t; cin >> t;
+	while (t--) {
+		ll n; cin >> n;
+		vector <ll> v; v.reserve(n);
+		unordered_map <ll, bool> was;
+		unordered_map <ll, ll> cnt;
+		unordered_map <ll, ll> nach_cnt;
+		unordered_map <ll, ll> alice_cnt;
+		for (ll i = 0; i < n; i++) {
+			ll a; cin >> a;
+			if (!was[a]) {
+				was[a] = true;
+				v.push_back(a);
+			}
+			nach_cnt[a]++;
+			cnt[a]++;
+		}
+		ll ans = 0;
+		unordered_map <ll, bool> new_col;
+		for (ll i = 0; i < n; i++) {
+			// Ход алисы
+			bool alice_done = false;
+			for (ll c : v) {
+				if (cnt[c] == 0) {
+					continue;
+				}
+				if (!new_col[c] && nach_cnt[c] == 1) {
+					ans++;
+					ans++;
+					new_col[c] = true;
+					cnt[c]--;
+					alice_done = true;
+					alice_cnt[c]++;
+					break;
+				}
+			}
+			if (!alice_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					if (cnt[c] == 1 && nach_cnt[c] - 1 == alice_cnt[c]) {
+						ans++;
+						cnt[c]--;
+						alice_cnt[c]++;
+						alice_done = true;
+						new_col[c] = true;
+						break;
+					}
+				}
+			}
+			if (!alice_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					if (!new_col[c]) {
+						ans++;
+						cnt[c]--;
+						alice_done = true;
+						new_col[c] = true;
+						alice_cnt[c]++;
+						break;
+					}
+				}
+			}
+			if (!alice_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					if (nach_cnt[c] == cnt[c] + alice_cnt[c]) {
+						cnt[c]--;
+						alice_cnt[c]++;
+						alice_done = true;
+						break;
+					}
+				}
+			}
+			if (!alice_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					cnt[c]--;
+					alice_cnt[c]++;
+					alice_done = true;
+					break;
+				}
+			}
+			i++;
+			if (i == n) {
+				break;
+			}
+			// ХОД БОБА
+			bool bob_done = false;
+			for (ll c : v) {
+				if (cnt[c] == 0) {
+					continue;
+				}
+				if (cnt[c] == 1 && !new_col[c]) {
+					cnt[c]--;
+					bob_done = true;
+					break;
+				}
+			}
+			if (!bob_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					if (nach_cnt[c] == cnt[c] + alice_cnt[c]) {
+						cnt[c]--;
+						bob_done = true;
+						break;
+					}
+				}
+			}
+			if (!bob_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					if (!new_col[c]) {
+						cnt[c]--;
+						bob_done = true;
+						break;
+					}
+				}
+			}
+			if (!bob_done) {
+				for (ll c : v) {
+					if (cnt[c] == 0) {
+						continue;
+					}
+					cnt[c]--;
+					break;
+				}
+			}
+		}
+		cout << ans << '\n';
+	}
+}
