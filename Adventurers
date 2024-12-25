@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define For(i, a, b) for(int i = a; i <= b; i++)
+#define pii pair<int, int>
+
+const int MOD = 1e9 + 7;
+const int MAXN = 525000;
+int N, n, V, x, y, t, u, v, l, r, z, s, sx, sy, a[MAXN], b[MAXN], X[MAXN], Y[MAXN], ex[MAXN], ey[MAXN];
+vector<int> c[MAXN];
+
+void upd(int x, int y) {
+    for (; x <= V; x += x & -x)
+        a[x] += y;
+}
+
+void P() {
+    cin >> n;
+    s = sx = sy = 0;
+    for (V = 1; V <= n; V <<= 1);
+    For(i, 0, V) a[i] = b[i] = 0, c[i].clear();
+    
+    For(i, 1, n) cin >> X[i] >> Y[i], ex[i] = X[i], ey[i] = Y[i];
+    
+    sort(ex + 1, ex + n + 1);
+    sort(ey + 1, ey + n + 1);
+    
+    For(i, 1, n) {
+        x = lower_bound(ex + 1, ex + n + 1, X[i]) - ex;
+        y = lower_bound(ey + 1, ey + n + 1, Y[i]) - ey;
+        b[y]++;
+        c[x].emplace_back(y);
+    }
+    
+    For(i, 1, V) b[i] += b[i - 1];
+    
+    For(i, 1, n) {
+        for (int y : c[i]) upd(y, 1);
+        
+        x = 0;
+        t = a[V];
+        
+        for (l = 0, r = V; r - l > 1;) {
+            z = (l + r) >> 1;
+            y = x + a[z];
+            u = min(y, b[z] - y);
+            v = min(t - y, n - t - (b[z] - y));
+            
+            if (min(u, v) > s) {
+                s = min(u, v);
+                sx = i;
+                sy = z;
+            }
+            
+            if (u > v) r = z;
+            else l = z, x = y;
+        }
+    }
+    
+    cout << s << '\n' << ex[sx] + 1 << ' ' << ey[sy] + 1 << '\n';
+}
+
+signed main() {
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    cin >> N;
+    while (N--) P();
+}
