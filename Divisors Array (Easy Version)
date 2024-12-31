@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX = 1e5 + 1;
+
+// Precompute the smallest prime factor (SPF) for each number
+vector<int> sieve() {
+    vector<int> spf(MAX);
+    for (int i = 1; i < MAX; ++i) spf[i] = i;
+    for (int i = 2; i * i < MAX; ++i) {
+        if (spf[i] == i) {
+            for (int j = i * i; j < MAX; j += i) {
+                if (spf[j] == j) spf[j] = i;
+            }
+        }
+    }
+    return spf;
+}
+
+// Factorize a number using its SPF
+map<int, int> factorize(int x, const vector<int>& spf) {
+    map<int, int> factors;
+    while (x > 1) {
+        factors[spf[x]]++;
+        x /= spf[x];
+    }
+    return factors;
+}
+
+// Compute factorial modulo MOD
+long long factorial_mod(int m) {
+    long long fact = 1;
+    for (int i = 2; i <= m; ++i) {
+        fact = (fact * i) % MOD;
+    }
+    return fact;
+}
+
+// Count divisors from the prime factorization
+long long count_divisors(const map<int, int>& factors) {
+    long long result = 1;
+    for (auto [prime, exp] : factors) {
+        result = result * (exp + 1) % MOD;
+    }
+    return result;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+    // Step 1: Precompute smallest prime factors (SPF)
+    vector<int> spf = sieve();
+
+    // Step 2: Compute M! and its prime factorization
+    long long m_fact = factorial_mod(m);
+    map<int, int> m_factors;
+    for (int i = 2; i <= m; ++i) {
+        auto factors = factorize(i, spf);
+        for (auto [prime, exp] : factors) {
+            m_factors[prime] += exp;
+        }
+    }
+
+    // Step 3: Process each element in A
+    vector<long long> result(n);
+    for (int i = 0; i < n; ++i) {
+        map<int, int> total_factors = m_factors;
+        auto a_factors = factorize(a[i], spf);
+        for (auto [prime, exp] : a_factors) {
+            total_factors[prime] += exp;
+        }
+        result[i] = count_divisors(total_factors);
+    }
+
+    // Step 4: Output the result
+    for (int i = 0; i < n; ++i) {
+        cout << result[i] << " ";
+    }
+    cout << "\n";
+
+    return 0;
+}
